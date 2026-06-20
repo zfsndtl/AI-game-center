@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>足球竞猜 · 比分预测</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/football.css" />
+</head>
+<body>
+    <!-- 输入与预测页面 -->
+    <div id="football-predict-page" class="page page-active">
+        <div class="football-container">
+
+            <!-- 顶部导航 -->
+            <div class="football-header">
+                <a href="index.html" class="icon-btn football-back-btn" aria-label="返回首页">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>返回</span>
+                </a>
+                <div class="football-title">足球竞猜</div>
+                <div style="width:70px;"></div>
+            </div>
+
+            <!-- 顶部 hero -->
+            <div class="football-hero">
+                <div class="football-hero-icon">
+                    <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polygon points="12,2 15,6.5 12,11 9,6.5"></polygon>
+                        <polygon points="2,10 6.5,8.5 7,12.5 3,13.5"></polygon>
+                        <polygon points="22,10 17.5,8.5 17,12.5 21,13.5"></polygon>
+                        <polygon points="6,17 10,17 12,21 8,19.5"></polygon>
+                        <polygon points="18,17 14,17 12,21 16,19.5"></polygon>
+                    </svg>
+                </div>
+                <div class="football-hero-title">输入两支球队</div>
+                <div class="football-hero-sub">基于近五场战绩 & 历史交手预测比分</div>
+            </div>
+
+            <!-- 醒目提示 -->
+            <div class="football-warning-banner">
+                <svg class="football-warning-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>本预测及历史战绩数据由AI模型随机生成，仅供娱乐参考，如有损失，概不负责</span>
+            </div>
+
+            <!-- 加载状态（初始隐藏） -->
+            <div id="football-loading" class="football-loading" style="display:none;">
+                <div class="football-spinner"></div>
+                <span>正在从 OpenFootball 数据库查询真实比赛数据…</span>
+            </div>
+
+            <!-- 输入卡片 -->
+            <div class="football-input-card">
+                <div class="football-input-row">
+                    <label class="football-input-label">主队</label>
+                    <input type="text" id="team-home" class="football-input" placeholder="例如：皇家马德里" autocomplete="off" />
+                </div>
+                <div class="football-vs">
+                    <span>VS</span>
+                </div>
+                <div class="football-input-row">
+                    <label class="football-input-label">客队</label>
+                    <input type="text" id="team-away" class="football-input" placeholder="例如：巴塞罗那" autocomplete="off" />
+                </div>
+
+                <button id="predict-btn" class="football-predict-btn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                    </svg>
+                    <span>生成预测</span>
+                </button>
+
+                <!-- 快速示例 -->
+                <div class="football-quick-row">
+                    <button class="football-quick-btn" data-home="皇家马德里" data-away="巴塞罗那">国家德比</button>
+                    <button class="football-quick-btn" data-home="曼城" data-away="利物浦">英超焦点</button>
+                    <button class="football-quick-btn" data-home="拜仁慕尼黑" data-away="多特蒙德">德甲天王山</button>
+                </div>
+            </div>
+
+            <!-- 预测结果区（初始隐藏） -->
+            <div id="football-result" class="football-result" style="display:none;">
+
+                <!-- 数据来源横幅（由 JS 动态填充） -->
+                <div id="football-source-banner" class="football-source-banner" style="display:none;"></div>
+
+                <!-- 预测比分 -->
+                <div class="football-score-card">
+                    <div class="football-score-title">预测比分</div>
+                    <div class="football-score-row">
+                        <div class="football-score-team">
+                            <div class="football-score-team-name" id="result-home-name">-</div>
+                            <div class="football-score-team-tag">主队</div>
+                        </div>
+                        <div class="football-score-display">
+                            <span class="football-score-num" id="result-home-score">0</span>
+                            <span class="football-score-colon">:</span>
+                            <span class="football-score-num football-score-num-away" id="result-away-score">0</span>
+                        </div>
+                        <div class="football-score-team">
+                            <div class="football-score-team-name" id="result-away-name">-</div>
+                            <div class="football-score-team-tag">客队</div>
+                        </div>
+                    </div>
+                    <div class="football-score-confidence">
+                        <div class="football-confidence-label">
+                            <span>胜 / 平 / 负 概率</span>
+                        </div>
+                        <div class="football-confidence-bar">
+                            <div class="football-confidence-win" id="confidence-win"></div>
+                            <div class="football-confidence-draw" id="confidence-draw"></div>
+                            <div class="football-confidence-lose" id="confidence-lose"></div>
+                        </div>
+                        <div class="football-confidence-text">
+                            <span id="confidence-win-text">胜 0%</span>
+                            <span id="confidence-draw-text">平 0%</span>
+                            <span id="confidence-lose-text">负 0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 主队最近5场 -->
+                <div class="football-history-card">
+                    <div class="football-history-title">
+                        <span class="football-history-dot football-history-dot-home"></span>
+                        <span id="history-home-name">主队</span>
+                        <span class="football-history-sub">· 最近 5 场</span>
+                    </div>
+                    <div id="history-home-list" class="football-history-list"></div>
+                    <div id="history-home-summary" class="football-history-summary"></div>
+                </div>
+
+                <!-- 客队最近5场 -->
+                <div class="football-history-card">
+                    <div class="football-history-title">
+                        <span class="football-history-dot football-history-dot-away"></span>
+                        <span id="history-away-name">客队</span>
+                        <span class="football-history-sub">· 最近 5 场</span>
+                    </div>
+                    <div id="history-away-list" class="football-history-list"></div>
+                    <div id="history-away-summary" class="football-history-summary"></div>
+                </div>
+
+                <!-- 历史交手 -->
+                <div class="football-history-card">
+                    <div class="football-history-title">
+                        <span class="football-history-dot football-history-dot-h2h"></span>
+                        <span>历史交手战绩</span>
+                        <span class="football-history-sub">· 近 5 场对赛</span>
+                    </div>
+                    <div id="history-h2h-list" class="football-history-list"></div>
+                    <div id="history-h2h-summary" class="football-history-summary"></div>
+                </div>
+
+                <!-- 预测分析说明 -->
+                <div class="football-analysis-card">
+                    <div class="football-analysis-title">预测说明</div>
+                    <p id="football-analysis-text" class="football-analysis-text"></p>
+                </div>
+
+                <!-- 重新预测 -->
+                <button id="reset-btn" class="football-reset-btn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"></path>
+                    </svg>
+                    <span>重新输入</span>
+                </button>
+
+            </div>
+
+            <div class="football-footer">
+                <span>⚠ 仅供娱乐参考 · 请勿用于真实投注</span>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/football.js"></script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>娱乐中心 · 五子棋 &amp; 围棋 &amp; 足球竞猜</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <!-- 最外层入口：五子棋 / 围棋 选择 -->
+    <div id="landing-page" class="page page-active">
+        <div class="landing-container">
+            <div class="landing-hero">
+                <div class="landing-title">娱乐中心</div>
+                <div class="landing-subtitle">即点即玩 · 多场景娱乐</div>
+            </div>
+
+            <div class="landing-cards">
+                <a href="#gomoku" class="landing-card landing-card-gomoku" data-game="gomoku">
+                    <div class="landing-card-icon">
+                        <span class="landing-piece landing-piece-black"></span>
+                        <span class="landing-piece landing-piece-white"></span>
+                    </div>
+                    <div class="landing-card-title">五子棋</div>
+                    <div class="landing-card-desc">15×15 棋盘 · 双人 / 人机 / 在线对战</div>
+                    <div class="landing-card-btn">进入 →</div>
+                </a>
+
+                <a href="go.html" class="landing-card landing-card-go">
+                    <div class="landing-card-icon landing-card-icon-go">
+                        <span class="landing-go-dot landing-go-dot-black"></span>
+                        <span class="landing-go-dot landing-go-dot-white"></span>
+                    </div>
+                    <div class="landing-card-title">围棋</div>
+                    <div class="landing-card-desc">9 / 13 / 19 路棋盘 · 双人 / 人机</div>
+                    <div class="landing-card-btn">进入 →</div>
+                </a>
+
+                <a href="football.html" class="landing-card landing-card-football">
+                    <div class="landing-card-icon landing-card-icon-football">
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#1a3d6f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polygon points="12,2 15,6.5 12,11 9,6.5"></polygon>
+                            <polygon points="2,10 6.5,8.5 7,12.5 3,13.5"></polygon>
+                            <polygon points="22,10 17.5,8.5 17,12.5 21,13.5"></polygon>
+                            <polygon points="6,17 10,17 12,21 8,19.5"></polygon>
+                            <polygon points="18,17 14,17 12,21 16,19.5"></polygon>
+                            <path d="M12,11 L9,17 L15,17 L12,11"></path>
+                        </svg>
+                    </div>
+                    <div class="landing-card-title">足球竞猜</div>
+                    <div class="landing-card-desc">输入对阵 · 基于历史战绩预测比分</div>
+                    <div class="landing-card-btn">进入 →</div>
+                </a>
+            </div>
+
+            <div class="landing-footer">
+                <span>点击上方卡片开始游戏</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 首页 / 模式选择 -->
+    <div id="home-page" class="page">
+        <div class="home-container">
+            <div class="hero">
+                <div class="board-icon">
+                    <span class="piece-piece piece-black"></span>
+                    <span class="piece-piece piece-white"></span>
+                </div>
+                <h1 class="game-title">五子棋</h1>
+                <p class="game-subtitle">经典对弈，即点即玩</p>
+            </div>
+
+            <div class="mode-selector">
+                <button class="mode-btn mode-pvp" data-mode="pvp">
+                    <span class="mode-icon">
+                        <span class="icon-pieces">
+                            <span class="piece-piece piece-black"></span>
+                            <span class="piece-piece piece-white"></span>
+                        </span>
+                    </span>
+                    <span class="mode-text">
+                        <span class="mode-title">双人对战</span>
+                        <span class="mode-desc">两人轮流落子</span>
+                    </span>
+                </button>
+
+                <button class="mode-btn mode-pve" data-mode="pve">
+                    <span class="mode-icon">
+                        <span class="icon-pieces">
+                            <span class="piece-piece piece-black"></span>
+                            <span class="piece-piece piece-ai">AI</span>
+                        </span>
+                    </span>
+                    <span class="mode-text">
+                        <span class="mode-title">人机对战</span>
+                        <span class="mode-desc">挑战电脑 AI</span>
+                    </span>
+                </button>
+
+                <button class="mode-btn mode-online" data-mode="create-room">
+                    <span class="mode-icon">
+                        <span class="mode-icon-wifi">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                                <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                                <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                            </svg>
+                        </span>
+                    </span>
+                    <span class="mode-text">
+                        <span class="mode-title">创建房间</span>
+                        <span class="mode-desc">生成 4 位房间号，等待对手</span>
+                    </span>
+                </button>
+
+                <button class="mode-btn mode-join" data-mode="join-room">
+                    <span class="mode-icon">
+                        <span class="mode-icon-wifi">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <line x1="20" y1="8" x2="20" y2="14"></line>
+                                <line x1="23" y1="11" x2="17" y2="11"></line>
+                            </svg>
+                        </span>
+                    </span>
+                    <span class="mode-text">
+                        <span class="mode-title">加入房间</span>
+                        <span class="mode-desc">输入 4 位房间号对战</span>
+                    </span>
+                </button>
+            </div>
+
+            <div class="rules-card">
+                <h3 class="rules-title">游戏规则</h3>
+                <ul class="rules-list">
+                    <li>黑棋先行，双方轮流在棋盘交叉点落子</li>
+                    <li>率先形成横、竖或斜向连续五子者获胜</li>
+                    <li>棋盘填满无人连成五子则判为平局</li>
+                    <li>局域网对战需两台设备连接同一 Wi-Fi</li>
+                </ul>
+            </div>
+
+            <div class="home-bottom-nav">
+                <button class="icon-btn icon-btn-back" data-action="back-landing" aria-label="返回首页">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>返回首页</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 房间：创建后显示房间号 / 等待对手 -->
+    <div id="room-page" class="page">
+        <div class="home-container room-container">
+            <div class="room-header">
+                <button class="icon-btn back-btn" data-action="back-home" aria-label="返回">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="room-card">
+                <div class="room-status-icon">
+                    <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                        <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                    </svg>
+                </div>
+                <h2 class="room-title">您的房间号</h2>
+                <div class="room-code" id="room-code-display">----</div>
+                <p class="room-tip" id="room-tip">请让朋友在另一个网页点击"加入房间"，输入此 4 位数字</p>
+                <div class="room-status" id="room-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">等待对手加入…</span>
+                </div>
+                <button class="mode-btn mode-copy" id="copy-code-btn" style="margin-top: 8px;">
+                    <span class="mode-icon" style="width:44px; height:44px;">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </span>
+                    <span class="mode-text">
+                        <span class="mode-title">复制房间号</span>
+                        <span class="mode-desc">发送给同局域网的朋友</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加入房间：输入 4 位数字 -->
+    <div id="join-page" class="page">
+        <div class="home-container room-container">
+            <div class="room-header">
+                <button class="icon-btn back-btn" data-action="back-home" aria-label="返回">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="room-card">
+                <div class="room-status-icon">
+                    <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                </div>
+                <h2 class="room-title">输入房间号</h2>
+                <div class="code-input-row" id="code-input-row">
+                    <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                    <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                    <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                    <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                </div>
+                <p class="room-tip" id="join-tip">必须与创建房间的朋友连接同一 Wi-Fi</p>
+                <div class="room-status room-status-warn" id="join-status" style="display:none;">
+                    <span class="status-text status-error"></span>
+                </div>
+                <button class="action-btn action-btn-primary action-btn-large" id="confirm-join-btn">
+                    加入房间
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏页面 -->
+    <div id="game-page" class="page">
+        <div class="game-container">
+            <!-- 顶部状态栏 -->
+            <div class="game-header">
+                <button id="back-btn" class="icon-btn back-btn" aria-label="返回">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <div class="turn-indicator">
+                    <span id="turn-piece" class="turn-piece turn-black"></span>
+                    <span id="turn-text">黑棋回合</span>
+                </div>
+                <button id="back-landing-btn" class="icon-btn back-btn" aria-label="返回首页">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- 玩家信息条 -->
+            <div class="players-bar">
+                <div id="player-black" class="player-card player-active">
+                    <div class="player-piece piece-piece piece-black"></div>
+                    <div class="player-info">
+                        <div class="player-label">黑棋</div>
+                        <div class="player-name" id="player-black-name">玩家 1</div>
+                    </div>
+                </div>
+                <div id="player-white" class="player-card">
+                    <div class="player-piece piece-piece piece-white"></div>
+                    <div class="player-info">
+                        <div class="player-label">白棋</div>
+                        <div class="player-name" id="player-white-name">玩家 2</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 执色提示（联机模式下显示，告诉用户自己执黑还是执白） -->
+            <div id="my-color-banner" class="my-color-banner" style="display:none;">
+                <span id="my-color-indicator" class="my-color-indicator"></span>
+                <span id="my-color-text" class="my-color-text">我执黑棋</span>
+            </div>
+
+            <!-- 棋盘 -->
+            <div class="board-wrapper">
+                <div id="board" class="board">
+                    <div class="board-lines"></div>
+                    <div class="board-overlay"></div>
+                    <div class="board-pieces"></div>
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="game-actions">
+                <button id="undo-btn" class="action-btn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    悔棋
+                </button>
+                <button id="restart-btn" class="action-btn action-btn-primary">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    重新开始
+                </button>
+            </div>
+        </div>
+
+        <!-- 胜负弹窗 -->
+        <div id="result-modal" class="modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-result-piece">
+                    <span id="result-piece" class="piece-piece piece-black"></span>
+                </div>
+                <h2 id="result-title" class="modal-title">黑棋获胜！</h2>
+                <p id="result-subtitle" class="modal-subtitle">恭喜黑棋率先连成五子</p>
+                <div class="modal-actions">
+                    <button id="modal-home-btn" class="modal-btn modal-btn-ghost">返回首页</button>
+                    <button id="modal-restart-btn" class="modal-btn modal-btn-primary">再来一局</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>

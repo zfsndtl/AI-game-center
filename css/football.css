@@ -1,0 +1,724 @@
+/* ===== 足球竞猜页面 ===== */
+body {
+    background: linear-gradient(180deg, #eaf1fb 0%, #d7e3f5 100%);
+}
+
+/* ===== 醒目警示横幅 ===== */
+.football-warning-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #fff4e6 0%, #ffe8cc 100%);
+    border: 1.5px solid #e67e22;
+    border-radius: 14px;
+    color: #b95b0a;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-align: left;
+    line-height: 1.55;
+    box-shadow: 0 3px 14px rgba(230, 126, 34, 0.18), inset 0 0 0 1px rgba(230, 126, 34, 0.08);
+    margin: 14px 0 4px 0;
+    letter-spacing: 0.3px;
+    animation: warningPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes warningPulse {
+    0%, 100% {
+        box-shadow: 0 3px 14px rgba(230, 126, 34, 0.18), inset 0 0 0 1px rgba(230, 126, 34, 0.08);
+    }
+    50% {
+        box-shadow: 0 3px 20px rgba(230, 126, 34, 0.32), inset 0 0 0 1px rgba(230, 126, 34, 0.12);
+    }
+}
+
+.football-warning-banner .football-warning-icon {
+    flex-shrink: 0;
+    color: #e67e22;
+    animation: iconBlink 2s ease-in-out infinite;
+}
+
+@keyframes iconBlink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(1.08); }
+}
+
+.football-warning-banner span {
+    display: block;
+}
+
+/* ===== 加载状态（带旋转图标） ===== */
+.football-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #fff9f9 0%, #fff7eb 100%);
+    border: 1px solid #ffd966;
+    border-radius: 14px;
+    color: #7a5a00;
+    font-size: 12.5px;
+    font-weight: 600;
+    margin: 14px 0 0 0;
+    animation: loadingPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+    0%, 100% { opacity: 0.95; }
+    50% { opacity: 1; box-shadow: 0 2px 10px rgba(255, 217, 102, 0.35); }
+}
+
+.football-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255, 200, 60, 0.35);
+    border-top-color: #d98c00;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===== 数据源横幅（由 JS 动态决定外观） ===== */
+.football-source-banner {
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin: 0 0 2px 0;
+    line-height: 1.5;
+}
+
+.football-source-banner .football-source-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    display: block;
+}
+
+.football-source-banner .football-source-sub {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.85;
+    margin-top: 4px;
+    display: block;
+}
+
+.football-source-real {
+    background: linear-gradient(135deg, #eafaf0 0%, #d7e3f5 100%);
+    border: 1px solid #8faad9;
+    color: #1a3d6f;
+    box-shadow: 0 2px 8px rgba(26, 61, 111, 0.15);
+}
+
+.football-source-mixed {
+    background: linear-gradient(135deg, #fff4e6 0%, #ffe8cc 100%);
+    border: 1px solid #cc7a2e;
+    color: #a65b00;
+    box-shadow: 0 2px 8px rgba(204, 122, 46, 0.15);
+}
+
+.football-source-sim {
+    background: linear-gradient(135deg, #f5e6e6 0%, #eed0d0 100%);
+    border: 1px solid #cc5555;
+    color: #8a2b2b;
+    box-shadow: 0 2px 8px rgba(204, 85, 85, 0.15);
+}
+
+.football-container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 16px 16px 32px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* ===== 顶部导航 ===== */
+.football-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 4px 20px;
+}
+
+.football-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a3d6f;
+    letter-spacing: 1px;
+}
+
+.football-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.75);
+    color: #1a3d6f;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 12px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(26, 61, 111, 0.08);
+}
+
+/* ===== Hero ===== */
+.football-hero {
+    background: linear-gradient(135deg, #1a3d6f 0%, #2c5aa0 55%, #3b6ea8 100%);
+    border-radius: 22px;
+    padding: 24px 20px 26px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 10px 28px rgba(26, 61, 111, 0.25);
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+}
+
+.football-hero::before {
+    content: "";
+    position: absolute;
+    right: -40px;
+    top: -30px;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.football-hero-icon {
+    width: 66px;
+    height: 66px;
+    margin: 0 auto 12px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.football-hero-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+}
+
+.football-hero-sub {
+    font-size: 12px;
+    opacity: 0.85;
+    letter-spacing: 1px;
+}
+
+/* ===== 输入卡片 ===== */
+.football-input-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 22px 20px;
+    box-shadow: 0 4px 22px rgba(26, 61, 111, 0.1);
+    margin-bottom: 18px;
+}
+
+.football-input-row {
+    margin-bottom: 8px;
+}
+
+.football-input-label {
+    display: block;
+    font-size: 12px;
+    color: #5a7a9a;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+
+.football-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 16px;
+    border: 1.5px solid #d6e0ee;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #1a3d6f;
+    background: #f7faff;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-weight: 600;
+}
+
+.football-input::placeholder {
+    color: #a0b5d0;
+    font-weight: 400;
+}
+
+.football-input:focus {
+    border-color: #3b6ea8;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(59, 110, 168, 0.08);
+}
+
+.football-vs {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7a9bc0;
+    padding: 4px 0 6px;
+    letter-spacing: 2px;
+}
+
+.football-vs span {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #eaf1fb;
+    border-radius: 6px;
+}
+
+/* ===== 预测按钮 ===== */
+.football-predict-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #1a3d6f, #3b6ea8);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 6px 18px rgba(26, 61, 111, 0.3);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+}
+
+.football-predict-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 10px rgba(26, 61, 111, 0.25);
+}
+
+.football-predict-btn:disabled {
+    background: #a0b5d0;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* ===== 快速示例按钮 ===== */
+.football-quick-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.football-quick-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+    background: #eaf1fb;
+    color: #1a3d6f;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+    font-family: inherit;
+}
+
+.football-quick-btn:active {
+    background: #d5e2f5;
+}
+
+/* ===== 预测结果区（动画出现） ===== */
+.football-result {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: footballFadeIn 0.4s ease;
+}
+
+@keyframes footballFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== 比分卡 ===== */
+.football-score-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f7faff 100%);
+    border-radius: 20px;
+    padding: 22px 20px;
+    box-shadow: 0 4px 22px rgba(26, 61, 111, 0.1);
+}
+
+.football-score-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #3b6ea8;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+.football-score-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.football-score-team {
+    flex: 1;
+    text-align: center;
+}
+
+.football-score-team-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a3d6f;
+    margin-bottom: 4px;
+    word-break: break-all;
+    line-height: 1.2;
+}
+
+.football-score-team-tag {
+    font-size: 10px;
+    color: #7a9bc0;
+    letter-spacing: 1px;
+}
+
+.football-score-display {
+    padding: 0 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    background: linear-gradient(135deg, #1a3d6f, #3b6ea8);
+    border-radius: 16px;
+    padding: 12px 22px;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.2), 0 4px 12px rgba(26,61,111,0.2);
+}
+
+.football-score-num {
+    font-size: 38px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    font-family: -apple-system, "SF Mono", Menlo, monospace;
+}
+
+.football-score-num-away {
+    color: #c8d9f0;
+}
+
+.football-score-colon {
+    font-size: 28px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    line-height: 1;
+    font-family: -apple-system, "SF Mono", Menlo, monospace;
+}
+
+/* ===== 概率条 ===== */
+.football-score-confidence {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed #d6e0ee;
+}
+
+.football-confidence-label {
+    font-size: 11px;
+    color: #5a7a9a;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.football-confidence-bar {
+    display: flex;
+    height: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #eaf1fb;
+    margin-bottom: 8px;
+}
+
+.football-confidence-win {
+    background: linear-gradient(90deg, #3b6ea8, #2c5aa0);
+    height: 100%;
+    transition: width 0.6s ease;
+}
+
+.football-confidence-draw {
+    background: linear-gradient(90deg, #a0b5d0, #7a9bc0);
+    height: 100%;
+    transition: width 0.6s ease;
+}
+
+.football-confidence-lose {
+    background: linear-gradient(90deg, #d48a5a, #c06a3a);
+    height: 100%;
+    transition: width 0.6s ease;
+}
+
+.football-confidence-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.football-confidence-text span:nth-child(1) { color: #3b6ea8; }
+.football-confidence-text span:nth-child(2) { color: #7a9bc0; }
+.football-confidence-text span:nth-child(3) { color: #c06a3a; }
+
+/* ===== 历史战绩卡片 ===== */
+.football-history-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 18px 18px 16px;
+    box-shadow: 0 4px 18px rgba(26, 61, 111, 0.08);
+}
+
+.football-history-title {
+    font-size: 13px;
+    color: #1a3d6f;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+.football-history-sub {
+    font-size: 11px;
+    color: #7a9bc0;
+    font-weight: 500;
+}
+
+.football-history-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.football-history-dot-home {
+    background: radial-gradient(circle at 30% 30%, #4a78b8, #1a3d6f 100%);
+    box-shadow: 0 1px 3px rgba(26,61,111,0.3);
+}
+
+.football-history-dot-away {
+    background: radial-gradient(circle at 30% 30%, #e8a070, #c06a3a 100%);
+    box-shadow: 0 1px 3px rgba(192,106,58,0.3);
+}
+
+.football-history-dot-h2h {
+    background: linear-gradient(135deg, #1a3d6f 0%, #c06a3a 100%);
+    box-shadow: 0 1px 3px rgba(26,61,111,0.3);
+}
+
+/* ===== 历史比赛行 ===== */
+.football-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.football-match-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f7faff;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.football-match-opponent {
+    flex: 1;
+    color: #5a7a9a;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.football-match-opponent-vs {
+    flex: 1;
+    color: #1a3d6f;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.football-match-opponent-vs span {
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.football-match-opponent-vs .vs-sep {
+    font-size: 10px;
+    color: #a0b5d0;
+    flex: 0;
+    font-weight: 500;
+    min-width: 20px;
+}
+
+.football-match-result {
+    font-family: -apple-system, "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 8px;
+    margin-right: 8px;
+}
+
+.football-match-result-win {
+    background: #e0f0e5;
+    color: #2e8b57;
+}
+
+.football-match-result-draw {
+    background: #f0eadc;
+    color: #8b7355;
+}
+
+.football-match-result-loss {
+    background: #f5e0dc;
+    color: #b04d3a;
+}
+
+.football-match-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.football-match-badge-win { background: #2e8b57; }
+.football-match-badge-draw { background: #8b7355; }
+.football-match-badge-loss { background: #b04d3a; }
+
+/* ===== 汇总行 ===== */
+.football-history-summary {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #d6e0ee;
+    display: flex;
+    justify-content: space-around;
+    font-size: 11px;
+    font-weight: 600;
+    color: #5a7a9a;
+    letter-spacing: 1px;
+}
+
+.football-history-summary .summary-stat {
+    text-align: center;
+}
+
+.football-history-summary .summary-stat strong {
+    display: block;
+    font-size: 15px;
+    color: #1a3d6f;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+
+/* ===== 分析说明 ===== */
+.football-analysis-card {
+    background: linear-gradient(135deg, #fff7ed 0%, #fffaf0 100%);
+    border: 1px solid rgba(192, 106, 58, 0.15);
+    border-radius: 18px;
+    padding: 16px 18px;
+}
+
+.football-analysis-title {
+    font-size: 12px;
+    color: #c06a3a;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.football-analysis-text {
+    font-size: 13px;
+    color: #5a4030;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ===== 重新预测按钮 ===== */
+.football-reset-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: #ffffff;
+    color: #3b6ea8;
+    border: 1.5px solid #d6e0ee;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+}
+
+.football-reset-btn:active {
+    background: #f0f5fb;
+    transform: scale(0.98);
+}
+
+/* ===== footer ===== */
+.football-footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 11px;
+    color: #7a9bc0;
+    letter-spacing: 1px;
+    opacity: 0.85;
+}
+
+/* ===== 小屏幕适配 ===== */
+@media (max-width: 360px) {
+    .football-hero-title {
+        font-size: 20px;
+    }
+    .football-score-num {
+        font-size: 30px;
+    }
+    .football-score-team-name {
+        font-size: 13px;
+    }
+}

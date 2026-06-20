@@ -1,0 +1,423 @@
+/* ===== 围棋专用样式 ===== */
+
+/* 围棋首页的棋盘图标 */
+.board-icon-go {
+    background: linear-gradient(135deg, #e8eeed, #cfd8dc);
+}
+
+/* 棋盘尺寸选择 */
+.go-size-section {
+    width: 100%;
+    margin-bottom: 16px;
+    animation: fadeInUp 0.6s ease 0.15s backwards;
+}
+
+.go-size-label {
+    font-size: 13px;
+    color: #6b5540;
+    margin-bottom: 8px;
+    padding-left: 4px;
+    font-weight: 600;
+}
+
+.go-size-row {
+    display: flex;
+    gap: 10px;
+}
+
+.go-size-btn {
+    flex: 1;
+    padding: 14px 8px;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 10px rgba(139, 90, 43, 0.12);
+    transition: all 0.15s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-family: inherit;
+}
+
+.go-size-btn:active {
+    transform: scale(0.97);
+}
+
+.go-size-btn.go-size-active {
+    border-color: #8B5A2B;
+    background: linear-gradient(135deg, #fff8e7, #fdefd5);
+    box-shadow: 0 4px 14px rgba(139, 90, 43, 0.25);
+}
+
+.go-size-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3a2a1a;
+    letter-spacing: 1px;
+}
+
+.go-size-sub {
+    font-size: 11px;
+    color: #8b7355;
+}
+
+/* 模式按钮（围棋色） */
+.go-mode-btn {
+    animation-delay: 0.25s;
+}
+
+/* ===== 围棋游戏页 ===== */
+.go-game-container {
+    max-width: 520px;
+}
+
+/* 回合指示器（围棋风格） */
+.go-turn-indicator {
+    background: linear-gradient(135deg, #fff, #f5ecd7);
+}
+
+/* 玩家信息条中的"提子"数 */
+.go-capture-count {
+    font-size: 11px;
+    color: #a08b6a;
+    margin-top: 2px;
+}
+
+/* 回合数 / 贴目 */
+.go-info-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #6b5540;
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.go-info-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #8B5A2B;
+    display: inline-block;
+}
+
+/* ===== 围棋棋盘 ===== */
+.go-board {
+    position: relative;
+    background: linear-gradient(135deg, #e8c99a 0%, #d9b37d 55%, #c89861 100%);
+    box-shadow: 0 8px 28px rgba(100, 60, 20, 0.4), inset 0 0 40px rgba(100, 60, 20, 0.2);
+    width: min(100%, 420px);
+    aspect-ratio: 1 / 1;
+    /* aspect-ratio fallback —— aspect-ratio 在部分浏览器中需要 height: 0 / 所以用 padding-top 100% 做保险 */
+    box-sizing: border-box;
+    overflow: hidden;
+    --go-padding: 5%;
+}
+
+/* 围棋棋盘专用的包装器 —— 强制 100% 宽度，避免 flex column 下宽度塌陷 */
+#go-game-page .board-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0;
+    flex: 0 0 auto;
+}
+
+/* 同时给 go-board 一个 fallback 的固定宽度，防止 aspect-ratio 计算失败 */
+.go-board {
+    width: min(100%, 420px);
+}
+
+/* 三层子元素占满棋盘，SVG 与百分比定位的交叉点严格对齐 */
+.go-board-lines,
+.go-board-overlay,
+.go-board-pieces {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* 网格线层（SVG 绘制） */
+.go-board-lines {
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* 点击层：每个交叉点是一个绝对定位的方块 */
+.go-board-overlay {
+    pointer-events: none;
+}
+
+.go-cell {
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 棋子容器：绝对定位到交叉点，棋子本身是相对 cell 的一个圆 */
+.go-piece-cell {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
+    /* 大小：以相邻交叉点间距作为 cell 大小，约为 100/(N-1)% */
+}
+
+.go-piece-cell .piece-piece {
+    width: 80%;
+    height: 80%;
+    max-width: var(--go-piece-max, 28px);
+    max-height: var(--go-piece-max, 28px);
+    min-width: 16px;
+    min-height: 16px;
+    animation: pieceDrop 0.18s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35), inset -2px -2px 3px rgba(0, 0, 0, 0.25), inset 2px 2px 3px rgba(255, 255, 255, 0.15);
+}
+
+/* 围棋白子更偏暖白 */
+.go-piece-cell .piece-white {
+    background: radial-gradient(circle at 30% 30%, #fffbea, #f0e6c8 55%, #d8c89a 100%);
+    box-shadow: 0 2px 4px rgba(139, 90, 43, 0.3), inset -2px -2px 3px rgba(139, 90, 43, 0.25), inset 2px 2px 3px rgba(255, 255, 255, 0.9);
+}
+
+/* 最后一手高亮（小圆点） */
+.go-piece-cell.last-move::after {
+    content: "";
+    position: absolute;
+    width: 32%;
+    height: 32%;
+    max-width: 12px;
+    max-height: 12px;
+    border-radius: 50%;
+    background: #d9534f;
+    box-shadow: 0 0 6px rgba(217, 83, 79, 0.6);
+    z-index: 3;
+}
+
+/* 白子上的最后一手用深色圆点 */
+.go-piece-cell.last-move-white::after {
+    background: #c0392b;
+}
+
+/* 预览棋子（悬停/触控预览） */
+.go-cell.preview::after {
+    content: "";
+    width: 72%;
+    height: 72%;
+    max-width: 24px;
+    max-height: 24px;
+    border-radius: 50%;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.go-cell.preview-black::after {
+    background: radial-gradient(circle at 30% 30%, #4a4a4a, #111);
+}
+
+.go-cell.preview-white::after {
+    background: radial-gradient(circle at 30% 30%, #fffbea, #d8c89a);
+}
+
+/* 禁入点（打劫禁入）的视觉提示 */
+.go-cell.ko-forbidden {
+    background: radial-gradient(circle, rgba(217, 83, 79, 0.2) 0%, transparent 60%);
+}
+
+/* ===== 操作按钮 ===== */
+.go-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.go-actions .action-btn {
+    padding: 12px 6px;
+    font-size: 13px;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.action-btn-pass {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.35);
+}
+
+.action-btn-pass:active:not(:disabled) {
+    background: linear-gradient(135deg, #2980b9, #21618c);
+}
+
+.action-btn-resign {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.35);
+}
+
+.action-btn-resign:active:not(:disabled) {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+}
+
+/* Pass 状态的提示 */
+.go-pass-indicator {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 14px;
+    background: rgba(231, 76, 60, 0.9);
+    color: #fff;
+    font-size: 12px;
+    border-radius: 14px;
+    font-weight: 600;
+    z-index: 20;
+}
+
+/* 提子提示浮动条 */
+.go-capture-toast {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 12px 24px;
+    background: rgba(30, 20, 10, 0.82);
+    color: #fffbea;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    z-index: 200;
+    letter-spacing: 1px;
+}
+
+.go-capture-toast.show {
+    opacity: 1;
+}
+
+/* ===== 结束弹窗（计分详情） ===== */
+.go-modal-content {
+    padding: 32px 24px 24px;
+}
+
+.go-score-detail {
+    margin: 14px 0 22px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #f5ecd7, #e8dcc0);
+    border-radius: 14px;
+    font-size: 13px;
+    color: #3a2a1a;
+    line-height: 1.9;
+    text-align: left;
+}
+
+.go-score-detail .score-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+}
+
+.go-score-detail .score-label {
+    color: #6b5540;
+}
+
+.go-score-detail .score-value {
+    font-weight: 700;
+    font-family: -apple-system, "SF Mono", Menlo, monospace;
+}
+
+.go-score-detail .score-divider {
+    height: 1px;
+    background: rgba(139, 90, 43, 0.3);
+    margin: 8px 0;
+}
+
+.go-score-detail .score-total {
+    font-size: 15px;
+    color: #8B5A2B;
+}
+
+/* ===== 小屏适配 ===== */
+@media (max-width: 360px) {
+    .go-size-num {
+        font-size: 18px;
+    }
+    .go-actions .action-btn {
+        font-size: 12px;
+        padding: 10px 4px;
+    }
+}
+
+/* 提前判胜提示 */
+.score-reason-early {
+    background: linear-gradient(135deg, #fff8e7, #fdefd5);
+    padding: 8px 12px;
+    border-radius: 10px;
+    color: #a06b35;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.score-reason-early .score-value {
+    font-size: 12px;
+    font-weight: 500;
+    color: #8B5A2B;
+}
+
+/* 实时分数显示 */
+.go-score-line {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.go-score-black {
+    color: #1a1a1a;
+    margin-right: 6px;
+}
+
+.go-score-white {
+    color: #8B5A2B;
+    margin-left: 6px;
+}
+
+.go-score-sep {
+    color: #c4a574;
+}
+
+.go-info-bar-soft {
+    background: rgba(255, 255, 255, 0.35);
+    font-size: 11px;
+    color: #8b7355;
+    padding: 6px 12px;
+    margin-top: -4px;
+    margin-bottom: 8px;
+}
+
+.go-info-value {
+    font-weight: 600;
+    color: #6b5540;
+    font-family: -apple-system, "SF Mono", Menlo, monospace;
+}
+
+.go-board.size-9 .h-line,
+.go-board.size-9 .v-line {
+    height: 1px;
+}

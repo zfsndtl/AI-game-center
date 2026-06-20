@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>围棋 · Go / Weiqi</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/go.css" />
+</head>
+<body>
+    <!-- 围棋模式 / 棋盘尺寸 选择 -->
+    <div id="go-home-page" class="page page-active">
+        <div class="home-container go-home">
+            <div class="hero">
+                <div class="board-icon board-icon-go">
+                    <span class="landing-go-dot landing-go-dot-black"></span>
+                    <span class="landing-go-dot landing-go-dot-white"></span>
+                </div>
+                <h1 class="game-title">围棋</h1>
+                <p class="game-subtitle">Go · Weiqi · 黑白之道</p>
+            </div>
+
+            <!-- 棋盘尺寸选择 -->
+            <div class="go-size-section">
+                <div class="go-size-label">选择棋盘</div>
+                <div class="go-size-row">
+                    <button class="go-size-btn" data-size="9">
+                        <span class="go-size-num">9</span>
+                        <span class="go-size-sub">路 9×9</span>
+                    </button>
+                    <button class="go-size-btn go-size-active" data-size="13">
+                        <span class="go-size-num">13</span>
+                        <span class="go-size-sub">路 13×13</span>
+                    </button>
+                    <button class="go-size-btn" data-size="19">
+                        <span class="go-size-num">19</span>
+                        <span class="go-size-sub">路 19×19</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 模式选择 -->
+            <div class="mode-selector">
+                <button class="mode-btn mode-pvp go-mode-btn" data-mode="pvp">
+                    <span class="mode-icon">
+                        <span class="icon-pieces">
+                            <span class="piece-piece piece-black"></span>
+                            <span class="piece-piece piece-white"></span>
+                        </span>
+                    </span>
+                    <span class="mode-text">
+                        <span class="mode-title">双人对战</span>
+                        <span class="mode-desc">两人轮流落子 · 中国规则</span>
+                    </span>
+                </button>
+
+                <button class="mode-btn mode-pve go-mode-btn" data-mode="pve">
+                    <span class="mode-icon">
+                        <span class="icon-pieces">
+                            <span class="piece-piece piece-black"></span>
+                            <span class="piece-piece piece-white"></span>
+                        </span>
+                    </span>
+                        <span class="mode-text">
+                            <span class="mode-title">人机对战</span>
+                            <span class="mode-desc">执黑对电脑</span>
+                        </span>
+                </button>
+            </div>
+
+            <div class="rules-card">
+                <h3 class="rules-title">基本规则</h3>
+                <ul class="rules-list">
+                    <li>黑棋先行，双方轮流在棋盘交叉点落子</li>
+                    <li>棋子无气（被完全包围）时被提掉</li>
+                    <li>禁止自杀（落子后自己无气且不能提对方子）</li>
+                    <li>禁止打劫还原（不可立即提回刚被提的子）</li>
+                    <li>双方连续 Pass 即终局，按中国规则（数子法）计分</li>
+                    <li>黑棋贴 3.75 子（合 7.5 目）</li>
+                </ul>
+            </div>
+
+            <div class="home-bottom-nav">
+                <button class="icon-btn icon-btn-back" data-action="back-landing" aria-label="返回首页">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>返回首页</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏页面 -->
+    <div id="go-game-page" class="page">
+        <div class="game-container go-game-container">
+            <!-- 顶部栏 -->
+            <div class="game-header">
+                <button id="go-back-btn" class="icon-btn back-btn" aria-label="返回">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <div class="turn-indicator go-turn-indicator">
+                    <span id="go-turn-piece" class="turn-piece turn-black"></span>
+                    <span id="go-turn-text">黑棋回合</span>
+                </div>
+                <button id="go-home-btn" class="icon-btn back-btn" aria-label="返回首页">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- 玩家信息条 -->
+            <div class="players-bar">
+                <div id="go-player-black" class="player-card player-active">
+                    <div class="player-piece piece-piece piece-black"></div>
+                    <div class="player-info">
+                        <div class="player-label">黑棋</div>
+                        <div class="player-name" id="go-player-black-name">玩家</div>
+                        <div class="go-capture-count" id="go-captured-black">提子 0</div>
+                    </div>
+                </div>
+                <div id="go-player-white" class="player-card">
+                    <div class="player-piece piece-piece piece-white"></div>
+                    <div class="player-info">
+                        <div class="player-label">白棋</div>
+                        <div class="player-name" id="go-player-white-name">玩家</div>
+                        <div class="go-capture-count" id="go-captured-white">提子 0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 回合数 / 贴目提示 -->
+            <div class="go-info-bar">
+                <span id="go-move-count">第 1 手</span>
+                <span class="go-info-dot"></span>
+                <span class="go-score-line">
+                    <span class="go-score-black">黑 <span id="go-score-black">0.00</span></span>
+                    <span class="go-score-sep">|</span>
+                    <span class="go-score-white">白 <span id="go-score-white">0.00</span></span>
+                </span>
+                <span class="go-info-dot"></span>
+                <span id="go-komi-info">黑贴 3.75 子</span>
+            </div>
+
+            <!-- 剩余空点提示 -->
+            <div class="go-info-bar go-info-bar-soft">
+                <span>剩余空点 <span id="go-remaining-empty" class="go-info-value">-</span></span>
+                <span class="go-info-dot"></span>
+                <span>理论翻盘阈值 <span id="go-comeback-limit" class="go-info-value">-</span></span>
+            </div>
+
+            <!-- 棋盘 -->
+            <div class="board-wrapper">
+                <div id="go-board" class="board go-board">
+                    <div class="board-lines go-board-lines"></div>
+                    <div class="board-overlay go-board-overlay"></div>
+                    <div class="board-pieces go-board-pieces"></div>
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="game-actions go-actions">
+                <button id="go-pass-btn" class="action-btn action-btn-pass">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12h4l3 8 4-16 3 8h4"></path>
+                    </svg>
+                    Pass
+                </button>
+                <button id="go-undo-btn" class="action-btn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    悔棋
+                </button>
+                <button id="go-resign-btn" class="action-btn action-btn-resign">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 2H4a2 2 0 0 0-2 2v6"></path>
+                        <path d="M22 12l-8 8-6-6"></path>
+                        <circle cx="18" cy="6" r="3"></circle>
+                    </svg>
+                    认输
+                </button>
+                <button id="go-restart-btn" class="action-btn action-btn-primary">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    重新开始
+                </button>
+            </div>
+        </div>
+
+        <!-- 提子提示 (浮动在棋盘上方) -->
+        <div id="go-capture-toast" class="go-capture-toast"></div>
+
+        <!-- 结束弹窗 -->
+        <div id="go-result-modal" class="modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content go-modal-content">
+                <div class="modal-result-piece">
+                    <span id="go-result-piece" class="piece-piece piece-black"></span>
+                </div>
+                <h2 id="go-result-title" class="modal-title">黑棋胜出！</h2>
+                <div id="go-score-detail" class="go-score-detail">
+                    <!-- 终局时显示详细计分 -->
+                </div>
+                <div class="modal-actions">
+                    <button id="go-modal-home-btn" class="modal-btn modal-btn-ghost">返回首页</button>
+                    <button id="go-modal-restart-btn" class="modal-btn modal-btn-primary">再来一局</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/go.js"></script>
+</body>
+</html>
