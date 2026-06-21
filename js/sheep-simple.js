@@ -27,37 +27,36 @@
              a.y + CARD_H <= b.y + 4 || b.y + CARD_H <= a.y + 4);
   }
 
-  // 生成关卡布局：每层随机挑选部分网格位置放卡片；每层整体偏移一点
-  function genPositions(innerW, innerH) {
-    var positions = [];
+  // 生成恰好 target 张卡片的位置；target 从 {69, 72, 75, 78, 81} 中随机
+  function randomTarget() {
+    var choices = [69, 72, 75, 78, 81];
+    return choices[Math.floor(Math.random() * choices.length)];
+  }
+
+  function genPositions(innerW, innerH, target) {
     // 让卡片居中放置
     var gridTotalW = GRID_COLS * CARD_W;
     var gridTotalH = GRID_ROWS * CARD_H;
     var offsetX = (innerW - gridTotalW) / 2;
     var offsetY = (innerH - gridTotalH) / 2;
 
-    // 每层可选位置数量：随机挑 70~85% 的网格位
+    // 先把每层的所有网格位置全部生成出来，然后打乱截取前 target 个
+    var positions = [];
     for (var layer = 0; layer < LAYERS; layer++) {
       var layerShiftX = layer % 2 === 1 ? CARD_W * 0.5 : 0;
       var layerShiftY = layer % 2 === 1 ? CARD_H * 0.5 : 0;
-      var count = Math.round(GRID_COLS * GRID_ROWS * (0.7 + Math.random() * 0.15));
-      // 随机挑网格位置
-      var all = [];
       for (var r = 0; r < GRID_ROWS; r++) {
         for (var c = 0; c < GRID_COLS; c++) {
-          all.push({ r: r, c: c });
+          positions.push({
+            x: offsetX + c * CARD_W + layerShiftX,
+            y: offsetY + r * CARD_H + layerShiftY,
+            layer: layer
+          });
         }
       }
-      shuffleArr(all);
-      for (var k = 0; k < count && k < all.length; k++) {
-        var cell = all[k];
-        positions.push({
-          x: offsetX + cell.c * CARD_W + layerShiftX,
-          y: offsetY + cell.r * CARD_H + layerShiftY,
-          layer: layer
-        });
-      }
     }
+    shuffleArr(positions);
+    if (positions.length > target) positions.length = target;
     return positions;
   }
 
@@ -89,7 +88,8 @@
   function buildCards() {
     var board = byId("sheep-simple-board");
     var rect = board.getBoundingClientRect();
-    var positions = genPositions(rect.width, rect.height);
+    var target = randomTarget();
+    var positions = genPositions(rect.width, rect.height, target);
     var pool = genPool(positions.length);
     var cards = [];
     for (var i = 0; i < positions.length; i++) {
