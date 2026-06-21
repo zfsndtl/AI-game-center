@@ -1,0 +1,249 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(180deg, #cfeeca 0%, #e6f5df 100%);
+  min-height: 100vh;
+  color: #2a3f2e;
+  overflow-x: hidden;
+}
+
+.sheep-simple-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 12px 14px 20px;
+}
+
+/* 顶部导航 */
+.sheep-simple-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.sheep-simple-back-btn,
+.sheep-simple-menu-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #3d7a4a;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sheep-simple-title-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #2f6b3d;
+  letter-spacing: 2px;
+}
+.sheep-simple-title-emoji { font-size: 26px; }
+
+/* 关卡信息条 */
+.sheep-simple-info-bar {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 2px 6px rgba(77, 136, 77, 0.12);
+  padding: 12px 10px;
+  display: flex;
+  margin-bottom: 14px;
+}
+.sheep-simple-info-col {
+  flex: 1;
+  text-align: center;
+}
+.sheep-simple-info-label {
+  font-size: 13px;
+  color: #4a8f5a;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.sheep-simple-info-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #2a6b3a;
+}
+
+/* 棋盘区 */
+.sheep-simple-board {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.95;
+  background: transparent;
+  margin-bottom: 14px;
+}
+
+/* 原版卡片样式：黄色主体 + 橘红粗边框 + 3D 阴影 */
+.sheep-simple-card {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fff4c2 0%, #ffe07a 100%);
+  border: 2px solid #e89a3c;
+  box-shadow: 0 3px 0 #b97420, 0 5px 8px rgba(185, 116, 32, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+.sheep-simple-card:active { transform: scale(0.92); }
+.sheep-simple-card.sheep-simple-locked {
+  filter: brightness(0.72) grayscale(0.35);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* 底部槽位：大白框 + 虚线边 */
+.sheep-simple-slot {
+  background: #ffffff;
+  border: 3px dashed #d9e8d7;
+  border-radius: 20px;
+  padding: 10px 8px;
+  display: flex;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(77, 136, 77, 0.12);
+  margin-bottom: 14px;
+}
+.sheep-simple-slot-item {
+  flex: 1;
+  height: 50px;
+  background: #f4f7f1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  line-height: 1;
+  transition: all 0.2s;
+}
+.sheep-simple-slot-item.sheep-simple-slot-filled {
+  background: linear-gradient(180deg, #fff4c2 0%, #ffe07a 100%);
+  border: 2px solid #e89a3c;
+  box-shadow: 0 2px 0 #b97420, 0 3px 5px rgba(185, 116, 32, 0.2);
+}
+.sheep-simple-slot-item.sheep-simple-slot-pop {
+  animation: sheepSimplePop 0.4s;
+}
+@keyframes sheepSimplePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); background: #fff176; }
+  100% { transform: scale(1); }
+}
+
+/* 底部三大按钮：撤回/洗牌（白底）、重玩（绿色） */
+.sheep-simple-toolbar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.sheep-simple-btn {
+  flex: 1;
+  max-width: 160px;
+  padding: 12px 10px;
+  border-radius: 16px;
+  border: none;
+  background: #ffffff;
+  color: #2f6b3d;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(77, 136, 77, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.sheep-simple-btn.sheep-simple-btn-primary {
+  background: linear-gradient(180deg, #66bb6a 0%, #43a047 100%);
+  color: #ffffff;
+  box-shadow: 0 3px 0 #2e7d32, 0 5px 10px rgba(46, 125, 50, 0.25);
+}
+.sheep-simple-btn:active { transform: scale(0.96); }
+
+.sheep-simple-footer-link {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: #3d7a4a;
+  font-size: 13px;
+  padding: 8px;
+}
+
+/* 结果弹窗 */
+.sheep-simple-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+.sheep-simple-modal.sheep-simple-modal-active { display: flex; }
+.sheep-simple-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 60, 35, 0.55);
+}
+.sheep-simple-modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  background: #fff;
+  border-radius: 22px;
+  padding: 28px 20px 22px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: sheepSimpleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes sheepSimpleIn {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.sheep-simple-modal-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #2f6b3d;
+  margin-bottom: 10px;
+}
+.sheep-simple-modal-body {
+  font-size: 14px;
+  color: #5b7b5e;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+.sheep-simple-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.sheep-simple-modal-btn {
+  padding: 11px 22px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #66bb6a 0%, #43a047 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #2e7d32, 0 5px 10px rgba(46, 125, 50, 0.25);
+}
+.sheep-simple-modal-btn.sheep-simple-modal-btn-ghost {
+  background: #eef5ee;
+  color: #3d7a4a;
+  box-shadow: 0 2px 5px rgba(77, 136, 77, 0.12);
+}

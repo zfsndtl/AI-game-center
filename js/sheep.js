@@ -4,64 +4,221 @@
   const GAP = 8;
   const CELL_W = CARD_W + GAP;
   const CELL_H = CARD_H + GAP;
-  const SLOT_SIZE = 7;
-  const TYPES_L1 = ["🐑","🌱","🍎","🍄","🐛","🌸"];
-  const TYPES_L2 = ["🐑","🌱","🍎","🍄","🐛","🌸","🌳","🌼","🐞"];
-  const $ = (id) => document.getElementById(id);
-  const boardEl = $("sheep-board");
-  const slotEl = $("sheep-slot");
-  const modal = $("sheep-result-modal");
-  let currentLevel = 1;
-  let cards = [];
-  let slotCards = [];
-  let undoStack = [];
-  let totalCards = 0;
-  let gameActive = false;
+
+  const LEVELS = [
+    { name: "第 1 关", layers: 3, cols: 3, rows: 3, matchCount: 3, slotSize: 7, types: ["🐑","🐂","🐄","🐖","🐗","🐏","🐓","🐔","🦃"] },
+    { name: "第 2 关", layers: 3, cols: 3, rows: 3, matchCount: 3, slotSize: 7, types: ["🍎","🍊","🍋","🍌","🍉","🍇","🍓","🍒","🥝"] },
+    { name: "第 3 关", layers: 5, cols: 4, rows: 3, matchCount: 3, slotSize: 7, types: ["⭐","🌟","✨","💫","🌙","☀","🌞","🌈","🌠","💡"] },
+    { name: "第 4 关", layers: 5, cols: 4, rows: 3, matchCount: 3, slotSize: 7, types: ["🌸","🌺","🌼","🌻","🌹","🌷","🍀","🌿","🍄","🌴"] },
+    { name: "第 5 关", layers: 7, cols: 4, rows: 3, matchCount: 3, slotSize: 7, types: ["🎈","🎁","🎀","🎂","🎉","🎊","🎆"] },
+    { name: "第 6 关", layers: 7, cols: 4, rows: 3, matchCount: 3, slotSize: 7, types: ["🔵","🔴","🟡","🟢","🟣","🟠","⚫"] },
+    { name: "第 7 关 · 终极挑战", layers: 9, cols: 5, rows: 2, matchCount: 5, slotSize: 10, types: ["🐑","🍎","🌸","⭐","🎁","🌺"] }
+  ];
+
+  let state = { level: 0, cards: [], slotCards: [], totalCards: 0, gameActive: false, matchCount: 3, slotSize: 7, undoUsed: false, startTimestamp: null, totalSeconds: 0 };
+  function byId(id) { return document.getElementById(id); }
+  function pad2(n) { return n < 10 ? "0" + n : "" + n; }
+  function formatDuration(total) {
+    var s = Math.max(0, Math.floor(total));
+    var h = Math.floor(s / 3600);
+    var m = Math.floor((s % 3600) / 60);
+    var ss = s % 60;
+    if (h > 0) return h + " 小时 " + m + " 分 " + ss + " 秒";
+    if (m > 0) return m + " 分 " + ss + " 秒";
+    return ss + " 秒";
+  }
+  function formatClock(total) {
+    var s = Math.max(0, Math.floor(total));
+    var h = Math.floor(s / 3600);
+    var m = Math.floor((s % 3600) / 60);
+    var ss = s % 60;
+    if (h > 0) return pad2(h) + ":" + pad2(m) + ":" + pad2(ss);
+    return pad2(m) + ":" + pad2(ss);
+  }
+  function formatToday() {
+    var d = new Date();
+    return d.getFullYear() + " 年 " + (d.getMonth() + 1) + " 月 " + d.getDate() + " 日";
+  }
+  var sheepTimerHandle = null;
+  function startGlobalTimer() {
+    if (state.startTimestamp == null) state.startTimestamp = Date.now();
+    if (sheepTimerHandle) return;
+    sheepTimerHandle = setInterval(function() { refreshTimer(); }, 1000);
+    refreshTimer();
+  }
+  function stopGlobalTimer() {
+    if (sheepTimerHandle) { clearInterval(sheepTimerHandle); sheepTimerHandle = null; }
+  }
+  function refreshTimer() {
+    var el = byId("sheep-info-timer");
+    if (!el) return;
+    if (state.startTimestamp == null) { el.textContent = "00:00"; return; }
+    var sec = Math.floor((Date.now() - state.startTimestamp) / 1000);
+    state.totalSeconds = sec;
+    el.textContent = formatClock(sec);
+  }
+  function showCertificate() {
+    var total = state.totalSeconds;
+    if (!total && state.startTimestamp) total = Math.floor((Date.now() - state.startTimestamp) / 1000);
+    var dateEl = byId("sheep-cert-date");
+    if (dateEl) dateEl.textContent = formatToday();
+    var durEl = byId("sheep-cert-duration");
+    if (durEl) durEl.textContent = formatDuration(total);
+    byId("sheep-result-modal").style.display = "none";
+    var modal = byId("sheep-certificate-modal");
+    modal.style.display = "flex";
+    modal.classList.add("sheep-modal-active");
+  }
+  function hideCertificate() {
+    var modal = byId("sheep-certificate-modal");
+    modal.style.display = "none";
+    modal.classList.remove("sheep-modal-active");
+  }
+
+  function getHighestUnlocked() {
+    try { var v = parseInt(localStorage.getItem("sheep_highest_level"), 10); if (v >= 1 && v <= LEVELS.length) return v; } catch (e) {}
+    return 1;
+  }
+  function setHighestUnlocked(n) {
+    try { localStorage.setItem("sheep_highest_level", String(n)); } catch (e) {}
+  }
+  function getPassedSet() {
+    try {
+      var raw = localStorage.getItem("sheep_passed");
+      var arr = JSON.parse(raw || "[]");
+      var set = {};
+      for (var i = 0; i < arr.length; i++) set[arr[i]] = true;
+      return set;
+    } catch (e) { return {}; }
+  }
+  function markPassed(lvl) {
+    try {
+      var set = getPassedSet();
+      set[lvl] = true;
+      var arr = [];
+      for (var k in set) arr.push(parseInt(k, 10));
+      localStorage.setItem("sheep_passed", JSON.stringify(arr));
+    } catch (e) {}
+  }
+
   function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      let t = a[i]; a[i] = a[j]; a[j] = t;
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
     }
     return a;
   }
-  function genPositions(level) {
-    const list = [];
-    if (level === 1) {
-      for (let r=0;r<3;r++) for (let c=0;c<4;c++) list.push({x:c*CELL_W,y:r*CELL_H,layer:1});
-      for (let r=0;r<2;r++) for (let c=0;c<3;c++) list.push({x:c*CELL_W+CELL_W/2,y:r*CELL_H+CELL_H/2,layer:2});
-    } else {
-      for (let r=0;r<4;r++) for (let c=0;c<6;c++) list.push({x:c*CELL_W,y:r*CELL_H,layer:1});
-      for (let r=0;r<3;r++) for (let c=0;c<6;c++) list.push({x:c*CELL_W+CELL_W/2,y:r*CELL_H+CELL_H/2,layer:2});
-      for (let r=0;r<2;r++) for (let c=0;c<6;c++) list.push({x:c*CELL_W+CELL_W,y:r*CELL_H+CELL_H,layer:3});
+  function genPositions(cfg) {
+    // 候选槽位池：比每层实际牌数多出一些槽位，让不同层能在不同"池子"里取
+    var gridCols = cfg.cols + 2;
+    var gridRows = cfg.rows + 1;
+    var cellW = CARD_W + GAP * 0.6;
+    var cellH = CARD_H + GAP * 0.6;
+    var baseStartX = GAP;
+    var baseStartY = GAP;
+    var list = [];
+    for (var l = 0; l < cfg.layers; l++) {
+      // 每层整体做不同的偏移，让层与层错开
+      var globalOffX = (l % 2 === 0 ? 1 : -1) * (GAP * 0.6 + l * 1.5) + GAP * (l % 3);
+      var globalOffY = l * GAP * 0.4;
+      var slots = [];
+      for (var rr = 0; rr < gridRows; rr++) {
+        for (var cc = 0; cc < gridCols; cc++) {
+          slots.push({ c: cc, r: rr });
+        }
+      }
+      shuffle(slots);
+      var count = cfg.cols * cfg.rows;
+      for (var i = 0; i < count && i < slots.length; i++) {
+        var s = slots[i];
+        // 单张牌的大随机偏移：± 0.35 格宽 / ± 0.25 格高，使牌不再严格对齐
+        var jitterX = (Math.random() - 0.5) * cellW * 0.7;
+        var jitterY = (Math.random() - 0.5) * cellH * 0.5;
+        // 整层轻微的方向摆动，视觉上更像"乱堆"
+        var swingX = Math.cos(l * 1.3) * GAP * 0.35;
+        var swingY = Math.sin(l * 1.3) * GAP * 0.35;
+        var x = baseStartX + s.c * cellW + jitterX + globalOffX + swingX;
+        var y = baseStartY + s.r * cellH + jitterY + globalOffY + swingY;
+        if (x < 0) x = Math.random() * GAP;
+        if (y < 0) y = Math.random() * GAP;
+        list.push({ x: x, y: y, layer: l + 1 });
+      }
     }
     return list;
   }
-  function genPool(level, count) {
-    const types = level === 1 ? TYPES_L1 : TYPES_L2;
-    const perType = Math.floor(count / types.length);
-    const pool = [];
-    for (let k=0;k<types.length;k++) for (let i=0;i<perType;i++) pool.push(types[k]);
+  function genPool(cfg, count) {
+    var types = cfg.types;
+    var perType = Math.floor(count / types.length);
+    var pool = [];
+    for (var k = 0; k < types.length; k++) {
+      for (var i = 0; i < perType; i++) pool.push(types[k]);
+    }
     while (pool.length < count) pool.push(types[pool.length % types.length]);
     return shuffle(pool);
   }
-  function getBoardSize(level) {
-    if (level === 1) return {w: 4*CELL_W, h: 3*CELL_H};
-    return {w: 7*CELL_W, h: 4*CELL_H};
+  function getBoardSize(cfg) {
+    return { w: (cfg.cols + 2) * (CARD_W + GAP * 0.6) + cfg.layers * GAP * 1.2 + GAP * 2, h: (cfg.rows + 1) * (CARD_H + GAP * 0.6) + cfg.layers * GAP * 1.2 + GAP * 2 };
   }
+  function renderLevelSelect() {
+    var highest = getHighestUnlocked();
+    var passed = getPassedSet();
+    var total = LEVELS.length;
+    var bar = byId("sheep-progress-bar");
+    bar.innerHTML = "";
+    for (var i = 1; i <= total; i++) {
+      var dot = document.createElement("div");
+      dot.className = "sheep-progress-dot";
+      if (passed[i]) dot.classList.add("sheep-progress-done");
+      else if (i <= highest) dot.classList.add("sheep-progress-current");
+      else dot.classList.add("sheep-progress-locked");
+      var num = document.createElement("div");
+      num.className = "sheep-progress-num";
+      num.textContent = passed[i] ? "✓" : String(i);
+      dot.appendChild(num);
+      bar.appendChild(dot);
+      if (i < total) {
+        var line = document.createElement("div");
+        line.className = "sheep-progress-line";
+        if (passed[i] || i < highest) line.classList.add("sheep-progress-line-done");
+        bar.appendChild(line);
+      }
+    }
+    byId("sheep-progress-label").textContent = "第 " + highest + " / " + total + " 关";
+
+    var cardWrap = byId("sheep-current-card");
+    cardWrap.innerHTML = "";
+    var card = document.createElement("button");
+    card.className = "sheep-current-card-inner sheep-lvl-" + highest;
+    if (highest === total) card.classList.add("sheep-lvl-final");
+    var cfg = LEVELS[highest - 1];
+    var preview = cfg.types.slice(0, 5).join(" ");
+    card.innerHTML = '<div class="sheep-current-badge">当前</div>' +
+      '<div class="sheep-current-num">' + highest + '</div>' +
+      '<div class="sheep-current-name">' + cfg.name + '</div>' +
+      '<div class="sheep-current-desc">' + cfg.layers + ' 层 · ' + cfg.matchCount + ' 消 · ' + cfg.slotSize + ' 槽位</div>' +
+      '<div class="sheep-current-preview">' + preview + '</div>' +
+      '<div class="sheep-current-btn">开始挑战</div>';
+    (function(lvl) {
+      card.addEventListener("click", function() { startGame(lvl); });
+    })(highest - 1);
+    cardWrap.appendChild(card);
+  }
+
   function isTop(card) {
     if (card.removed) return false;
-    const cx = card.x + CARD_W/2, cy = card.y + CARD_H/2;
-    for (let i=0;i<cards.length;i++) {
-      const o = cards[i];
-      if (o === card || o.removed) continue;
-      if (o.layer <= card.layer) continue;
-      if (cx >= o.x && cx <= o.x + CARD_W && cy >= o.y && cy <= o.y + CARD_H) return false;
+    var cx = card.x + CARD_W / 2;
+    var cy = card.y + CARD_H / 2;
+    for (var i = 0; i < state.cards.length; i++) {
+      var other = state.cards[i];
+      if (other === card || other.removed) continue;
+      if (other.layer <= card.layer) continue;
+      if (cx >= other.x && cx <= other.x + CARD_W && cy >= other.y && cy <= other.y + CARD_H) return false;
     }
     return true;
   }
   function refreshLock() {
-    for (let i=0;i<cards.length;i++) {
-      const c = cards[i];
+    for (var i = 0; i < state.cards.length; i++) {
+      var c = state.cards[i];
       if (!c.el) continue;
       if (c.removed) { c.el.style.display = "none"; continue; }
       if (isTop(c)) c.el.classList.remove("sheep-card-locked");
@@ -69,19 +226,22 @@
     }
   }
   function refreshInfo() {
-    $("sheep-info-level").textContent = currentLevel;
-    let remain = 0;
-    for (let i=0;i<cards.length;i++) if (!cards[i].removed) remain++;
-    $("sheep-info-remain").textContent = remain;
-    $("sheep-info-progress").textContent = Math.round((1-remain/totalCards)*100)+"%";
-  }  function renderBoard() {
+    byId("sheep-info-level").textContent = state.level + 1;
+    var remain = 0;
+    for (var i = 0; i < state.cards.length; i++) if (!state.cards[i].removed) remain++;
+    byId("sheep-info-remain").textContent = remain;
+    byId("sheep-info-progress").textContent = Math.round((1 - remain / state.totalCards) * 100) + "%";
+  }
+  function renderBoard() {
+    var boardEl = byId("sheep-board");
     boardEl.innerHTML = "";
-    const size = getBoardSize(currentLevel);
+    var cfg = LEVELS[state.level];
+    var size = getBoardSize(cfg);
     boardEl.style.width = size.w + "px";
     boardEl.style.height = size.h + "px";
-    for (let i=0;i<cards.length;i++) {
-      const c = cards[i];
-      const el = document.createElement("div");
+    for (var i = 0; i < state.cards.length; i++) {
+      var c = state.cards[i];
+      var el = document.createElement("div");
       el.className = "sheep-card";
       el.style.position = "absolute";
       el.style.left = c.x + "px";
@@ -90,133 +250,254 @@
       el.style.height = CARD_H + "px";
       el.style.zIndex = c.layer * 10;
       el.textContent = c.type;
-      el.addEventListener("click", () => onClickCard(c));
+      // 按层显示不同阴影/边框，层次更明显
+      var depth = c.layer;
+      var shadowOffset = depth * 2;
+      var shadowBlur = depth * 2 + 4;
+      el.style.boxShadow = shadowOffset + "px " + shadowOffset + "px " + shadowBlur + "px rgba(46,125,50,0.25)";
+      // 不同层的边框颜色，从深到浅，表示在上面
+      var borderShade = Math.min(200, 120 + depth * 12);
+      el.style.borderColor = "rgb(" + borderShade + "," + (borderShade + 10) + "," + (borderShade - 10) + ")";
+      el.style.borderWidth = "2px";
+      (function(card) {
+        el.addEventListener("click", function() { onClickCard(card); });
+      })(c);
       c.el = el;
       boardEl.appendChild(el);
     }
     refreshLock();
   }
   function renderSlot() {
+    var slotEl = byId("sheep-slot");
     slotEl.innerHTML = "";
-    for (let i=0;i<SLOT_SIZE;i++) {
-      const cell = document.createElement("div");
+    for (var i = 0; i < state.slotSize; i++) {
+      var cell = document.createElement("div");
       cell.className = "sheep-slot-cell";
-      if (slotCards[i]) {
-        const cardEl = document.createElement("div");
+      if (state.slotCards[i]) {
+        var cardEl = document.createElement("div");
         cardEl.className = "sheep-slot-card";
-        cardEl.textContent = slotCards[i].type;
+        cardEl.textContent = state.slotCards[i].type;
         cell.appendChild(cardEl);
       }
       slotEl.appendChild(cell);
     }
   }
+  function refreshUndoBtn() {
+    var btn = byId("sheep-undo-btn");
+    var label = byId("sheep-undo-label");
+    if (state.undoUsed) {
+      btn.classList.add("sheep-action-btn-used");
+      label.textContent = "已使用";
+    } else {
+      btn.classList.remove("sheep-action-btn-used");
+      label.textContent = "撤回";
+    }
+  }
   function onClickCard(card) {
-    if (!gameActive) return;
+    if (!state.gameActive) return;
     if (card.removed || !isTop(card)) return;
+    if (state.slotCards.length >= state.slotSize) return;
     card.removed = true;
-    card.el.style.display = "none";
-    slotCards.push({type: card.type});
-    undoStack.push(card.id);
+    if (card.el) card.el.style.display = "none";
+    state.slotCards.push({ type: card.type });
     renderSlot();
     refreshLock();
     refreshInfo();
     checkMatch();
-    setTimeout(checkGameState, 180);
+    setTimeout(checkGameState, 200);
   }
   function checkMatch() {
-    const counts = {};
-    for (let i=0;i<slotCards.length;i++) counts[slotCards[i].type] = (counts[slotCards[i].type]||0)+1;
-    let matched = null;
-    for (const t in counts) if (counts[t] >= 3) { matched = t; break; }
-    if (matched) {
-      const idx = [];
-      for (let i=0;i<slotCards.length && idx.length<3;i++) if (slotCards[i].type === matched) idx.push(i);
-      for (let i=idx.length-1;i>=0;i--) slotCards.splice(idx[i],1);
-      undoStack = [];
+    var counts = {};
+    for (var i = 0; i < state.slotCards.length; i++) {
+      var t = state.slotCards[i].type;
+      counts[t] = (counts[t] || 0) + 1;
+    }
+    var matchedType = null;
+    for (var tt in counts) {
+      if (counts[tt] >= state.matchCount) { matchedType = tt; break; }
+    }
+    if (matchedType) {
+      var idxToRemove = [];
+      for (var j = state.slotCards.length - 1; j >= 0 && idxToRemove.length < state.matchCount; j--) {
+        if (state.slotCards[j].type === matchedType) idxToRemove.push(j);
+      }
+      idxToRemove.sort(function(a, b) { return b - a; });
+      for (var k = 0; k < idxToRemove.length; k++) {
+        state.slotCards.splice(idxToRemove[k], 1);
+      }
       renderSlot();
+      setTimeout(checkMatch, 100);
     }
   }
   function checkGameState() {
-    const remaining = cards.filter(c => !c.removed).length;
-    if (remaining === 0 && slotCards.length === 0) { showResult(true); return; }
-    if (slotCards.length >= SLOT_SIZE) {
-      const counts = {};
-      for (let i=0;i<slotCards.length;i++) counts[slotCards[i].type] = (counts[slotCards[i].type]||0)+1;
-      let canMatch = false;
-      for (const t in counts) if (counts[t] >= 3) canMatch = true;
-      if (!canMatch) showResult(false);
-    }
+    var remaining = 0;
+    for (var i = 0; i < state.cards.length; i++) if (!state.cards[i].removed) remaining++;
+    if (remaining === 0 && state.slotCards.length === 0) { showResult(true); return; }
+    if (state.slotCards.length >= state.slotSize) showResult(false);
   }
   function showResult(win) {
-    gameActive = false;
-    modal.style.display = "flex";
-    modal.classList.add("sheep-modal-active");
-    $("sheep-modal-emoji").textContent = win ? "🎉" : "😵";
-    $("sheep-modal-title").textContent = win ? "恭喜通关！" : "挑战失败";
-    $("sheep-modal-subtitle").textContent = win ? "成功消除所有牌" : "卡槽已满，再试一次吧";
+    state.gameActive = false;
+    var level1Based = state.level + 1;
+    var total = LEVELS.length;
+    if (win) {
+      markPassed(level1Based);
+      if (level1Based >= total) {
+        stopGlobalTimer();
+        showCertificate();
+        return;
+      }
+      var nextLevel = level1Based + 1;
+      if (nextLevel > getHighestUnlocked()) setHighestUnlocked(nextLevel);
+      var modal = byId("sheep-result-modal");
+      modal.style.display = "flex";
+      modal.classList.add("sheep-modal-active");
+      byId("sheep-modal-emoji").textContent = "🎉";
+      byId("sheep-modal-title").textContent = "恭喜通关！";
+      byId("sheep-modal-subtitle").textContent = "已解锁第 " + nextLevel + " 关";
+      byId("sheep-modal-main-btn").textContent = "挑战下一关";
+    } else {
+      var modal = byId("sheep-result-modal");
+      modal.style.display = "flex";
+      modal.classList.add("sheep-modal-active");
+      byId("sheep-modal-emoji").textContent = "😵";
+      byId("sheep-modal-title").textContent = "挑战失败";
+      byId("sheep-modal-subtitle").textContent = "槽位已满，再试一次吧";
+      byId("sheep-modal-main-btn").textContent = "再来一次";
+    }
   }
   function hideResult() {
+    var modal = byId("sheep-result-modal");
     modal.style.display = "none";
     modal.classList.remove("sheep-modal-active");
-  }  function startGame(level) {
-    currentLevel = level;
-    const positions = genPositions(level);
-    const pool = genPool(level, positions.length);
-    cards = [];
-    for (let i=0;i<positions.length;i++) {
-      cards.push({id:"c"+i, type:pool[i], x:positions[i].x, y:positions[i].y, layer:positions[i].layer, removed:false, el:null});
+  }
+  function startGame(levelIdx) {
+    state.level = levelIdx;
+    var cfg = LEVELS[levelIdx];
+    state.matchCount = cfg.matchCount;
+    state.slotSize = cfg.slotSize;
+    state.undoUsed = false;
+    var positions = genPositions(cfg);
+    var pool = genPool(cfg, positions.length);
+    state.cards = [];
+    for (var i = 0; i < positions.length; i++) {
+      state.cards.push({
+        id: "c" + i, type: pool[i],
+        x: positions[i].x, y: positions[i].y, layer: positions[i].layer,
+        removed: false, el: null
+      });
     }
-    totalCards = cards.length;
-    slotCards = [];
-    undoStack = [];
-    gameActive = true;
-    $("sheep-level-panel").style.display = "none";
-    $("sheep-game-panel").style.display = "block";
-    $("sheep-level-text").textContent = level === 1 ? "第1关" : "第2关";
+    state.totalCards = state.cards.length;
+    state.slotCards = [];
+    state.gameActive = true;
+    if (state.startTimestamp == null) startGlobalTimer();
+    byId("sheep-level-panel").style.display = "none";
+    byId("sheep-game-panel").style.display = "block";
+    byId("sheep-level-text").textContent = cfg.name;
     hideResult();
     renderBoard();
     renderSlot();
     refreshInfo();
+    refreshUndoBtn();
+    var slotEl = byId("sheep-slot");
+    slotEl.style.gridTemplateColumns = "repeat(" + state.slotSize + ", 1fr)";
   }
-  function backToLevels() {
-    // 返回主导航页
-    window.location.href = "index.html";
-  }
-  function showLevels() {
-    $("sheep-game-panel").style.display = "none";
-    $("sheep-level-panel").style.display = "block";
-    $("sheep-level-text").textContent = "羊了个羊";
+
+  function showLevelsPage() {
+    byId("sheep-game-panel").style.display = "none";
+    byId("sheep-level-panel").style.display = "block";
+    byId("sheep-level-text").textContent = "羊了个羊";
     hideResult();
+    renderLevelSelect();
   }
+
   function doUndo() {
-    if (!gameActive || undoStack.length === 0) return;
-    const lastId = undoStack.pop();
-    const card = null;
-    for (let i=0;i<cards.length;i++) if (cards[i].id === lastId) { cards[i].removed = false; if (cards[i].el) cards[i].el.style.display = "flex"; break; }
-    if (slotCards.length > 0) slotCards.pop();
+    if (!state.gameActive || state.slotCards.length === 0) return;
+    if (state.undoUsed) return;
+    var removed = [];
+    for (var i = 0; i < state.cards.length; i++) if (state.cards[i].removed) removed.push(state.cards[i]);
+    if (removed.length === 0) return;
+    var last = removed[removed.length - 1];
+    last.removed = false;
+    if (last.el) last.el.style.display = "flex";
+    state.slotCards.pop();
+    state.undoUsed = true;
     renderSlot();
     refreshLock();
     refreshInfo();
+    refreshUndoBtn();
   }
+
   function doShuffle() {
-    if (!gameActive) return;
-    const actives = cards.filter(c => !c.removed);
-    const types = actives.map(c => c.type);
+    if (!state.gameActive) return;
+    var actives = [];
+    for (var i = 0; i < state.cards.length; i++) if (!state.cards[i].removed) actives.push(state.cards[i]);
+    var types = [];
+    for (var j = 0; j < actives.length; j++) types.push(actives[j].type);
     shuffle(types);
-    for (let i=0;i<actives.length;i++) actives[i].type = types[i];
+    for (var k = 0; k < actives.length; k++) actives[k].type = types[k];
     renderBoard();
   }
-  document.querySelectorAll(".sheep-level-card").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const lv = parseInt(btn.getAttribute("data-level") || "1", 10);
-      startGame(lv);
-    });
-  });
-  $("sheep-undo-btn").addEventListener("click", doUndo);
-  $("sheep-shuffle-btn").addEventListener("click", doShuffle);
-  $("sheep-restart-btn").addEventListener("click", () => startGame(currentLevel));
-  $("sheep-modal-back-btn").addEventListener("click", backToLevels);
-  $("sheep-modal-again-btn").addEventListener("click", () => startGame(currentLevel));
-  const bk = $("back-btn"); if (bk) bk.addEventListener("click", backToLevels);
-  const mn = $("sheep-menu"); if (mn) mn.addEventListener("click", backToLevels);
+
+  function onModalMainClick() {
+    var title = byId("sheep-modal-title").textContent;
+    if (title === "全部通关！") {
+      window.location.href = "index.html";
+    } else if (title === "恭喜通关！") {
+      var next = state.level + 1;
+      if (next < LEVELS.length) startGame(next);
+      else showLevelsPage();
+    } else {
+      startGame(state.level);
+    }
+  }
+
+  function setupEvents() {
+    var bk = byId("back-btn");
+    if (bk) bk.addEventListener("click", function() { window.location.href = "index.html"; });
+    var mn = byId("sheep-menu");
+    if (mn) mn.addEventListener("click", function() { window.location.href = "index.html"; });
+    byId("sheep-undo-btn").addEventListener("click", doUndo);
+    byId("sheep-shuffle-btn").addEventListener("click", doShuffle);
+    byId("sheep-restart-btn").addEventListener("click", function() { startGame(state.level); });
+    byId("sheep-modal-back-btn").addEventListener("click", showLevelsPage);
+    var cBack = byId("sheep-cert-back-btn");
+    if (cBack) cBack.addEventListener("click", function() { window.location.href = "index.html"; });
+    var cSave = byId("sheep-cert-save-btn");
+    if (cSave) cSave.addEventListener("click", function() { alert("长按奖状可保存到相册，或使用系统截图保存"); });
+    byId("sheep-modal-main-btn").addEventListener("click", onModalMainClick);
+  }
+
+  function init() {
+    setupEvents();
+    renderLevelSelect();
+    // 调试入口：访问 sheep.html#cert 可直接预览奖状（用于演示）
+    if (location.hash.indexOf("cert") >= 0) {
+      state.startTimestamp = Date.now() - 15 * 60 * 1000 - 23 * 1000;
+      state.totalSeconds = 15 * 60 + 23;
+      setTimeout(function() { showCertificate(); }, 300);
+    }
+    // 连点 3 下标题也可触发演示
+    var title = byId("sheep-level-text");
+    if (title) {
+      var sheepTapCount = 0;
+      var sheepTapTimer = null;
+      title.addEventListener("click", function() {
+        sheepTapCount++;
+        if (sheepTapTimer) clearTimeout(sheepTapTimer);
+        if (sheepTapCount >= 3) {
+          sheepTapCount = 0;
+          state.startTimestamp = Date.now() - 8 * 60 * 1000 - 42 * 1000;
+          state.totalSeconds = 8 * 60 + 42;
+          showCertificate();
+        } else {
+          sheepTapTimer = setTimeout(function() { sheepTapCount = 0; }, 800);
+        }
+      });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();

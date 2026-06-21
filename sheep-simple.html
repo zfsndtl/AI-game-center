@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>羊了个羊 · 简单版</title>
+    <link rel="stylesheet" href="css/sheep-simple.css" />
+</head>
+<body>
+    <div class="sheep-simple-wrap">
+        <div class="sheep-simple-topbar">
+            <button class="sheep-simple-back-btn" id="sheep-simple-back">&lt;</button>
+            <div class="sheep-simple-title-area">
+                <span class="sheep-simple-title-emoji">🐑</span>
+                <span>简单版</span>
+            </div>
+            <button class="sheep-simple-menu-btn" id="sheep-simple-menu">☰</button>
+        </div>
+
+        <div class="sheep-simple-info-bar">
+            <div class="sheep-simple-info-col">
+                <div class="sheep-simple-info-label">关卡</div>
+                <div class="sheep-simple-info-value" id="sheep-simple-level">1</div>
+            </div>
+            <div class="sheep-simple-info-col">
+                <div class="sheep-simple-info-label">剩余</div>
+                <div class="sheep-simple-info-value" id="sheep-simple-remain">0</div>
+            </div>
+            <div class="sheep-simple-info-col">
+                <div class="sheep-simple-info-label">进度</div>
+                <div class="sheep-simple-info-value" id="sheep-simple-progress">0%</div>
+            </div>
+        </div>
+
+        <div class="sheep-simple-board" id="sheep-simple-board"></div>
+
+        <div class="sheep-simple-slot" id="sheep-simple-slot">
+            <div class="sheep-simple-slot-item"></div>
+            <div class="sheep-simple-slot-item"></div>
+            <div class="sheep-simple-slot-item"></div>
+            <div class="sheep-simple-slot-item"></div>
+            <div class="sheep-simple-slot-item"></div>
+            <div class="sheep-simple-slot-item"></div>
+            <div class="sheep-simple-slot-item"></div>
+        </div>
+
+        <div class="sheep-simple-toolbar">
+            <button class="sheep-simple-btn" id="sheep-simple-undo-btn">↻ 撤回</button>
+            <button class="sheep-simple-btn" id="sheep-simple-shuffle-btn">⇅ 洗牌</button>
+            <button class="sheep-simple-btn sheep-simple-btn-primary" id="sheep-simple-restart-btn">↻ 重玩</button>
+        </div>
+
+        <a href="index.html" class="sheep-simple-footer-link">← 返回首页</a>
+    </div>
+
+    <div id="sheep-simple-modal" class="sheep-simple-modal">
+        <div class="sheep-simple-modal-overlay"></div>
+        <div class="sheep-simple-modal-box">
+            <div class="sheep-simple-modal-title" id="sheep-simple-modal-title">🎉 通关成功</div>
+            <div class="sheep-simple-modal-body" id="sheep-simple-modal-body">恭喜！再来一局挑战更高分？</div>
+            <div class="sheep-simple-modal-actions">
+                <button class="sheep-simple-modal-btn" id="sheep-simple-modal-restart">再来一局</button>
+                <button class="sheep-simple-modal-btn sheep-simple-modal-btn-ghost" id="sheep-simple-modal-back">返回首页</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/sheep-simple.js"></script>
+</body>
+</html>

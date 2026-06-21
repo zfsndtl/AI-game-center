@@ -1155,3 +1155,26 @@ h1, h2, h3 {
 .landing-card-sheep .landing-card-btn {
     background: linear-gradient(135deg, #e8a23a, #c97f1c);
 }
+
+
+/* 羊了个羊 - 简单版 */
+.landing-card-sheep-simple::before {
+    background: linear-gradient(180deg, #66bb6a, #43a047);
+}
+.landing-card-icon-sheep-simple {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+}
+.landing-card-sheep-simple .landing-card-btn {
+    background: linear-gradient(135deg, #66bb6a, #2e7d32);
+}
+
+/* 羊了个羊 - 挑战版 */
+.landing-card-sheep-challenge::before {
+    background: linear-gradient(180deg, #e8a23a, #c97f1c);
+}
+.landing-card-icon-sheep-challenge {
+    background: linear-gradient(135deg, #fff4dc, #f8e6b8);
+}
+.landing-card-sheep-challenge .landing-card-btn {
+    background: linear-gradient(135deg, #e8a23a, #b87218);
+}
