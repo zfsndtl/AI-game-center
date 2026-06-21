@@ -1,0 +1,132 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); color: #2e7d32; font-size: 16px; }
+button { border: none; outline: none; cursor: pointer; font-family: inherit; background: none; color: inherit; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+/* 容器 */
+.sheep-container { min-height: 100%; max-width: 520px; margin: 0 auto; padding: 12px 16px 20px; display: flex; flex-direction: column; }
+
+/* 顶部栏 */
+.sheep-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 0 16px; }
+.sheep-icon-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(255, 255, 255, 0.85); color: #2e7d32; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(46, 125, 50, 0.15); transition: transform 0.15s ease; }
+.sheep-icon-btn:active { transform: scale(0.93); }
+.sheep-title { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700; color: #1b5e20; }
+.sheep-title-emoji { font-size: 22px; }
+
+/* 通用面板 */
+.sheep-panel { animation: sheepFadeIn 0.4s ease; }
+@keyframes sheepFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 关卡选择 hero */
+.sheep-hero { text-align: center; padding: 24px 0 28px; }
+.sheep-hero-emoji { font-size: 64px; line-height: 1; margin-bottom: 12px; display: inline-block; animation: sheepBounce 2s ease-in-out infinite; }
+@keyframes sheepBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.sheep-hero-title { font-size: 30px; font-weight: 800; color: #1b5e20; letter-spacing: 2px; margin-bottom: 6px; }
+.sheep-hero-subtitle { font-size: 14px; color: #558b2f; }
+
+/* 关卡卡片 */
+.sheep-level-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+.sheep-level-card { width: 100%; padding: 20px; background: #fff; border-radius: 18px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(46, 125, 50, 0.15); transition: transform 0.15s ease, box-shadow 0.15s ease; position: relative; overflow: hidden; }
+.sheep-level-card:active { transform: scale(0.97); }
+.sheep-level-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
+.sheep-level-easy::before { background: linear-gradient(180deg, #66bb6a, #a5d6a7); }
+.sheep-level-hard::before { background: linear-gradient(180deg, #ef5350, #ffab91); }
+.sheep-level-num { position: absolute; right: 16px; top: 12px; font-size: 36px; font-weight: 800; color: rgba(46, 125, 50, 0.12); font-family: Georgia, serif; }
+.sheep-level-hard .sheep-level-num { color: rgba(198, 40, 40, 0.15); }
+.sheep-level-name { font-size: 18px; font-weight: 700; color: #1b5e20; margin-top: 4px; }
+.sheep-level-hard .sheep-level-name { color: #b71c1c; }
+.sheep-level-desc { font-size: 13px; color: #558b2f; }
+.sheep-level-hard .sheep-level-desc { color: #c0392b; }
+.sheep-level-btn { margin-top: 4px; padding: 8px 20px; background: linear-gradient(135deg, #66bb6a, #43a047); color: #fff; font-size: 13px; font-weight: 700; border-radius: 10px; letter-spacing: 2px; box-shadow: 0 4px 10px rgba(67, 160, 71, 0.35); }
+.sheep-level-hard .sheep-level-btn { background: linear-gradient(135deg, #ef5350, #e53935); box-shadow: 0 4px 10px rgba(229, 57, 53, 0.35); }
+
+/* 规则说明 */
+.sheep-rules { background: rgba(255, 255, 255, 0.75); border-radius: 16px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(46, 125, 50, 0.1); }
+.sheep-rules-title { font-size: 14px; font-weight: 700; color: #1b5e20; margin-bottom: 8px; }
+.sheep-rules li { position: relative; padding-left: 16px; font-size: 12.5px; color: #33691e; line-height: 1.8; }
+.sheep-rules li::before { content: ""; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; background: #66bb6a; border-radius: 50%; }
+
+
+/* 游戏信息栏 */
+.sheep-info-bar { display: flex; justify-content: space-around; background: rgba(255, 255, 255, 0.85); border-radius: 14px; padding: 10px 12px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(46, 125, 50, 0.1); }
+.sheep-info-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.sheep-info-label { font-size: 11px; color: #689f38; font-weight: 500; letter-spacing: 1px; }
+.sheep-info-value { font-size: 16px; font-weight: 800; color: #1b5e20; }
+
+/* 牌堆区 */
+.sheep-board-wrapper { flex: 0 0 auto; display: flex; justify-content: center; align-items: center; padding: 12px 0 16px; }
+.sheep-board { position: relative; width: 100%; max-width: 380px; aspect-ratio: 1/1; }
+
+/* 单张牌 */
+.sheep-card { position: absolute; width: 52px; height: 62px; border-radius: 10px; background: linear-gradient(135deg, #fff9e6 0%, #ffe082 55%, #ffc107 100%); border: 2px solid #e65100; display: flex; align-items: center; justify-content: center; font-size: 34px; line-height: 1; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.25); cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease; user-select: none; will-change: transform; }
+.sheep-card::before { content: ""; position: absolute; top: 4px; left: 4px; right: 4px; height: 8px; border-radius: 6px; background: rgba(255,255,255,0.5); }
+.sheep-card:hover:not(.sheep-card-locked) { transform: translateY(-2px); box-shadow: inset 0 -3px 0 rgba(0,0,0,0.1), 0 6px 12px rgba(0,0,0,0.3); }
+.sheep-card.sheep-card-locked { filter: brightness(0.55) saturate(0.6); cursor: not-allowed; opacity: 0.85; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3); }
+.sheep-card.sheep-card-picked { animation: sheepPick 0.3s ease forwards; }
+@keyframes sheepPick { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 0.9; } 100% { transform: scale(0.5) translateY(-30px); opacity: 0; } }
+
+/* 槽位区 */
+.sheep-slot-wrapper { display: flex; justify-content: center; padding: 8px 0 16px; }
+.sheep-slot { display: flex; gap: 6px; padding: 10px; background: rgba(255,255,255,0.9); border-radius: 16px; box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15); border: 2px dashed rgba(104, 159, 56, 0.35); }
+.sheep-slot-cell { width: 44px; height: 52px; border-radius: 8px; background: rgba(197, 225, 165, 0.25); display: flex; align-items: center; justify-content: center; position: relative; }
+.sheep-slot-card { width: 44px; height: 52px; border-radius: 8px; background: linear-gradient(135deg, #fff9e6 0%, #ffe082 55%, #ffc107 100%); border: 2px solid #e65100; display: flex; align-items: center; justify-content: center; font-size: 28px; line-height: 1; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.2); animation: sheepDrop 0.25s ease; }
+.sheep-slot-card::before { content: ""; position: absolute; top: 3px; left: 3px; right: 3px; height: 5px; border-radius: 4px; background: rgba(255,255,255,0.5); }
+.sheep-slot-card.sheep-card-match { animation: sheepMatch 0.4s ease forwards; }
+@keyframes sheepDrop { from { transform: translateY(-24px) scale(0.7); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+@keyframes sheepMatch { 0% { transform: scale(1); } 40% { transform: scale(1.25); filter: brightness(1.5); } 100% { transform: scale(0); opacity: 0; } }
+
+/* 操作按钮 */
+.sheep-actions { display: flex; gap: 10px; justify-content: center; }
+.sheep-action-btn { flex: 0 1 auto; min-width: 90px; padding: 10px 16px; background: rgba(255, 255, 255, 0.95); color: #2e7d32; border-radius: 12px; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 3px 10px rgba(46, 125, 50, 0.15); transition: transform 0.15s ease; }
+.sheep-action-btn:active { transform: scale(0.94); }
+.sheep-action-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.sheep-action-restart { background: linear-gradient(135deg, #66bb6a, #43a047); color: #fff; box-shadow: 0 3px 10px rgba(67, 160, 71, 0.35); }
+
+/* 胜负弹窗 */
+.sheep-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 100; }
+.sheep-modal.sheep-modal-active { display: flex; animation: sheepFadeIn 0.3s ease; }
+.sheep-modal-overlay { position: absolute; inset: 0; background: rgba(30, 50, 30, 0.65); backdrop-filter: blur(4px); }
+.sheep-modal-content { position: relative; width: calc(100% - 60px); max-width: 340px; background: #fff; border-radius: 24px; padding: 28px 20px 20px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.25); animation: sheepModalDrop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.sheep-modal-emoji { font-size: 56px; line-height: 1; margin-bottom: 10px; }
+.sheep-modal-title { font-size: 22px; font-weight: 800; color: #1b5e20; margin-bottom: 6px; }
+.sheep-modal-subtitle { font-size: 13.5px; color: #558b2f; margin-bottom: 20px; }
+.sheep-modal-actions { display: flex; gap: 10px; }
+.sheep-modal-btn { flex: 1; padding: 12px 16px; border-radius: 12px; font-size: 14px; font-weight: 700; transition: transform 0.15s ease; }
+.sheep-modal-btn:active { transform: scale(0.96); }
+.sheep-modal-btn-primary { background: linear-gradient(135deg, #66bb6a, #43a047); color: #fff; box-shadow: 0 4px 12px rgba(67, 160, 71, 0.35); }
+.sheep-modal-btn-ghost { background: #e8f5e9; color: #2e7d32; }
+
+@keyframes sheepModalDrop { from { transform: translateY(30px) scale(0.88); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+/* 小屏适配 */
+@media (max-width: 360px) {
+.sheep-card { width: 46px; height: 56px; font-size: 30px; }
+.sheep-slot-cell { width: 40px; height: 48px; }
+.sheep-slot-card { width: 40px; height: 48px; font-size: 26px; }
+.sheep-action-btn { min-width: 76px; padding: 9px 12px; font-size: 12px; }
+.sheep-hero-title { font-size: 26px; }
+}
+@media (max-height: 680px) {
+.sheep-hero { padding: 12px 0 16px; }
+.sheep-hero-emoji { font-size: 48px; }
+}
+
+/* 返回首页按钮 */
+.sheep-home-link {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  color: #2e7d32;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.15);
+  transition: transform 0.15s ease;
+}
+.sheep-home-link:active {
+  transform: scale(0.97);
+}
+

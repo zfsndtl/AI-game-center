@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>羊了个羊 · 小游戏</title>
+<link rel="stylesheet" href="css/sheep.css" />
+</head>
+<body>
+<div class="sheep-container">
+<div class="sheep-header">
+<button id="back-btn" class="sheep-icon-btn" aria-label="返回">
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<div class="sheep-title">
+<span class="sheep-title-emoji">🐑</span>
+<span id="sheep-level-text">羊了个羊</span>
+</div>
+<button id="sheep-menu" class="sheep-icon-btn" aria-label="菜单">
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+</div>
+
+<div id="sheep-level-panel" class="sheep-panel">
+<div class="sheep-hero">
+<div class="sheep-hero-emoji">🐑</div>
+<div class="sheep-hero-title">羊了个羊</div>
+<div class="sheep-hero-subtitle">三个相同图案即可消除</div>
+</div>
+<div class="sheep-level-list">
+<button class="sheep-level-card sheep-level-easy" data-level="1">
+<div class="sheep-level-num">1</div>
+<div class="sheep-level-name">入门关卡</div>
+<div class="sheep-level-desc">简单堆叠 · 轻松通关</div>
+<div class="sheep-level-btn">开始</div>
+</button>
+<button class="sheep-level-card sheep-level-hard" data-level="2">
+<div class="sheep-level-num">2</div>
+<div class="sheep-level-name">挑战关卡</div>
+<div class="sheep-level-desc">三层堆叠 · 运气与策略</div>
+<div class="sheep-level-btn">挑战</div>
+</button>
+</div>
+<div class="sheep-rules">
+<div class="sheep-rules-title">游戏规则</div>
+<ul>
+<li>点击上层露出的牌，牌会进入底部 7 格槽位</li>
+<li>槽位中若有三张相同图案，自动消除</li>
+<li>7 个槽位填满但无法消除，游戏失败</li>
+<li>可使用撤回、洗牌道具辅助通关</li>
+</ul>
+</div>
+<a href="index.html" class="sheep-home-link">← 返回首页</a>
+</div>
+
+<div id="sheep-game-panel" class="sheep-panel" style="display:none;">
+<div class="sheep-info-bar">
+<div class="sheep-info-item"><span class="sheep-info-label">关卡</span><span id="sheep-info-level" class="sheep-info-value">1</span></div>
+<div class="sheep-info-item"><span class="sheep-info-label">剩余</span><span id="sheep-info-remain" class="sheep-info-value">0</span></div>
+<div class="sheep-info-item"><span class="sheep-info-label">进度</span><span id="sheep-info-progress" class="sheep-info-value">0%</span></div>
+</div>
+<div class="sheep-board-wrapper">
+<div id="sheep-board" class="sheep-board"></div>
+</div>
+<div class="sheep-slot-wrapper">
+<div id="sheep-slot" class="sheep-slot"></div>
+</div>
+<div class="sheep-actions">
+<button class="sheep-action-btn sheep-action-undo" id="sheep-undo-btn">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+<span>撤回</span>
+</button>
+<button class="sheep-action-btn sheep-action-shuffle" id="sheep-shuffle-btn">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+<span>洗牌</span>
+</button>
+<button class="sheep-action-btn sheep-action-restart" id="sheep-restart-btn">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+<span>重玩</span>
+</button>
+</div>
+</div>
+</div>
+<div id="sheep-result-modal" class="sheep-modal">
+<div class="sheep-modal-overlay"></div>
+<div class="sheep-modal-content">
+<div id="sheep-modal-emoji" class="sheep-modal-emoji">🎉</div>
+<div id="sheep-modal-title" class="sheep-modal-title">恭喜通关！</div>
+<div id="sheep-modal-subtitle" class="sheep-modal-subtitle">你成功消除了所有牌</div>
+<div class="sheep-modal-actions">
+<button class="sheep-modal-btn sheep-modal-btn-ghost" id="sheep-modal-back-btn">返回关卡</button>
+<button class="sheep-modal-btn sheep-modal-btn-primary" id="sheep-modal-again-btn">再来一次</button>
+</div>
+</div>
+</div>
+<script src="js/sheep.js"></script>
+</body>
+</html>

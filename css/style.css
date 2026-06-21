@@ -1141,3 +1141,17 @@ h1, h2, h3 {
 .landing-card-football .landing-card-btn {
     background: linear-gradient(135deg, #1a3d6f, #3b6ea8);
 }
+
+/* 羊了个羊入口卡片 */
+.landing-card-sheep::before {
+    background: linear-gradient(180deg, #e8a23a, #f0c674);
+}
+.landing-card-icon-sheep {
+    background: linear-gradient(135deg, #fff4dc, #f8e6b8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.landing-card-sheep .landing-card-btn {
+    background: linear-gradient(135deg, #e8a23a, #c97f1c);
+}
