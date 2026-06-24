@@ -112,13 +112,18 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM加载完成，开始初始化气球和气泡交互效果');
             
-            // 气球点击处理
-            function handleBalloonClick(e) {
+            // 气球悬停/触摸处理
+            function handleBalloonHover(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log('气球被点击');
                 
                 var balloon = e.currentTarget;
+                
+                // 防止重复触发
+                if (balloon.dataset.popping === 'true') return;
+                balloon.dataset.popping = 'true';
+                
+                console.log('气球被触碰');
                 
                 // 停止动画
                 balloon.style.animation = 'none';
@@ -158,17 +163,23 @@
                         balloon.style.transform = '';
                         balloon.style.animation = '';
                         balloon.classList.remove('pop');
+                        balloon.dataset.popping = 'false';
                     }, 400);
                 }, 300);
             }
             
-            // 气泡点击处理
-            function handleBubbleClick(e) {
+            // 气泡悬停/触摸处理
+            function handleBubbleHover(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log('气泡被点击');
                 
                 var bubble = e.currentTarget;
+                
+                // 防止重复触发
+                if (bubble.dataset.popping === 'true') return;
+                bubble.dataset.popping = 'true';
+                
+                console.log('气泡被触碰');
                 
                 // 停止动画
                 bubble.style.animation = 'none';
@@ -203,6 +214,7 @@
                 setTimeout(function() {
                     bubble.style.animation = '';
                     bubble.classList.remove('pop');
+                    bubble.dataset.popping = 'false';
                 }, 300);
             }
             
@@ -221,22 +233,38 @@
                 console.error('没有找到气泡元素！');
             }
             
+            // 气球事件：鼠标悬停和触摸触发
             for (var i = 0; i < balloons.length; i++) {
-                balloons[i].addEventListener('click', handleBalloonClick);
-                balloons[i].addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    handleBalloonClick(e);
-                }, { passive: false });
-                console.log('已为气球 ' + (i + 1) + ' 添加事件监听器');
+                balloons[i].dataset.popping = 'false';
+                
+                // 电脑端：鼠标悬停触发
+                balloons[i].addEventListener('mouseenter', handleBalloonHover);
+                
+                // 移动端：触摸触发（使用pointerenter兼容）
+                balloons[i].addEventListener('pointerenter', function(e) {
+                    if (e.pointerType === 'touch') {
+                        handleBalloonHover(e);
+                    }
+                });
+                
+                console.log('已为气球 ' + (i + 1) + ' 添加悬停/触摸事件监听器');
             }
             
+            // 气泡事件：鼠标悬停和触摸触发
             for (var i = 0; i < bubbles.length; i++) {
-                bubbles[i].addEventListener('click', handleBubbleClick);
-                bubbles[i].addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    handleBubbleClick(e);
-                }, { passive: false });
-                console.log('已为气泡 ' + (i + 1) + ' 添加事件监听器');
+                bubbles[i].dataset.popping = 'false';
+                
+                // 电脑端：鼠标悬停触发
+                bubbles[i].addEventListener('mouseenter', handleBubbleHover);
+                
+                // 移动端：触摸触发（使用pointerenter兼容）
+                bubbles[i].addEventListener('pointerenter', function(e) {
+                    if (e.pointerType === 'touch') {
+                        handleBubbleHover(e);
+                    }
+                });
+                
+                console.log('已为气泡 ' + (i + 1) + ' 添加悬停/触摸事件监听器');
             }
             
             console.log('气球和气泡交互初始化完成');
