@@ -8,8 +8,8 @@
   const MATCH_COUNT = 3;  // 三消
   const SLOT_SIZE = 7;    // 槽位数
 
-  // 原版风格的图案（与截图对应：花、树、蘑菇、苹果、苗、羊、瓢虫、毛毛虫、向日葵等）
-  const PATTERNS = ["🌸", "🌳", "🍄", "🍎", "🌱", "🐑", "🐞", "🐛", "🌻"];
+  // 原版风格的图案（与截图对应：花、树、蘑菇、苹果、苗、羊、瓢虫、兔子、向日葵等）
+  const PATTERNS = ["🌸", "🌳", "🍄", "🍎", "🌱", "🐑", "🐞", "🐰", "🌻"];
 
   let state = { cards: [], slotCards: [], totalCards: 0, gameActive: false, lastActions: [], level: 1 };
 

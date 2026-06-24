@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>计算器</title>
+    <link rel="stylesheet" href="css/calculator.css" />
+    <link rel="stylesheet" href="css/background.css" />
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <a href="index.html" class="calculator-back-btn">← 返回首页</a>
+            <div class="calculator-title">计算器</div>
+        </div>
+
+        <div class="calculator-display">
+            <div class="calculator-expression" id="expression"></div>
+            <div class="calculator-result" id="result">0</div>
+        </div>
+
+        <div class="calculator-buttons">
+            <div class="calculator-row">
+                <button class="calculator-btn calculator-btn-clear" data-action="clear">C</button>
+                <button class="calculator-btn calculator-btn-delete" data-action="delete">⌫</button>
+                <button class="calculator-btn calculator-btn-operator" data-action="operator" data-value="%">%</button>
+                <button class="calculator-btn calculator-btn-operator" data-action="operator" data-value="/">÷</button>
+            </div>
+            <div class="calculator-row">
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value="7">7</button>
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value="8">8</button>
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value="9">9</button>
+                <button class="calculator-btn calculator-btn-operator" data-action="operator" data-value="*">×</button>
+            </div>
+            <div class="calculator-row">
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value="4">4</button>
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value="5">5</button>
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value="6">6</button>
+                <button class="calculator-btn calculator-btn-operator" data-action="operator" data-value="-">−</button>
+            </div>
+            <div class="calculator-row">
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value="1">1</button>
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value="2">2</button>
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value="3">3</button>
+                <button class="calculator-btn calculator-btn-operator" data-action="operator" data-value="+">+</button>
+            </div>
+            <div class="calculator-row">
+                <button class="calculator-btn calculator-btn-number calculator-btn-wide" data-action="number" data-value="0">0</button>
+                <button class="calculator-btn calculator-btn-number" data-action="number" data-value=".">.</button>
+                <button class="calculator-btn calculator-btn-equals" data-action="equals">=</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/background-manager.js"></script>
+    <script src="js/calculator.js"></script>
+</body>
+</html>

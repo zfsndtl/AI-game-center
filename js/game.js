@@ -87,9 +87,11 @@
 
         // 游戏页元素
         dom.board = document.getElementById('board');
-        dom.boardLines = dom.board.querySelector('.board-lines');
-        dom.boardOverlay = dom.board.querySelector('.board-overlay');
-        dom.boardPieces = dom.board.querySelector('.board-pieces');
+        if (dom.board) {
+            dom.boardLines = dom.board.querySelector('.board-lines');
+            dom.boardOverlay = dom.board.querySelector('.board-overlay');
+            dom.boardPieces = dom.board.querySelector('.board-pieces');
+        }
         dom.backBtn = document.getElementById('back-btn');
         dom.undoBtn = document.getElementById('undo-btn');
         dom.restartBtn = document.getElementById('restart-btn');
@@ -121,21 +123,21 @@
 
         // 加入房间页
         dom.codeInputRow = document.getElementById('code-input-row');
-        dom.codeDigits = dom.codeInputRow.querySelectorAll('.code-digit');
+        dom.codeDigits = dom.codeInputRow ? dom.codeInputRow.querySelectorAll('.code-digit') : [];
         dom.joinStatus = document.getElementById('join-status');
-        dom.joinStatusText = dom.joinStatus.querySelector('.status-text');
+        if (dom.joinStatus) {
+            dom.joinStatusText = dom.joinStatus.querySelector('.status-text');
+        }
         dom.confirmJoinBtn = document.getElementById('confirm-join-btn');
     }
 
     function bindEvents() {
-        // === 入口页：五子棋卡片点击
-        var gomokuCard = document.querySelector('.landing-card-gomoku');
-        if (gomokuCard) {
-            gomokuCard.addEventListener('click', function (e) {
-                if (e.target.closest('a') && e.currentTarget.getAttribute('href') === '#gomoku') {
-                    // 阻止默认锚点跳转，走内部页面切换
-                    e.preventDefault();
-                }
+        // === 入口页：五子棋方形图标点击
+        var gomokuSquare = document.querySelector('.landing-square-gomoku');
+        if (gomokuSquare) {
+            gomokuSquare.addEventListener('click', function (e) {
+                // 阻止默认锚点跳转，走内部页面切换
+                e.preventDefault();
                 // 重置五子棋状态 + 进入五子棋首页
                 resetGameState();
                 showPage('home');
@@ -143,8 +145,9 @@
         }
 
         // 返回首页 (从任意页面 -> landing)
-        document.querySelectorAll('[data-action="back-landing"]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
+        document.querySelectorAll('[data-back="landing"]').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
                 leaveRoom();
                 showPage('landing');
             });
@@ -160,12 +163,14 @@
         }
 
         // 模式选择按钮
-        dom.modeBtns.forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var mode = btn.getAttribute('data-mode');
-                handleModeSelect(mode);
+        if (dom.modeBtns) {
+            dom.modeBtns.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var mode = btn.getAttribute('data-mode');
+                    handleModeSelect(mode);
+                });
             });
-        });
+        }
 
         // 房间 / 加入页的返回按钮
         document.querySelectorAll('[data-action="back-home"]').forEach(function (btn) {
@@ -176,37 +181,44 @@
         });
 
         // 游戏页返回
-        dom.backBtn.addEventListener('click', function () {
-            leaveRoom();
-            showPage('home');
-        });
+        if (dom.backBtn) {
+            dom.backBtn.addEventListener('click', function () {
+                leaveRoom();
+                showPage('home');
+            });
+        }
 
         // 悔棋 / 重开
-        dom.undoBtn.addEventListener('click', handleUndo);
-        dom.restartBtn.addEventListener('click', handleRestart);
-        dom.modalRestartBtn.addEventListener('click', handleRestart);
-        dom.modalHomeBtn.addEventListener('click', function () {
-            hideModal();
-            leaveRoom();
-            showPage('home');
-        });
+        if (dom.undoBtn) dom.undoBtn.addEventListener('click', handleUndo);
+        if (dom.restartBtn) dom.restartBtn.addEventListener('click', handleRestart);
+        if (dom.modalRestartBtn) dom.modalRestartBtn.addEventListener('click', handleRestart);
+        if (dom.modalHomeBtn) {
+            dom.modalHomeBtn.addEventListener('click', function () {
+                hideModal();
+                leaveRoom();
+                showPage('home');
+            });
+        }
 
         // 复制房间号
-        dom.copyCodeBtn.addEventListener('click', function () {
-            if (!state.roomCode) return;
-            var text = state.roomCode;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(function () {
-                    var old = dom.copyCodeBtn.querySelector('.mode-title');
-                    old.textContent = '✓ 已复制';
-                    setTimeout(function () { old.textContent = '复制房间号'; }, 1500);
-                }).catch(function () { fallbackCopy(text); });
-            } else {
-                fallbackCopy(text);
-            }
-        });
+        if (dom.copyCodeBtn) {
+            dom.copyCodeBtn.addEventListener('click', function () {
+                if (!state.roomCode) return;
+                var text = state.roomCode;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function () {
+                        var old = dom.copyCodeBtn.querySelector('.mode-title');
+                        old.textContent = '✓ 已复制';
+                        setTimeout(function () { old.textContent = '复制房间号'; }, 1500);
+                    }).catch(function () { fallbackCopy(text); });
+                } else {
+                    fallbackCopy(text);
+                }
+            });
+        }
 
         // 4 位数字输入格自动跳焦
+        if (!dom.codeDigits) return;
         dom.codeDigits.forEach(function (input, idx) {
             input.addEventListener('input', function () {
                 var v = input.value.replace(/[^0-9]/g, '');
@@ -279,11 +291,11 @@
     // ============= 页面切换 =============
     function showPage(name) {
         Object.keys(dom.pages).forEach(function (key) {
-            dom.pages[key].classList.remove('page-active');
+            var el = dom.pages[key];
+            if (el) el.classList.remove('page-active');
         });
-        if (dom.pages[name]) {
-            dom.pages[name].classList.add('page-active');
-        }
+        var target = dom.pages[name];
+        if (target) target.classList.add('page-active');
     }
 
     // ============= 模式选择 =============
@@ -786,6 +798,7 @@
 
     // ============= 棋盘渲染 =============
     function renderBoard() {
+        if (!dom.boardLines || !dom.boardOverlay || !dom.boardPieces) return;
         // 清空
         dom.boardLines.innerHTML = '';
         dom.boardOverlay.innerHTML = '';
@@ -986,6 +999,7 @@
     }
 
     function updateUndoBtn() {
+        if (!dom.undoBtn) return;
         dom.undoBtn.disabled = state.gameOver || state.history.length === 0;
     }
 

@@ -1,0 +1,118 @@
+/* ===== 动态背景样式 ===== */
+
+/* 背景容器 */
+.dynamic-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* 已加载状态 */
+.dynamic-background.loaded {
+    opacity: 1;
+}
+
+/* 淡入动画 */
+.dynamic-background.fade-in {
+    animation: backgroundFadeIn 1s ease-in-out forwards;
+}
+
+@keyframes backgroundFadeIn {
+    from {
+        opacity: 0.8;
+        transform: scale(1.02);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 移动端适配 - 针对不同屏幕比例优化 */
+@media (max-width: 768px) {
+    .dynamic-background {
+        background-attachment: scroll;
+        /* 移动端优先显示图片中心区域 */
+        background-position: center center;
+        /* 确保图片完全覆盖屏幕 */
+        background-size: cover;
+        /* 防止图片在移动端被裁剪过多 */
+        min-height: 100vh;
+        min-width: 100vw;
+    }
+}
+
+/* 小屏手机适配 - 竖屏优化 */
+@media (max-width: 480px) and (orientation: portrait) {
+    .dynamic-background {
+        background-attachment: scroll;
+        /* 竖屏时优先显示图片上半部分（通常风景图上半部分更美观） */
+        background-position: center top;
+        background-size: cover;
+        min-height: 100vh;
+    }
+}
+
+/* 小屏手机适配 - 横屏优化 */
+@media (max-width: 480px) and (orientation: landscape) {
+    .dynamic-background {
+        background-attachment: scroll;
+        /* 横屏时居中显示 */
+        background-position: center center;
+        background-size: cover;
+        min-height: 100vh;
+    }
+}
+
+/* 平板设备适配 */
+@media (min-width: 481px) and (max-width: 768px) {
+    .dynamic-background {
+        background-attachment: scroll;
+        background-position: center center;
+        background-size: cover;
+    }
+}
+
+/* 确保内容在背景之上 */
+body {
+    position: relative;
+    z-index: 0;
+}
+
+/* 添加半透明遮罩层（提高可读性） */
+.dynamic-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 移动端增加遮罩透明度，提高内容可读性 */
+    background: rgba(255, 255, 255, 0.25);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* 移动端遮罩层调整 */
+@media (max-width: 480px) {
+    .dynamic-background::after {
+        /* 移动端遮罩更明显 */
+        background: rgba(255, 255, 255, 0.35);
+    }
+}
+
+/* 平板遮罩层调整 */
+@media (min-width: 481px) and (max-width: 768px) {
+    .dynamic-background::after {
+        background: rgba(255, 255, 255, 0.3);
+    }
+}

@@ -1,0 +1,365 @@
+/* ===== 计算器样式 ===== */
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: none;
+}
+
+.calculator-container {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    max-width: 420px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+/* 顶部栏 */
+.calculator-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.calculator-back-btn {
+    position: absolute;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 16px;
+    border-radius: 24px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.calculator-back-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.calculator-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 显示区域 */
+.calculator-display {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    padding: 24px 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    animation: fadeInDown 0.5s ease;
+}
+
+.calculator-expression {
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 8px;
+    text-align: right;
+    word-wrap: break-word;
+    min-height: 24px;
+}
+
+.calculator-result {
+    font-size: 48px;
+    font-weight: 700;
+    color: #333333;
+    text-align: right;
+    word-wrap: break-word;
+    animation: resultPulse 0.3s ease;
+}
+
+/* 按钮区域 */
+.calculator-buttons {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.5s ease 0.1s backwards;
+}
+
+.calculator-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.calculator-row:last-child {
+    margin-bottom: 0;
+}
+
+/* 按钮通用样式 */
+.calculator-btn {
+    flex: 1;
+    height: 64px;
+    border-radius: 16px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+/* 按钮触碰动画效果 */
+.calculator-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+}
+
+.calculator-btn:active::before {
+    width: 200px;
+    height: 200px;
+}
+
+/* 涟漪效果 */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: rippleAnimation 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes rippleAnimation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* 按钮按下状态 */
+.calculator-btn-pressed {
+    transform: scale(0.92);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* 按钮按下效果 */
+.calculator-btn:active {
+    transform: scale(0.92);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* 数字按钮 */
+.calculator-btn-number {
+    background: rgba(102, 126, 234, 0.15);
+    color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.calculator-btn-number:hover {
+    background: rgba(102, 126, 234, 0.25);
+}
+
+.calculator-btn-number:active {
+    background: rgba(102, 126, 234, 0.35);
+}
+
+/* 操作符按钮 */
+.calculator-btn-operator {
+    background: rgba(118, 75, 162, 0.15);
+    color: #764ba2;
+    box-shadow: 0 4px 12px rgba(118, 75, 162, 0.2);
+}
+
+.calculator-btn-operator:hover {
+    background: rgba(118, 75, 162, 0.25);
+}
+
+.calculator-btn-operator:active {
+    background: rgba(118, 75, 162, 0.35);
+}
+
+/* 清除按钮 */
+.calculator-btn-clear {
+    background: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+}
+
+.calculator-btn-clear:hover {
+    background: rgba(255, 107, 107, 0.25);
+}
+
+.calculator-btn-clear:active {
+    background: rgba(255, 107, 107, 0.35);
+}
+
+/* 删除按钮 */
+.calculator-btn-delete {
+    background: rgba(255, 159, 67, 0.15);
+    color: #ff9f43;
+    box-shadow: 0 4px 12px rgba(255, 159, 67, 0.2);
+}
+
+.calculator-btn-delete:hover {
+    background: rgba(255, 159, 67, 0.25);
+}
+
+.calculator-btn-delete:active {
+    background: rgba(255, 159, 67, 0.35);
+}
+
+/* 等于按钮 */
+.calculator-btn-equals {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+.calculator-btn-equals:hover {
+    background: linear-gradient(135deg, #764ba2, #667eea);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.calculator-btn-equals:active {
+    transform: scale(0.92);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.6);
+}
+
+/* 宽按钮 */
+.calculator-btn-wide {
+    flex: 2;
+}
+
+/* 动画效果 */
+@keyframes fadeInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes resultPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 小屏适配 */
+@media (max-width: 360px) {
+    .calculator-container {
+        padding: 16px;
+    }
+    
+    .calculator-display {
+        padding: 20px 16px;
+        min-height: 100px;
+    }
+    
+    .calculator-result {
+        font-size: 40px;
+    }
+    
+    .calculator-btn {
+        height: 56px;
+        font-size: 20px;
+        border-radius: 14px;
+    }
+    
+    .calculator-row {
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-height: 640px) {
+    .calculator-header {
+        margin-bottom: 16px;
+    }
+    
+    .calculator-display {
+        padding: 20px 16px;
+        min-height: 90px;
+        margin-bottom: 16px;
+    }
+    
+    .calculator-result {
+        font-size: 36px;
+    }
+    
+    .calculator-btn {
+        height: 52px;
+    }
+}
