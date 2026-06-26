@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>取色器</title>
+    <link rel="stylesheet" href="css/color-picker.css" />
+    <link rel="stylesheet" href="css/background.css" />
+</head>
+<body>
+    <div class="picker-container">
+        <div class="picker-header">
+            <a href="index.html" class="picker-back-btn">← 返回首页</a>
+            <div class="picker-title">取色器</div>
+        </div>
+
+        <!-- 颜色选择区域 -->
+        <div class="picker-color-area">
+            <div class="picker-gradient" id="gradientArea">
+                <div class="picker-cursor" id="gradientCursor"></div>
+            </div>
+            <div class="picker-hue-strip" id="hueStrip">
+                <div class="picker-hue-cursor" id="hueCursor"></div>
+            </div>
+        </div>
+
+        <!-- 颜色预览 -->
+        <div class="picker-preview">
+            <div class="picker-preview-color" id="previewColor"></div>
+            <div class="picker-preview-info">
+                <div class="picker-preview-hex" id="previewHex">#FF0000</div>
+                <div class="picker-preview-rgb" id="previewRgb">rgb(255, 0, 0)</div>
+            </div>
+        </div>
+
+        <!-- 颜色值显示与复制 -->
+        <div class="picker-values">
+            <div class="picker-value-row">
+                <span class="picker-value-label">HEX</span>
+                <span class="picker-value-text" id="hexValue">#FF0000</span>
+                <button class="picker-copy-btn" data-target="hexValue">复制</button>
+            </div>
+            <div class="picker-value-row">
+                <span class="picker-value-label">RGB</span>
+                <span class="picker-value-text" id="rgbValue">rgb(255, 0, 0)</span>
+                <button class="picker-copy-btn" data-target="rgbValue">复制</button>
+            </div>
+            <div class="picker-value-row">
+                <span class="picker-value-label">HSL</span>
+                <span class="picker-value-text" id="hslValue">hsl(0, 100%, 50%)</span>
+                <button class="picker-copy-btn" data-target="hslValue">复制</button>
+            </div>
+        </div>
+
+        <!-- 手动输入 -->
+        <div class="picker-input-section">
+            <div class="picker-input-row">
+                <label class="picker-input-label">HEX</label>
+                <input type="text" class="picker-input" id="hexInput" placeholder="#FF0000" maxlength="7" />
+            </div>
+            <button class="picker-apply-btn" id="applyBtn">应用颜色</button>
+        </div>
+
+        <!-- 预设颜色 -->
+        <div class="picker-presets">
+            <div class="picker-presets-title">预设颜色</div>
+            <div class="picker-presets-grid" id="presetsGrid"></div>
+        </div>
+
+        <!-- 最近使用 -->
+        <div class="picker-recent" id="recentSection" style="display:none;">
+            <div class="picker-recent-title">最近使用</div>
+            <div class="picker-recent-grid" id="recentGrid"></div>
+        </div>
+    </div>
+
+    <script src="js/background-manager.js"></script>
+    <script src="js/color-picker.js"></script>
+</body>
+</html>

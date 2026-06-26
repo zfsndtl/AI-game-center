@@ -1,0 +1,420 @@
+/* ===== 取色器样式 ===== */
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+input {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: none;
+}
+
+.picker-container {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 40px;
+}
+
+/* 顶部栏 */
+.picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.picker-back-btn {
+    position: absolute;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 16px;
+    border-radius: 24px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.picker-back-btn:active {
+    transform: scale(0.95);
+}
+
+.picker-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 颜色选择区域 */
+.picker-color-area {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    animation: fadeInDown 0.5s ease;
+}
+
+.picker-gradient {
+    flex: 1;
+    height: 200px;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    /* 默认红色渐变，JS 会动态更新 */
+    background: linear-gradient(to top, #000, transparent),
+                linear-gradient(to right, #fff, hsl(0, 100%, 50%));
+}
+
+.picker-cursor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.3);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    /* 初始位置右上角 */
+    top: 0;
+    right: -10px;
+    left: calc(100% - 10px);
+}
+
+.picker-hue-strip {
+    width: 32px;
+    height: 200px;
+    border-radius: 16px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(to bottom,
+        hsl(0, 100%, 50%),
+        hsl(60, 100%, 50%),
+        hsl(120, 100%, 50%),
+        hsl(180, 100%, 50%),
+        hsl(240, 100%, 50%),
+        hsl(300, 100%, 50%),
+        hsl(360, 100%, 50%)
+    );
+}
+
+.picker-hue-cursor {
+    position: absolute;
+    left: -4px;
+    right: -4px;
+    height: 12px;
+    border-radius: 6px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(-50%);
+    pointer-events: none;
+    top: 0;
+}
+
+/* 颜色预览 */
+.picker-preview {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: fadeInUp 0.5s ease 0.1s backwards;
+}
+
+.picker-preview-color {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: #ff0000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.picker-preview-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.picker-preview-hex {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.picker-preview-rgb {
+    font-size: 14px;
+    color: #888;
+    font-family: monospace;
+}
+
+/* 颜色值显示 */
+.picker-values {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: fadeInUp 0.5s ease 0.15s backwards;
+}
+
+.picker-value-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.picker-value-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.picker-value-row:first-child {
+    padding-top: 0;
+}
+
+.picker-value-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #999;
+    width: 36px;
+    flex-shrink: 0;
+}
+
+.picker-value-text {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+    font-family: monospace;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.picker-copy-btn {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9c27b0;
+    background: rgba(156, 39, 176, 0.1);
+    padding: 6px 12px;
+    border-radius: 16px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.picker-copy-btn:active {
+    transform: scale(0.92);
+    background: rgba(156, 39, 176, 0.2);
+}
+
+.picker-copy-btn.copied {
+    color: #4caf50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+/* 手动输入 */
+.picker-input-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: fadeInUp 0.5s ease 0.2s backwards;
+}
+
+.picker-input-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.picker-input-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    width: 40px;
+    flex-shrink: 0;
+}
+
+.picker-input {
+    flex: 1;
+    padding: 12px 14px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    font-family: monospace;
+    text-transform: uppercase;
+}
+
+.picker-input:focus {
+    border-color: #9c27b0;
+    background: #fff;
+}
+
+.picker-apply-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+    transition: all 0.2s ease;
+}
+
+.picker-apply-btn:active {
+    transform: scale(0.97);
+}
+
+/* 预设颜色 */
+.picker-presets {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: fadeInUp 0.5s ease 0.25s backwards;
+}
+
+.picker-presets-title,
+.picker-recent-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.picker-presets-grid,
+.picker-recent-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
+}
+
+.picker-color-swatch {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.15s ease;
+}
+
+.picker-color-swatch:active {
+    transform: scale(0.85);
+}
+
+/* 最近使用 */
+.picker-recent {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: fadeInUp 0.5s ease 0.3s backwards;
+}
+
+/* 动画 */
+@keyframes fadeInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 小屏适配 */
+@media (max-width: 360px) {
+    .picker-container {
+        padding: 16px;
+    }
+
+    .picker-gradient {
+        height: 160px;
+    }
+
+    .picker-hue-strip {
+        height: 160px;
+    }
+
+    .picker-presets-grid,
+    .picker-recent-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .picker-preview-hex {
+        font-size: 20px;
+    }
+}

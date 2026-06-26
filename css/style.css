@@ -1268,6 +1268,22 @@ h1, h2, h3 {
     background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%);
 }
 
+/* 取色器入口卡片 */
+.landing-square-color-picker {
+    background: linear-gradient(135deg, #f3e5f5 0%, #ce93d8 100%);
+}
+
+/* 音乐播放器入口卡片 */
+.landing-square-music {
+    background: linear-gradient(135deg, #263238 0%, #455a64 100%);
+}
+.landing-square-music .landing-square-icon {
+    color: #1a1a1a;
+}
+.landing-square-music .landing-square-name {
+    color: #1a1a1a;
+}
+
 /* ===== 首页方形图标布局 ===== */
 
 /* 区块容器 */
