@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>房贷计算器</title>
+    <link rel="stylesheet" href="css/mortgage.css" />
+    <link rel="stylesheet" href="css/background.css" />
+</head>
+<body>
+    <div class="mortgage-container">
+        <div class="mortgage-header">
+            <a href="index.html" class="mortgage-back-btn">← 返回首页</a>
+            <div class="mortgage-title">房贷计算器</div>
+        </div>
+
+        <!-- 输入区域 -->
+        <div class="mortgage-input-card">
+            <div class="mortgage-field">
+                <label class="mortgage-label">贷款总额（万元）</label>
+                <input type="number" id="loanAmount" class="mortgage-input" placeholder="请输入贷款金额" value="100" min="1" step="1" />
+            </div>
+            <div class="mortgage-field">
+                <label class="mortgage-label">年利率（%）</label>
+                <input type="number" id="interestRate" class="mortgage-input" placeholder="请输入年利率" value="3.85" min="0.01" step="0.01" />
+            </div>
+            <div class="mortgage-field">
+                <label class="mortgage-label">贷款年限</label>
+                <div class="mortgage-term-group" id="termGroup">
+                    <button class="mortgage-term-btn" data-years="5">5年</button>
+                    <button class="mortgage-term-btn" data-years="10">10年</button>
+                    <button class="mortgage-term-btn" data-years="15">15年</button>
+                    <button class="mortgage-term-btn" data-years="20">20年</button>
+                    <button class="mortgage-term-btn active" data-years="25">25年</button>
+                    <button class="mortgage-term-btn" data-years="30">30年</button>
+                </div>
+            </div>
+            <div class="mortgage-field">
+                <label class="mortgage-label">还款方式</label>
+                <div class="mortgage-method-group">
+                    <label class="mortgage-method-label">
+                        <input type="radio" name="method" value="equal_installment" checked />
+                        <span class="mortgage-radio-custom"></span>
+                        等额本息
+                    </label>
+                    <label class="mortgage-method-label">
+                        <input type="radio" name="method" value="equal_principal" />
+                        <span class="mortgage-radio-custom"></span>
+                        等额本金
+                    </label>
+                </div>
+            </div>
+            <button class="mortgage-calc-btn" id="calcBtn">开始计算</button>
+        </div>
+
+        <!-- 结果摘要 -->
+        <div class="mortgage-summary" id="summary" style="display:none;">
+            <div class="mortgage-summary-title">还款摘要</div>
+            <div class="mortgage-summary-cards">
+                <div class="mortgage-summary-card">
+                    <div class="mortgage-summary-label" id="monthlyLabel">首月月供</div>
+                    <div class="mortgage-summary-value" id="monthlyPayment">-</div>
+                </div>
+                <div class="mortgage-summary-card">
+                    <div class="mortgage-summary-label">还款总额</div>
+                    <div class="mortgage-summary-value" id="totalPayment">-</div>
+                </div>
+                <div class="mortgage-summary-card">
+                    <div class="mortgage-summary-label">支付利息</div>
+                    <div class="mortgage-summary-value" id="totalInterest">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 还款明细表 -->
+        <div class="mortgage-schedule" id="schedule" style="display:none;">
+            <div class="mortgage-schedule-header">
+                <div class="mortgage-schedule-title">还款明细</div>
+                <button class="mortgage-toggle-btn" id="toggleBtn">展开明细</button>
+            </div>
+            <div class="mortgage-table-wrapper" id="tableWrapper" style="display:none;">
+                <table class="mortgage-table">
+                    <thead>
+                        <tr>
+                            <th>期数</th>
+                            <th>月供(元)</th>
+                            <th>本金(元)</th>
+                            <th>利息(元)</th>
+                            <th>剩余本金(元)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/background-manager.js"></script>
+    <script src="js/mortgage.js"></script>
+</body>
+</html>

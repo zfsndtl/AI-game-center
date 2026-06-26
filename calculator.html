@@ -14,11 +14,48 @@
         <div class="calculator-header">
             <a href="index.html" class="calculator-back-btn">← 返回首页</a>
             <div class="calculator-title">计算器</div>
+            <button class="calculator-mode-toggle" id="modeToggle" title="切换科学计算器">SCI</button>
         </div>
 
         <div class="calculator-display">
+            <div class="calculator-angle-mode" id="angleMode">
+                <button class="calculator-angle-btn active" data-angle="deg">DEG</button>
+                <button class="calculator-angle-btn" data-angle="rad">RAD</button>
+            </div>
             <div class="calculator-expression" id="expression"></div>
             <div class="calculator-result" id="result">0</div>
+        </div>
+
+        <!-- 科学函数面板 -->
+        <div class="calculator-scientific" id="scientificPanel">
+            <div class="calculator-row">
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="sin">sin</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="cos">cos</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="tan">tan</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="log">log</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="ln">ln</button>
+            </div>
+            <div class="calculator-row">
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="asin">sin⁻¹</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="acos">cos⁻¹</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="atan">tan⁻¹</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="sqrt">√x</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="abs">|x|</button>
+            </div>
+            <div class="calculator-row">
+                <button class="calculator-btn calculator-btn-sci" data-action="power" data-value="2">x²</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="power" data-value="3">x³</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="power" data-value="n">xⁿ</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="exp">eˣ</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="tenx">10ˣ</button>
+            </div>
+            <div class="calculator-row">
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="inv">1/x</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="func" data-value="fact">x!</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="constant" data-value="pi">π</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="constant" data-value="e">e</button>
+                <button class="calculator-btn calculator-btn-sci" data-action="paren" data-value="(">(</button>
+            </div>
         </div>
 
         <div class="calculator-buttons">

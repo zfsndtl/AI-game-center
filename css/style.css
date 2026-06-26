@@ -1262,6 +1262,12 @@ h1, h2, h3 {
 .landing-square-calculator {
     background: linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%);
 }
+
+/* 房贷计算器入口卡片 */
+.landing-square-mortgage {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%);
+}
+
 /* ===== 首页方形图标布局 ===== */
 
 /* 区块容器 */

@@ -97,6 +97,11 @@
                         <div class="landing-square-icon">🧮</div>
                         <div class="landing-square-name">计算器</div>
                     </a>
+
+                    <a href="mortgage.html" class="landing-square landing-square-mortgage">
+                        <div class="landing-square-icon">🏠</div>
+                        <div class="landing-square-name">房贷计算器</div>
+                    </a>
                 </div>
             </div>
 
@@ -133,7 +138,8 @@
                 
                 // 延迟破碎
                 setTimeout(function() {
-                    balloon.classList.add('pop');
+                    // 通过内联样式直接播放破碎动画（避免 CSS 类与内联 animation:none 冲突）
+                    balloon.style.animation = 'balloonPop 0.4s ease forwards';
                     
                     // 创建碎片
                     var rect = balloon.getBoundingClientRect();
@@ -162,9 +168,8 @@
                     setTimeout(function() {
                         balloon.style.transform = '';
                         balloon.style.animation = '';
-                        balloon.classList.remove('pop');
                         balloon.dataset.popping = 'false';
-                    }, 400);
+                    }, 500);
                 }, 300);
             }
             

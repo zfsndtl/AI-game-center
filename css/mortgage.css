@@ -1,0 +1,440 @@
+/* ===== 房贷计算器样式 ===== */
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+input {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: none;
+}
+
+.mortgage-container {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 40px;
+}
+
+/* 顶部栏 */
+.mortgage-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.mortgage-back-btn {
+    position: absolute;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 16px;
+    border-radius: 24px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mortgage-back-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.mortgage-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 输入卡片 */
+.mortgage-input-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    padding: 24px 20px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: fadeInDown 0.5s ease;
+}
+
+.mortgage-field {
+    margin-bottom: 20px;
+}
+
+.mortgage-field:last-of-type {
+    margin-bottom: 24px;
+}
+
+.mortgage-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.mortgage-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.mortgage-input:focus {
+    border-color: #e8a23a;
+    box-shadow: 0 0 0 3px rgba(232, 162, 58, 0.15);
+    background: #fff;
+}
+
+.mortgage-input::placeholder {
+    color: #adb5bd;
+    font-weight: 400;
+}
+
+/* 年限选择 */
+.mortgage-term-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.mortgage-term-btn {
+    padding: 12px 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #666;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.mortgage-term-btn:active {
+    transform: scale(0.95);
+}
+
+.mortgage-term-btn.active {
+    color: #fff;
+    background: linear-gradient(135deg, #e8a23a, #c97f1c);
+    border-color: #e8a23a;
+    box-shadow: 0 4px 12px rgba(232, 162, 58, 0.3);
+}
+
+/* 还款方式 */
+.mortgage-method-group {
+    display: flex;
+    gap: 24px;
+}
+
+.mortgage-method-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+}
+
+.mortgage-method-label input[type="radio"] {
+    display: none;
+}
+
+.mortgage-radio-custom {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.mortgage-method-label input[type="radio"]:checked + .mortgage-radio-custom {
+    border-color: #e8a23a;
+    background: #e8a23a;
+}
+
+.mortgage-method-label input[type="radio"]:checked + .mortgage-radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+/* 计算按钮 */
+.mortgage-calc-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #e8a23a, #c97f1c);
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(232, 162, 58, 0.4);
+    transition: all 0.2s ease;
+    letter-spacing: 2px;
+}
+
+.mortgage-calc-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 12px rgba(232, 162, 58, 0.5);
+}
+
+/* 摘要卡片 */
+.mortgage-summary {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.5s ease;
+}
+
+.mortgage-summary-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #555;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.mortgage-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.mortgage-summary-card {
+    text-align: center;
+    padding: 14px 8px;
+    background: linear-gradient(135deg, #fff8e1, #fff3e0);
+    border-radius: 14px;
+    border: 1px solid rgba(232, 162, 58, 0.15);
+}
+
+.mortgage-summary-label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.mortgage-summary-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #c97f1c;
+    word-break: break-all;
+}
+
+/* 还款明细 */
+.mortgage-schedule {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.5s ease 0.1s backwards;
+}
+
+.mortgage-schedule-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.mortgage-schedule-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #555;
+}
+
+.mortgage-toggle-btn {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e8a23a;
+    padding: 6px 14px;
+    background: rgba(232, 162, 58, 0.1);
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.mortgage-toggle-btn:active {
+    transform: scale(0.95);
+    background: rgba(232, 162, 58, 0.2);
+}
+
+/* 表格 */
+.mortgage-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+.mortgage-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 400px;
+}
+
+.mortgage-table th {
+    background: linear-gradient(135deg, #fff8e1, #fff3e0);
+    color: #8B5A2B;
+    font-weight: 600;
+    padding: 12px 10px;
+    text-align: right;
+    white-space: nowrap;
+    border-bottom: 2px solid #f0e0c0;
+}
+
+.mortgage-table th:first-child {
+    text-align: center;
+}
+
+.mortgage-table td {
+    padding: 10px;
+    text-align: right;
+    color: #555;
+    border-bottom: 1px solid #f5f5f5;
+    white-space: nowrap;
+}
+
+.mortgage-table td:first-child {
+    text-align: center;
+    font-weight: 600;
+    color: #888;
+}
+
+.mortgage-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.mortgage-table tbody tr:active {
+    background: #fff3e0;
+}
+
+/* 动画 */
+@keyframes fadeInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 小屏适配 */
+@media (max-width: 360px) {
+    .mortgage-container {
+        padding: 16px;
+    }
+
+    .mortgage-input-card {
+        padding: 20px 16px;
+    }
+
+    .mortgage-summary-cards {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .mortgage-summary-value {
+        font-size: 18px;
+    }
+
+    .mortgage-term-group {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-height: 640px) {
+    .mortgage-header {
+        margin-bottom: 14px;
+    }
+
+    .mortgage-input-card {
+        padding: 18px 16px;
+    }
+
+    .mortgage-field {
+        margin-bottom: 16px;
+    }
+}
