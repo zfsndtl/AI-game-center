@@ -17,6 +17,7 @@ html, body {
     font-size: 16px;
     line-height: 1.5;
 }
+}
 
 button {
     border: none;
@@ -1281,6 +1282,19 @@ h1, h2, h3 {
     color: #1a1a1a;
 }
 .landing-square-music .landing-square-name {
+    color: #1a1a1a;
+}
+
+/* 歌曲列表入口卡片 */
+.landing-square-songs {
+    background: linear-gradient(135deg, #fff8e1 0%, #ffb74d 100%);
+}
+
+/* 剪辑工具入口卡片 */
+.landing-square-video {
+    background: linear-gradient(135deg, #e8eaf6 0%, #5c6bc0 100%);
+}
+.landing-square-video .landing-square-name {
     color: #1a1a1a;
 }
 

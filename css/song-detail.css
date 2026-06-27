@@ -1,0 +1,579 @@
+/* ===== 歌曲详情页样式 ===== */
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+input, select {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+a { text-decoration: none; }
+button { border: none; outline: none; cursor: pointer; font-family: inherit; background: none; }
+
+.detail-container {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 40px;
+}
+
+/* 顶部栏 */
+.detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.detail-back-btn {
+    position: absolute;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 16px;
+    border-radius: 24px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.detail-back-btn:active { transform: scale(0.95); }
+
+.detail-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    letter-spacing: 2px;
+}
+
+/* 歌曲信息卡片 */
+.song-info-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: fadeInUp 0.4s ease;
+}
+
+.song-info-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.song-info-artist {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+/* 设置栏 */
+.settings-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    animation: fadeInUp 0.4s ease 0.05s backwards;
+}
+
+.setting-item {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 14px;
+    padding: 12px 14px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.setting-label {
+    display: block;
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.4);
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.setting-select {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 14px;
+    color: #333;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    outline: none;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.setting-select:focus {
+    border-color: #ffb74d;
+}
+
+/* 歌词列表 */
+.lyrics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 空状态 */
+.empty-lyrics {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-lyrics .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.empty-lyrics .empty-text {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+/* 歌词行卡片 */
+.lyric-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 0.4s ease backwards;
+}
+
+.lyric-text {
+    font-size: 17px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.lyric-recordings {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lyric-recordings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.lyric-recordings-title {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.4);
+    font-weight: 500;
+}
+
+.add-recording-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #e65d0e;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: rgba(230, 93, 14, 0.08);
+    transition: all 0.2s ease;
+}
+
+.add-recording-btn:active {
+    transform: scale(0.95);
+    background: rgba(230, 93, 14, 0.15);
+}
+
+/* 录音项 */
+.recording-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.recording-item.playing {
+    background: rgba(230, 93, 14, 0.08);
+}
+
+.recording-play-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff9800, #e65d0e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.recording-play-btn:active {
+    transform: scale(0.9);
+}
+
+.recording-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.recording-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.recording-time {
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.35);
+    margin-top: 1px;
+}
+
+.recording-delete-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.recording-delete-btn:active {
+    background: rgba(229, 57, 53, 0.1);
+    color: #e53935;
+}
+
+.no-recordings {
+    text-align: center;
+    padding: 12px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.3);
+}
+
+/* ===== 弹窗样式 ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal {
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-close:active { background: rgba(0, 0, 0, 0.05); }
+
+.modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 10px;
+    padding: 16px 20px 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* 录音弹窗内容 */
+.record-lyric-line {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    padding: 12px 16px;
+    background: rgba(255, 183, 77, 0.1);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    color: #333;
+    background: #f5f5f5;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.form-input:focus {
+    border-color: #ffb74d;
+    background: #fff;
+}
+
+.record-options {
+    margin-bottom: 16px;
+}
+
+.record-option-title {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+}
+
+.record-option-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.record-option-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    background: #f5f5f5;
+    border-radius: 14px;
+    transition: all 0.2s ease;
+}
+
+.record-option-btn:active {
+    background: #eee;
+    transform: scale(0.97);
+}
+
+.record-option-btn svg {
+    color: #e65d0e;
+}
+
+/* 录音控制面板 */
+.recording-panel {
+    background: #f5f5f5;
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    margin-top: 16px;
+}
+
+.recording-status {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 8px;
+}
+
+.recording-status.recording {
+    color: #e53935;
+}
+
+.recording-timer {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 16px;
+}
+
+.recording-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.rec-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #ff9800, #e65d0e);
+    border-radius: 24px;
+    transition: all 0.2s ease;
+}
+
+.rec-btn:active { transform: scale(0.95); }
+
+.rec-btn-stop {
+    background: linear-gradient(135deg, #e53935, #c62828);
+}
+
+.rec-btn-cancel {
+    color: rgba(0, 0, 0, 0.5);
+    background: #eee;
+}
+
+/* 音频预览 */
+.audio-preview {
+    background: #f5f5f5;
+    border-radius: 14px;
+    padding: 14px;
+    margin-top: 16px;
+}
+
+.audio-preview-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+}
+
+.audio-preview audio {
+    width: 100%;
+    height: 36px;
+}
+
+/* 弹窗按钮 */
+.modal-btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 14px;
+    transition: all 0.2s ease;
+}
+
+.modal-btn:active { transform: scale(0.97); }
+
+.modal-btn-cancel {
+    color: rgba(0, 0, 0, 0.5);
+    background: #f5f5f5;
+}
+
+.modal-btn-save {
+    color: #fff;
+    background: linear-gradient(135deg, #ff9800, #e65d0e);
+    box-shadow: 0 4px 12px rgba(230, 93, 14, 0.3);
+}
+
+/* 动画 */
+@keyframes fadeInUp {
+    from { transform: translateY(16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* 小屏适配 */
+@media (max-width: 360px) {
+    .detail-container { padding: 16px; }
+    .detail-title { font-size: 20px; }
+    .song-info-name { font-size: 18px; }
+    .lyric-text { font-size: 15px; }
+    .settings-bar { flex-direction: column; }
+}

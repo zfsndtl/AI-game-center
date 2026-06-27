@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>歌曲详情</title>
+    <link rel="stylesheet" href="css/song-detail.css" />
+    <link rel="stylesheet" href="css/background.css" />
+</head>
+<body>
+    <div class="detail-container">
+        <div class="detail-header">
+            <a href="songs.html" class="detail-back-btn">← 返回列表</a>
+            <div class="detail-title" id="headerTitle">歌曲详情</div>
+        </div>
+
+        <!-- 歌曲信息卡片 -->
+        <div class="song-info-card" id="songInfoCard">
+            <div class="song-info-name" id="songInfoName">--</div>
+            <div class="song-info-artist" id="songInfoArtist">--</div>
+        </div>
+
+        <!-- 设置栏 -->
+        <div class="settings-bar">
+            <div class="setting-item">
+                <label class="setting-label">每句显示录音数</label>
+                <select class="setting-select" id="maxRecordingsSelect">
+                    <option value="1">1 个</option>
+                    <option value="2">2 个</option>
+                    <option value="3" selected>3 个</option>
+                    <option value="5">5 个</option>
+                    <option value="0">全部</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label">排序方式</label>
+                <select class="setting-select" id="sortOrderSelect">
+                    <option value="time-asc">时间升序</option>
+                    <option value="time-desc">时间降序</option>
+                    <option value="name-asc">名称 A-Z</option>
+                    <option value="name-desc">名称 Z-A</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 歌词列表 -->
+        <div class="lyrics-list" id="lyricsList">
+            <div class="empty-lyrics" id="emptyLyrics">
+                <div class="empty-icon">📝</div>
+                <div class="empty-text">暂无歌词</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加录音弹窗 -->
+    <div class="modal-overlay" id="recordModal" style="display:none;">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">添加录音</span>
+                <button class="modal-close" id="recordModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="record-lyric-line" id="recordLyricLine">--</div>
+                <div class="form-group">
+                    <label class="form-label">录音人名称</label>
+                    <input type="text" class="form-input" id="recorderNameInput" placeholder="请输入录音人名称" />
+                </div>
+                <div class="record-options">
+                    <div class="record-option-title">选择录音方式</div>
+                    <div class="record-option-buttons">
+                        <button class="record-option-btn" id="uploadAudioBtn">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+                            上传音频
+                        </button>
+                        <button class="record-option-btn" id="recordAudioBtn">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+                            录制音频
+                        </button>
+                    </div>
+                </div>
+                <input type="file" id="audioFileInput" accept="audio/*" style="display:none;" />
+                <!-- 录音控制面板 -->
+                <div class="recording-panel" id="recordingPanel" style="display:none;">
+                    <div class="recording-status" id="recordingStatus">准备录音...</div>
+                    <div class="recording-timer" id="recordingTimer">0:00</div>
+                    <div class="recording-buttons">
+                        <button class="rec-btn" id="startRecordBtn">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+                            开始
+                        </button>
+                        <button class="rec-btn rec-btn-stop" id="stopRecordBtn" style="display:none;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="6" y="6" width="12" height="12"/></svg>
+                            停止
+                        </button>
+                        <button class="rec-btn rec-btn-cancel" id="cancelRecordBtn">
+                            取消
+                        </button>
+                    </div>
+                </div>
+                <!-- 预览已选文件 -->
+                <div class="audio-preview" id="audioPreview" style="display:none;">
+                    <div class="audio-preview-info">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="#e65d0e"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        <span id="audioFileName">audio.mp3</span>
+                    </div>
+                    <audio id="previewAudio" controls></audio>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="recordCancelBtn">取消</button>
+                <button class="modal-btn modal-btn-save" id="recordSaveBtn">保存录音</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/background-manager.js"></script>
+    <script src="js/song-detail.js"></script>
+</body>
+</html>

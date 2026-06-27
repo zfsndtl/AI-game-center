@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>剪辑工具</title>
+    <link rel="stylesheet" href="css/video-editor.css" />
+    <link rel="stylesheet" href="css/background.css" />
+</head>
+<body>
+    <div class="editor-container">
+        <div class="editor-header">
+            <a href="index.html" class="editor-back-btn">← 返回首页</a>
+            <div class="editor-title">剪辑工具</div>
+        </div>
+
+        <!-- 画布预览区 -->
+        <div class="canvas-section">
+            <div class="canvas-wrapper">
+                <canvas id="previewCanvas" width="640" height="360"></canvas>
+                <div class="canvas-placeholder" id="canvasPlaceholder">
+                    <div class="placeholder-icon">🎬</div>
+                    <div class="placeholder-text">请先添加图片素材</div>
+                </div>
+            </div>
+            <!-- 播放控制 -->
+            <div class="preview-controls">
+                <button class="prev-btn" id="prevBtn" title="上一帧">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                </button>
+                <button class="play-btn" id="playBtn" title="预览播放">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <button class="next-btn" id="nextBtn" title="下一帧">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                </button>
+                <div class="progress-info" id="progressInfo">0:00 / 0:00</div>
+            </div>
+        </div>
+
+        <!-- 图片上传区 -->
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-content">
+                    <svg viewBox="0 0 24 24" width="36" height="36" fill="rgba(92,107,192,0.6)"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    <div class="upload-text">点击或拖拽添加图片 (5-20张)</div>
+                    <div class="upload-hint" id="uploadHint">已添加 0 张图片</div>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
+            </div>
+        </div>
+
+        <!-- 图片时间轴 -->
+        <div class="timeline-section" id="timelineSection" style="display:none;">
+            <div class="timeline-header">
+                <span class="timeline-title">图片列表</span>
+                <span class="timeline-tip">拖动排序 · 点击编辑</span>
+            </div>
+            <div class="timeline-list" id="timelineList"></div>
+        </div>
+
+        <!-- 全局设置 -->
+        <div class="global-settings" id="globalSettings" style="display:none;">
+            <div class="settings-title">全局设置</div>
+            <div class="settings-row">
+                <div class="setting-item">
+                    <label class="setting-label">默认时长</label>
+                    <select class="setting-select" id="globalDuration">
+                        <option value="1">1 秒</option>
+                        <option value="2">2 秒</option>
+                        <option value="3" selected>3 秒</option>
+                        <option value="4">4 秒</option>
+                        <option value="5">5 秒</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">默认动画</label>
+                    <select class="setting-select" id="globalTransition">
+                        <option value="page">翻页</option>
+                        <option value="flash">黑闪</option>
+                        <option value="zoomin">放大</option>
+                        <option value="zoomout">缩小</option>
+                        <option value="blur">模糊</option>
+                        <option value="slideleft">左滑</option>
+                        <option value="slideup">上滑</option>
+                        <option value="wipe">擦除</option>
+                        <option value="rotate">旋转</option>
+                        <option value="fade">淡入淡出</option>
+                    </select>
+                </div>
+                <button class="apply-global-btn" id="applyGlobalBtn">应用到全部</button>
+            </div>
+        </div>
+
+        <!-- 导出按钮 -->
+        <div class="export-section" id="exportSection" style="display:none;">
+            <!-- 文字叠加层管理 -->
+            <div class="text-overlay-section" id="textOverlaySection">
+                <div class="text-overlay-header">
+                    <span class="text-overlay-title">文字叠加</span>
+                    <button class="add-text-btn" id="addTextBtn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        添加文字
+                    </button>
+                </div>
+                <div class="text-overlay-list" id="textOverlayList">
+                    <div class="text-overlay-empty" id="textOverlayEmpty">暂无文字，点击上方按钮添加</div>
+                </div>
+            </div>
+
+            <button class="export-btn" id="exportBtn">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                导出视频
+            </button>
+            <div class="export-progress" id="exportProgress" style="display:none;">
+                <div class="export-progress-bar">
+                    <div class="export-progress-fill" id="exportProgressFill"></div>
+                </div>
+                <div class="export-progress-text" id="exportProgressText">导出中...</div>
+            </div>
+        </div>
+
+        <!-- 导出结果 -->
+        <div class="result-section" id="resultSection" style="display:none;">
+            <div class="result-title">预览导出效果</div>
+            <video id="resultVideo" controls loop></video>
+            <div class="result-actions">
+                <button class="result-btn result-download-btn" id="downloadBtn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    下载视频
+                </button>
+                <button class="result-btn result-close-btn" id="closeResultBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片编辑弹窗 -->
+    <div class="modal-overlay" id="editModal" style="display:none;">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">编辑图片设置</span>
+                <button class="modal-close" id="editModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="edit-preview">
+                    <img id="editPreviewImg" src="" alt="" />
+                </div>
+                <div class="edit-index" id="editIndex">#1</div>
+                <div class="form-group">
+                    <label class="form-label">展示时长</label>
+                    <div class="duration-slider-group">
+                        <input type="range" class="duration-slider" id="editDuration" min="1" max="5" step="0.5" value="3" />
+                        <span class="duration-value" id="editDurationValue">3 秒</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">切换动画</label>
+                    <div class="transition-options" id="editTransition">
+                        <button class="transition-opt" data-value="page">
+                            <span class="transition-icon">📖</span>
+                            <span class="transition-name">翻页</span>
+                        </button>
+                        <button class="transition-opt" data-value="flash">
+                            <span class="transition-icon">⚡</span>
+                            <span class="transition-name">黑闪</span>
+                        </button>
+                        <button class="transition-opt" data-value="zoomin">
+                            <span class="transition-icon">🔍</span>
+                            <span class="transition-name">放大</span>
+                        </button>
+                        <button class="transition-opt" data-value="zoomout">
+                            <span class="transition-icon">🔎</span>
+                            <span class="transition-name">缩小</span>
+                        </button>
+                        <button class="transition-opt" data-value="blur">
+                            <span class="transition-icon">💨</span>
+                            <span class="transition-name">模糊</span>
+                        </button>
+                        <button class="transition-opt" data-value="slideleft">
+                            <span class="transition-icon">👈</span>
+                            <span class="transition-name">左滑</span>
+                        </button>
+                        <button class="transition-opt" data-value="slideup">
+                            <span class="transition-icon">👆</span>
+                            <span class="transition-name">上滑</span>
+                        </button>
+                        <button class="transition-opt" data-value="wipe">
+                            <span class="transition-icon">🧹</span>
+                            <span class="transition-name">擦除</span>
+                        </button>
+                        <button class="transition-opt" data-value="rotate">
+                            <span class="transition-icon">🔄</span>
+                            <span class="transition-name">旋转</span>
+                        </button>
+                        <button class="transition-opt" data-value="fade">
+                            <span class="transition-icon">✨</span>
+                            <span class="transition-name">淡入淡出</span>
+                        </button>
+                    </div>
+                </div>
+                <button class="remove-image-btn" id="removeImageBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    移除这张图片
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-save" id="editSaveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/background-manager.js"></script>
+    <script src="js/video-editor.js"></script>
+
+    <!-- 文字编辑弹窗 -->
+    <div class="modal-overlay" id="textModal" style="display:none;">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title" id="textModalTitle">添加文字</span>
+                <button class="modal-close" id="textModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">文字内容</label>
+                    <input type="text" class="form-input" id="textContentInput" placeholder="请输入文字内容" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">文字位置</label>
+                    <div class="position-grid" id="positionGrid">
+                        <button class="position-cell" data-pos="top-left">↖</button>
+                        <button class="position-cell" data-pos="top-center">↑</button>
+                        <button class="position-cell" data-pos="top-right">↗</button>
+                        <button class="position-cell" data-pos="center-left">←</button>
+                        <button class="position-cell active" data-pos="center">●</button>
+                        <button class="position-cell" data-pos="center-right">→</button>
+                        <button class="position-cell" data-pos="bottom-left">↙</button>
+                        <button class="position-cell" data-pos="bottom-center">↓</button>
+                        <button class="position-cell" data-pos="bottom-right">↘</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">字号</label>
+                    <div class="duration-slider-group">
+                        <input type="range" class="duration-slider" id="textFontSize" min="16" max="72" step="2" value="32" />
+                        <span class="duration-value" id="textFontSizeValue">32px</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">文字颜色</label>
+                    <div class="color-options" id="textColorOptions">
+                        <button class="color-opt active" data-color="#ffffff" style="background:#ffffff;"></button>
+                        <button class="color-opt" data-color="#000000" style="background:#000000;"></button>
+                        <button class="color-opt" data-color="#ff5252" style="background:#ff5252;"></button>
+                        <button class="color-opt" data-color="#ffab40" style="background:#ffab40;"></button>
+                        <button class="color-opt" data-color="#69f0ae" style="background:#69f0ae;"></button>
+                        <button class="color-opt" data-color="#40c4ff" style="background:#40c4ff;"></button>
+                        <button class="color-opt" data-color="#e040fb" style="background:#e040fb;"></button>
+                        <button class="color-opt" data-color="#ffd740" style="background:#ffd740;"></button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">描边</label>
+                    <div class="color-options" id="textStrokeOptions">
+                        <button class="color-opt stroke-opt active" data-color="none" style="background:repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 50%/12px 12px;">无</button>
+                        <button class="color-opt stroke-opt" data-color="#000000" style="background:#000000;"></button>
+                        <button class="color-opt stroke-opt" data-color="#ffffff" style="background:#ffffff; border:1px solid #ddd;"></button>
+                        <button class="color-opt stroke-opt" data-color="#ff5252" style="background:#ff5252;"></button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">显示时机</label>
+                    <select class="setting-select" id="textTimingSelect">
+                        <option value="all">全程显示</option>
+                        <option value="image">跟随指定图片</option>
+                    </select>
+                </div>
+                <div class="form-group" id="textImageRangeGroup" style="display:none;">
+                    <label class="form-label">显示范围 (第几张到第几张)</label>
+                    <div class="range-group">
+                        <input type="number" class="range-input" id="textStartImage" min="1" value="1" />
+                        <span class="range-sep">~</span>
+                        <input type="number" class="range-input" id="textEndImage" min="1" value="1" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">入场动画</label>
+                    <div class="transition-options text-anim-options" id="textAnimOptions">
+                        <button class="transition-opt text-anim-opt" data-value="none">
+                            <span class="transition-icon">🚫</span>
+                            <span class="transition-name">无</span>
+                        </button>
+                        <button class="transition-opt text-anim-opt active" data-value="fadeIn">
+                            <span class="transition-icon">✨</span>
+                            <span class="transition-name">淡入</span>
+                        </button>
+                        <button class="transition-opt text-anim-opt" data-value="slideUp">
+                            <span class="transition-icon">⬆</span>
+                            <span class="transition-name">上滑入</span>
+                        </button>
+                        <button class="transition-opt text-anim-opt" data-value="scaleIn">
+                            <span class="transition-icon">🔍</span>
+                            <span class="transition-name">缩放</span>
+                        </button>
+                        <button class="transition-opt text-anim-opt" data-value="typewriter">
+                            <span class="transition-icon">⌨</span>
+                            <span class="transition-name">打字机</span>
+                        </button>
+                    </div>
+                </div>
+                <button class="remove-image-btn" id="removeTextBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    删除这条文字
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-save" id="textSaveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
