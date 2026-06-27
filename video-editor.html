@@ -16,6 +16,12 @@
             <div class="editor-title">剪辑工具</div>
         </div>
 
+        <!-- 开发中提示 -->
+        <div class="dev-notice">
+            <span class="dev-notice-icon">🚧</span>
+            <span class="dev-notice-text">持续开发更新中</span>
+        </div>
+
         <!-- 画布预览区 -->
         <div class="canvas-section">
             <div class="canvas-wrapper">
@@ -66,7 +72,7 @@
             <div class="settings-title">全局设置</div>
             <div class="settings-row">
                 <div class="setting-item">
-                    <label class="setting-label">默认时长</label>
+                    <label class="setting-label">图片时长</label>
                     <select class="setting-select" id="globalDuration">
                         <option value="1">1 秒</option>
                         <option value="2">2 秒</option>
@@ -74,6 +80,13 @@
                         <option value="4">4 秒</option>
                         <option value="5">5 秒</option>
                     </select>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">动画时长</label>
+                    <div class="duration-slider-group">
+                        <input type="range" class="duration-slider" id="globalTransitionDuration" min="0.5" max="1.5" step="0.1" value="0.5" />
+                        <span class="duration-value" id="globalTransitionDurationValue">0.5 秒</span>
+                    </div>
                 </div>
                 <div class="setting-item">
                     <label class="setting-label">默认动画</label>
@@ -96,8 +109,8 @@
 
         <!-- 导出按钮 -->
         <div class="export-section" id="exportSection" style="display:none;">
-            <!-- 文字叠加层管理 -->
-            <div class="text-overlay-section" id="textOverlaySection">
+            <!-- 文字叠加层管理（暂时隐藏） -->
+            <div class="text-overlay-section" id="textOverlaySection" style="display:none;">
                 <div class="text-overlay-header">
                     <span class="text-overlay-title">文字叠加</span>
                     <button class="add-text-btn" id="addTextBtn">
@@ -108,6 +121,45 @@
                 <div class="text-overlay-list" id="textOverlayList">
                     <div class="text-overlay-empty" id="textOverlayEmpty">暂无文字，点击上方按钮添加</div>
                 </div>
+            </div>
+
+            <!-- 背景音乐（暂时隐藏） -->
+            <div class="music-section" id="musicSection" style="display:none;">
+                <div class="music-header">
+                    <span class="music-title">背景音乐</span>
+                    <button class="add-text-btn" id="uploadMusicBtn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        <span id="musicBtnText">上传音乐</span>
+                    </button>
+                </div>
+                <div class="music-content" id="musicContent" style="display:none;">
+                    <div class="music-info">
+                        <span class="music-name" id="musicName">-</span>
+                        <span class="music-duration" id="musicDuration">0:00</span>
+                        <button class="music-remove-btn" id="removeMusicBtn">&times;</button>
+                    </div>
+                    <div class="music-player">
+                        <audio id="musicAudio" controls></audio>
+                    </div>
+                    <div class="music-trim">
+                        <div class="music-trim-row">
+                            <label class="form-label">起始时间</label>
+                            <div class="duration-slider-group">
+                                <input type="range" class="duration-slider" id="musicStartTime" min="0" max="0" step="0.1" value="0" />
+                                <span class="duration-value" id="musicStartTimeValue">0:00</span>
+                            </div>
+                        </div>
+                        <div class="music-trim-row">
+                            <label class="form-label">结束时间</label>
+                            <div class="duration-slider-group">
+                                <input type="range" class="duration-slider" id="musicEndTime" min="0" max="0" step="0.1" value="0" />
+                                <span class="duration-value" id="musicEndTimeValue">0:00</span>
+                            </div>
+                        </div>
+                        <div class="music-trim-hint" id="musicTrimHint">视频时长: 0:00</div>
+                    </div>
+                </div>
+                <input type="file" id="musicFileInput" accept="audio/*" style="display:none;" />
             </div>
 
             <button class="export-btn" id="exportBtn">
@@ -153,6 +205,13 @@
                     <div class="duration-slider-group">
                         <input type="range" class="duration-slider" id="editDuration" min="1" max="5" step="0.5" value="3" />
                         <span class="duration-value" id="editDurationValue">3 秒</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">动画时长</label>
+                    <div class="duration-slider-group">
+                        <input type="range" class="duration-slider" id="editTransitionDuration" min="0.5" max="1.5" step="0.1" value="0.5" />
+                        <span class="duration-value" id="editTransitionDurationValue">0.5 秒</span>
                     </div>
                 </div>
                 <div class="form-group">
