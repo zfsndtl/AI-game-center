@@ -990,7 +990,13 @@
             isExporting = false;
             if (audioContext) { audioContext.close(); }
             downloadBtn.onclick = function() {
-                var a = document.createElement('a'); a.href = url; a.download = 'video_' + Date.now() + '.webm'; a.click();
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'video_' + Date.now() + '.webm';
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
             };
         };
 
@@ -1063,7 +1069,8 @@
             exportProgressFill.style.width = progress + '%';
             exportProgressText.textContent = '导出中... ' + progress + '%';
             currentFrame++;
-            setTimeout(renderExportFrame, 1);
+            // 按帧率延迟渲染，确保 captureStream 能正确捕获每一帧
+            setTimeout(renderExportFrame, 1000 / fps);
         }
         renderExportFrame();
     }
