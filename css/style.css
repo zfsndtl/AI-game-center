@@ -1396,6 +1396,9 @@ h1, h2, h3 {
 .landing-square-sheep-challenge {
     background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%);
 }
+.landing-square-sokoban {
+    background: linear-gradient(135deg, #efebe9 0%, #bcaaa4 100%);
+}
 .landing-square-football {
     background: linear-gradient(135deg, #e8eaf6 0%, #b39ddb 100%);
 }
