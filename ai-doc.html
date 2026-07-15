@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>AI技术站 - AI小站</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/ai-doc.css" />
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="doc-page">
+        <!-- 移动端头部 -->
+        <header class="doc-header">
+            <a href="index.html" class="doc-back-btn">← 返回</a>
+            <h1 class="doc-title">📚 AI技术站</h1>
+            <button class="doc-menu-toggle" id="menuToggle">☰</button>
+        </header>
+
+        <div class="doc-container">
+            <!-- 左侧导航栏 -->
+            <nav class="doc-sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <span class="sidebar-title">文档目录</span>
+                    <button class="sidebar-close" id="sidebarClose">×</button>
+                </div>
+                <div class="sidebar-search">
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索文档..." />
+                </div>
+                <ul class="doc-list" id="docList">
+                    <!-- 文档列表将由 JS 动态生成 -->
+                </ul>
+            </nav>
+
+            <!-- 主内容区 -->
+            <main class="doc-main">
+                <article class="doc-content" id="docContent">
+                    <div class="doc-loading">
+                        <div class="loading-spinner"></div>
+                        <p>正在加载文档...</p>
+                    </div>
+                </article>
+            </main>
+        </div>
+
+        <!-- 返回顶部按钮 -->
+        <button class="back-to-top" id="backToTop" title="返回顶部">↑</button>
+    </div>
+
+    <script src="js/ai-doc.js"></script>
+</body>
+</html>

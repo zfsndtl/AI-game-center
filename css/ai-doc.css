@@ -1,0 +1,451 @@
+/* ===== AI技术站 - 文档博客页面样式 ===== */
+
+.doc-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+}
+
+/* ===== 头部 ===== */
+.doc-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.doc-back-btn {
+    color: #5d4037;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.doc-back-btn:hover {
+    background: rgba(93, 64, 55, 0.1);
+}
+
+.doc-title {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #3d2410;
+    margin: 0;
+}
+
+.doc-menu-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #5d4037;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.doc-menu-toggle:hover {
+    background: rgba(93, 64, 55, 0.1);
+}
+
+/* ===== 容器布局 ===== */
+.doc-container {
+    display: flex;
+    padding-top: 56px;
+    min-height: calc(100vh - 56px);
+}
+
+/* ===== 侧边栏 ===== */
+.doc-sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: rgba(255, 255, 255, 0.98);
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 90;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #3d2410;
+}
+
+.sidebar-close {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.sidebar-search {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.search-input:focus {
+    border-color: #8B5A2B;
+    box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.15);
+}
+
+/* ===== 文档列表 ===== */
+.doc-list {
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.doc-item {
+    margin: 2px 12px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.doc-item:hover {
+    background: rgba(139, 90, 43, 0.08);
+}
+
+.doc-item.active {
+    background: linear-gradient(135deg, #8B5A2B, #a06b35);
+}
+
+.doc-item.active .doc-link {
+    color: #fff;
+}
+
+.doc-link {
+    display: block;
+    padding: 12px 16px;
+    color: #3d2410;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 10px;
+}
+
+.doc-link:hover {
+    color: #8B5A2B;
+}
+
+.doc-category {
+    padding: 12px 16px 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===== 主内容区 ===== */
+.doc-main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 24px;
+    min-height: calc(100vh - 56px);
+}
+
+.doc-content {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== 加载状态 ===== */
+.doc-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(139, 90, 43, 0.2);
+    border-top-color: #8B5A2B;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===== Markdown 内容样式 ===== */
+.doc-content h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #3d2410;
+    margin: 0 0 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(139, 90, 43, 0.2);
+}
+
+.doc-content h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3d2410;
+    margin: 32px 0 16px;
+    padding-left: 12px;
+    border-left: 4px solid #8B5A2B;
+}
+
+.doc-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #5d4037;
+    margin: 24px 0 12px;
+}
+
+.doc-content p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #444;
+    margin: 0 0 16px;
+}
+
+.doc-content code {
+    background: #f5f5f5;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    color: #c7254e;
+}
+
+.doc-content pre {
+    background: #2d2d2d;
+    color: #f8f8f2;
+    padding: 16px;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin: 16px 0;
+}
+
+.doc-content pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: 14px;
+}
+
+.doc-content ul, .doc-content ol {
+    margin: 0 0 16px;
+    padding-left: 24px;
+}
+
+.doc-content li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #444;
+    margin: 4px 0;
+}
+
+.doc-content blockquote {
+    border-left: 4px solid #8B5A2B;
+    background: rgba(139, 90, 43, 0.05);
+    padding: 12px 20px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.doc-content blockquote p {
+    margin: 0;
+    color: #666;
+}
+
+.doc-content a {
+    color: #8B5A2B;
+    text-decoration: none;
+    border-bottom: 1px dotted #8B5A2B;
+}
+
+.doc-content a:hover {
+    color: #a06b35;
+    border-bottom-style: solid;
+}
+
+.doc-content img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 16px 0;
+}
+
+.doc-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+}
+
+.doc-content th, .doc-content td {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.doc-content th {
+    background: rgba(139, 90, 43, 0.1);
+    font-weight: 600;
+    color: #3d2410;
+}
+
+/* ===== 空状态 ===== */
+.doc-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+}
+
+.doc-empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+/* ===== 返回顶部按钮 ===== */
+.back-to-top {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #8B5A2B, #a06b35);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(139, 90, 43, 0.4);
+    z-index: 80;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(139, 90, 43, 0.5);
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 768px) {
+    .doc-header {
+        padding: 0 8px;
+    }
+
+    .doc-title {
+        font-size: 16px;
+    }
+
+    .doc-sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .doc-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-close {
+        display: block;
+    }
+
+    .doc-main {
+        margin-left: 0;
+        padding: 16px;
+    }
+
+    .doc-content {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .doc-content h1 {
+        font-size: 22px;
+    }
+
+    .doc-content h2 {
+        font-size: 18px;
+    }
+
+    .doc-content h3 {
+        font-size: 16px;
+    }
+
+    .back-to-top {
+        right: 16px;
+        bottom: 16px;
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+    }
+}
+
+/* ===== 遮罩层 ===== */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 85;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidebar-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
