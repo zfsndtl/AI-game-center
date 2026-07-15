@@ -51,6 +51,38 @@
 
         <!-- 返回顶部按钮 -->
         <button class="back-to-top" id="backToTop" title="返回顶部">↑</button>
+
+        <!-- 阅读进度条 -->
+        <div class="reading-progress" id="readingProgress">
+            <div class="reading-progress-bar" id="readingProgressBar"></div>
+        </div>
+
+        <!-- 文章目录（桌面端） -->
+        <nav class="doc-toc" id="docToc">
+            <div class="toc-header">
+                <span class="toc-title">目录</span>
+                <button class="toc-toggle" id="tocToggle" title="收起">«</button>
+            </div>
+            <div class="toc-content" id="tocContent">
+                <!-- 目录内容由 JS 动态生成 -->
+            </div>
+        </nav>
+
+        <!-- 移动端目录按钮 -->
+        <button class="toc-mobile-btn" id="tocMobileBtn" title="文章目录">
+            <span>☰</span>
+        </button>
+
+        <!-- 移动端目录弹窗 -->
+        <div class="toc-modal" id="tocModal">
+            <div class="toc-modal-header">
+                <span>文章目录</span>
+                <button class="toc-modal-close" id="tocModalClose">×</button>
+            </div>
+            <div class="toc-modal-content" id="tocModalContent">
+                <!-- 目录内容由 JS 动态生成 -->
+            </div>
+        </div>
     </div>
 
     <script src="js/ai-doc.js"></script>

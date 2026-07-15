@@ -15,7 +15,7 @@
             category: '入门指南',
             docs: [
                 { title: '项目介绍', file: 'intro.md' },
-                { title: '快速开始', file: 'quick-start.md' }
+              //  { title: '快速开始', file: 'quick-start.md' }
             ]
         },
         {
@@ -26,18 +26,18 @@
                 { title: '推箱子攻略', file: 'sokoban.md' }
             ]
         },
-        {
+/*         {
             category: '技术文档',
             docs: [
                 { title: '项目架构', file: 'architecture.md' },
                 { title: 'API参考', file: 'api.md' }
             ]
-        },
+        }, */
 		 {
             category: 'AI技术文档',
             docs: [
-                { title: 'AI编程学习-AI Agent 核心技术概念全景', file: 'AI-agent.md' },
-                { title: 'API参考', file: 'api.md' }
+                { title: 'AI编程-AI Agent 核心技术概念', file: 'AI-agent.md' } //,
+               // { title: 'API参考', file: 'api.md' }
             ]
         }
     ];
@@ -50,6 +50,15 @@
     var sidebar = document.getElementById('sidebar');
     var sidebarClose = document.getElementById('sidebarClose');
     var backToTop = document.getElementById('backToTop');
+    var readingProgress = document.getElementById('readingProgress');
+    var readingProgressBar = document.getElementById('readingProgressBar');
+    var docToc = document.getElementById('docToc');
+    var tocContent = document.getElementById('tocContent');
+    var tocToggle = document.getElementById('tocToggle');
+    var tocMobileBtn = document.getElementById('tocMobileBtn');
+    var tocModal = document.getElementById('tocModal');
+    var tocModalContent = document.getElementById('tocModalContent');
+    var tocModalClose = document.getElementById('tocModalClose');
 
     // ===== 当前状态 =====
     var currentDoc = null;
@@ -123,6 +132,8 @@
 
         // 滚动监听
         window.addEventListener('scroll', checkBackToTop);
+        window.addEventListener('scroll', updateReadingProgress);
+        window.addEventListener('scroll', updateTocActive);
 
         // URL hash 变化监听
         window.addEventListener('hashchange', function() {
@@ -144,6 +155,37 @@
                     !menuToggle.contains(e.target) &&
                     !sidebarOverlay.contains(e.target)) {
                     closeSidebar();
+                }
+            });
+        }
+
+        // 目录收起/展开
+        if (tocToggle) {
+            tocToggle.addEventListener('click', function() {
+                docToc.classList.toggle('collapsed');
+                tocToggle.textContent = docToc.classList.contains('collapsed') ? '»' : '«';
+            });
+        }
+
+        // 移动端目录按钮
+        if (tocMobileBtn) {
+            tocMobileBtn.addEventListener('click', function() {
+                tocModal.classList.add('open');
+            });
+        }
+
+        // 关闭移动端目录弹窗
+        if (tocModalClose) {
+            tocModalClose.addEventListener('click', function() {
+                tocModal.classList.remove('open');
+            });
+        }
+
+        // 点击目录链接关闭弹窗
+        if (tocModalContent) {
+            tocModalContent.addEventListener('click', function(e) {
+                if (e.target.classList.contains('toc-link')) {
+                    tocModal.classList.remove('open');
                 }
             });
         }
@@ -239,9 +281,134 @@
                 gfm: true
             });
             docContent.innerHTML = marked.parse(markdown);
+            
+            // 为标题添加 id
+            addHeadingIds();
+            
+            // 生成目录
+            generateToc();
+            
+            // 滚动到顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             // 如果 marked.js 未加载，显示原始文本
             docContent.innerHTML = '<pre>' + escapeHtml(markdown) + '</pre>';
+        }
+    }
+
+    // ===== 为标题添加 id =====
+    function addHeadingIds() {
+        var headings = docContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        headings.forEach(function(heading, index) {
+            if (!heading.id) {
+                var id = 'heading-' + index + '-' + encodeURIComponent(heading.textContent.trim().substring(0, 20));
+                heading.id = id;
+            }
+        });
+    }
+
+    // ===== 生成目录 =====
+    function generateToc() {
+        var headings = docContent.querySelectorAll('h2, h3, h4');
+        if (headings.length === 0) {
+            // 没有标题，隐藏目录
+            if (docToc) docToc.style.display = 'none';
+            if (tocMobileBtn) tocMobileBtn.style.display = 'none';
+            return;
+        }
+
+        var html = '<ul class="toc-list">';
+        headings.forEach(function(heading, index) {
+            var level = heading.tagName.toLowerCase();
+            var id = heading.id || 'heading-' + index;
+            var text = heading.textContent.trim();
+            
+            // 限制标题长度
+            if (text.length > 30) {
+                text = text.substring(0, 30) + '...';
+            }
+            
+            html += '<li class="toc-item toc-item-' + level + '">';
+            html += '<a href="#' + id + '" class="toc-link" data-target="' + id + '">' + escapeHtml(text) + '</a>';
+            html += '</li>';
+        });
+        html += '</ul>';
+
+        // 桌面端目录
+        if (tocContent) {
+            tocContent.innerHTML = html;
+            bindTocLinks(tocContent);
+        }
+
+        // 移动端目录
+        if (tocModalContent) {
+            tocModalContent.innerHTML = html;
+            bindTocLinks(tocModalContent);
+        }
+
+        // 显示目录
+        if (docToc) docToc.style.display = 'block';
+        if (tocMobileBtn && window.innerWidth <= 768) {
+            tocMobileBtn.style.display = 'flex';
+        }
+    }
+
+    // ===== 绑定目录链接点击事件 =====
+    function bindTocLinks(container) {
+        var links = container.querySelectorAll('.toc-link');
+        links.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var targetId = this.getAttribute('data-target');
+                var target = document.getElementById(targetId);
+                if (target) {
+                    var offset = 70; // 头部高度
+                    var top = target.getBoundingClientRect().top + window.scrollY - offset;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                }
+            });
+        });
+    }
+
+    // ===== 更新阅读进度 =====
+    function updateReadingProgress() {
+        if (!readingProgressBar) return;
+        
+        var scrollTop = window.scrollY;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        
+        readingProgressBar.style.width = progress + '%';
+    }
+
+    // ===== 更新目录活动状态 =====
+    function updateTocActive() {
+        var headings = docContent.querySelectorAll('h2, h3, h4');
+        if (headings.length === 0) return;
+
+        var scrollTop = window.scrollY;
+        var offset = 100; // 偏移量
+        var currentHeading = null;
+
+        // 找到当前可见的标题
+        headings.forEach(function(heading) {
+            var rect = heading.getBoundingClientRect();
+            if (rect.top <= offset) {
+                currentHeading = heading;
+            }
+        });
+
+        // 更新目录活动状态
+        var allLinks = document.querySelectorAll('.toc-link');
+        allLinks.forEach(function(link) {
+            link.classList.remove('active');
+        });
+
+        if (currentHeading) {
+            var activeLinks = document.querySelectorAll('.toc-link[data-target="' + currentHeading.id + '"]');
+            activeLinks.forEach(function(link) {
+                link.classList.add('active');
+            });
         }
     }
 
@@ -306,7 +473,7 @@
         if (overlay) {
             overlay.classList.add('visible');
         }
-        // 禁止背景滚动
+        // 禁止背景滚动（仅在侧边栏区域）
         document.body.style.overflow = 'hidden';
     }
 
@@ -329,6 +496,17 @@
         } else {
             backToTop.classList.remove('visible');
         }
+    }
+
+    // ===== 更新阅读进度 =====
+    function updateReadingProgress() {
+        if (!readingProgressBar) return;
+
+        var scrollTop = window.scrollY;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
+        readingProgressBar.style.width = progress + '%';
     }
 
     // ===== 工具函数 =====
