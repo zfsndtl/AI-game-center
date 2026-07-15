@@ -133,13 +133,20 @@
         });
 
         // 点击遮罩层关闭侧边栏
-        document.addEventListener('click', function(e) {
-            if (sidebar.classList.contains('open') &&
-                !sidebar.contains(e.target) &&
-                !menuToggle.contains(e.target)) {
-                closeSidebar();
-            }
-        });
+        var sidebarOverlay = document.getElementById('sidebarOverlay');
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // 点击文档内容区域关闭侧边栏（移动端）
+            document.addEventListener('click', function(e) {
+                if (sidebar.classList.contains('open') &&
+                    !sidebar.contains(e.target) &&
+                    !menuToggle.contains(e.target) &&
+                    !sidebarOverlay.contains(e.target)) {
+                    closeSidebar();
+                }
+            });
+        }
     }
 
     // ===== 加载初始文档 =====
@@ -294,11 +301,25 @@
     // ===== 打开侧边栏 =====
     function openSidebar() {
         sidebar.classList.add('open');
+        // 显示遮罩层
+        var overlay = document.querySelector('.sidebar-overlay');
+        if (overlay) {
+            overlay.classList.add('visible');
+        }
+        // 禁止背景滚动
+        document.body.style.overflow = 'hidden';
     }
 
     // ===== 关闭侧边栏 =====
     function closeSidebar() {
         sidebar.classList.remove('open');
+        // 隐藏遮罩层
+        var overlay = document.querySelector('.sidebar-overlay');
+        if (overlay) {
+            overlay.classList.remove('visible');
+        }
+        // 恢复背景滚动
+        document.body.style.overflow = '';
     }
 
     // ===== 检查返回顶部按钮 =====
