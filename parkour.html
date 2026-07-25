@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>城市跑酷 - AI小站</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/parkour.css" />
+</head>
+<body>
+    <div class="parkour-page">
+        <!-- 游戏头部 -->
+        <header class="parkour-header">
+            <a href="index.html" class="pk-back-link">&larr; 返回</a>
+            <h1 class="pk-title">&#127759; 城市跑酷</h1>
+            <div class="pk-header-right">
+                <span class="pk-coin-display" id="pkCoins">&#128176; 0</span>
+            </div>
+        </header>
+
+        <!-- 信息栏 -->
+        <div class="pk-info-bar">
+            <div class="pk-info-item">
+                <span class="pk-info-label">关卡</span>
+                <span class="pk-info-value" id="pkLevelDisplay">1/4</span>
+            </div>
+            <div class="pk-info-item">
+                <span class="pk-info-label">距离</span>
+                <span class="pk-info-value"><span id="pkDistance">0</span>m</span>
+            </div>
+            <div class="pk-info-item">
+                <span class="pk-info-label">目标</span>
+                <span class="pk-info-value"><span id="pkGoal">400</span>m</span>
+            </div>
+            <div class="pk-info-item">
+                <span class="pk-info-label">得分</span>
+                <span class="pk-info-value" id="pkScore">0</span>
+            </div>
+        </div>
+
+        <!-- 关卡进度条 -->
+        <div class="pk-progress-bar-wrap">
+            <div class="pk-progress-bar" id="pkProgressBar" style="width:0%;"></div>
+            <div class="pk-progress-bus" id="pkProgressBus">&#128652;</div>
+        </div>
+
+        <!-- 游戏画布 -->
+        <div class="pk-game-container" id="pkGameContainer">
+            <canvas id="pkCanvas"></canvas>
+
+            <!-- 开始界面 -->
+            <div class="pk-overlay" id="pkStartOverlay">
+                <div class="pk-overlay-content">
+                    <div class="pk-overlay-icon">&#127939;&#8205;&#9794;&#65039;</div>
+                    <div class="pk-overlay-title">城市跑酷</div>
+                    <div class="pk-overlay-subtitle">下班路上，闯关回家！</div>
+                    <div class="pk-level-preview" id="pkLevelPreview">
+                        <div class="pk-level-card">
+                            <span class="pk-level-num">1</span>
+                            <span class="pk-level-name">公司出发</span>
+                            <span class="pk-level-goal">400m</span>
+                            <span class="pk-level-speed">&#9889; 1.5x</span>
+                        </div>
+                        <div class="pk-level-card">
+                            <span class="pk-level-num">2</span>
+                            <span class="pk-level-name">穿越商业街</span>
+                            <span class="pk-level-goal">600m</span>
+                            <span class="pk-level-speed">&#9889; 2.5x</span>
+                        </div>
+                        <div class="pk-level-card">
+                            <span class="pk-level-num">3</span>
+                            <span class="pk-level-name">夜跑回家</span>
+                            <span class="pk-level-goal">800m</span>
+                            <span class="pk-level-speed">&#9889; 3.5x</span>
+                        </div>
+                        <div class="pk-level-card pk-level-final">
+                            <span class="pk-level-num">4</span>
+                            <span class="pk-level-name">最后一程</span>
+                            <span class="pk-level-goal">1000m</span>
+                            <span class="pk-level-speed">&#9889; 4.5x</span>
+                        </div>
+                    </div>
+                    <div class="pk-tips">
+                        <div class="pk-tip-row">
+                            <span class="pk-tip-key">&#9000;&#65039;</span>
+                            <span>空格/上键 跳跃，下键/S 滑铲</span>
+                        </div>
+                        <div class="pk-tip-row">
+                            <span class="pk-tip-key">&#128241;</span>
+                            <span>点击屏幕上半部跳跃，下半部滑铲</span>
+                        </div>
+                        <div class="pk-tip-row">
+                            <span class="pk-tip-key">&#9749;</span>
+                            <span>收集咖啡获得短暂无敌加速</span>
+                        </div>
+                        <div class="pk-tip-row">
+                            <span class="pk-tip-key">&#128652;</span>
+                            <span>到达目标距离即可乘公交前往下一关</span>
+                        </div>
+                    </div>
+                    <button class="pk-start-btn" id="pkStartBtn">开始闯关</button>
+                </div>
+            </div>
+
+            <!-- 关卡过渡界面 -->
+            <div class="pk-overlay pk-overlay-transition" id="pkTransitionOverlay" style="display:none;">
+                <div class="pk-overlay-content">
+                    <div class="pk-overlay-icon pk-transition-icon" id="pkTransitionIcon">&#128652;</div>
+                    <div class="pk-overlay-title" id="pkTransitionTitle">第2关</div>
+                    <div class="pk-overlay-subtitle" id="pkTransitionSubtitle">穿越商业街</div>
+                    <div class="pk-transition-info" id="pkTransitionInfo">
+                        <div class="pk-transition-stat">
+                            <span class="pk-transition-stat-label">本关距离</span>
+                            <span class="pk-transition-stat-value"><span id="pkTransitionDistance">0</span>m</span>
+                        </div>
+                        <div class="pk-transition-stat">
+                            <span class="pk-transition-stat-label">收集金币</span>
+                            <span class="pk-transition-stat-value"><span id="pkTransitionCoins">0</span></span>
+                        </div>
+                    </div>
+                    <button class="pk-start-btn pk-next-btn" id="pkNextBtn">继续前进 &#10142;</button>
+                </div>
+            </div>
+
+            <!-- 失败界面 -->
+            <div class="pk-overlay pk-overlay-end" id="pkEndOverlay" style="display:none;">
+                <div class="pk-overlay-content">
+                    <div class="pk-overlay-icon" id="pkEndIcon">&#128165;</div>
+                    <div class="pk-overlay-title" id="pkEndTitle">闯关失败！</div>
+                    <div class="pk-end-stats">
+                        <div class="pk-stat">
+                            <span class="pk-stat-label">奔跑距离</span>
+                            <span class="pk-stat-value"><span id="pkEndDistance">0</span>m</span>
+                        </div>
+                        <div class="pk-stat">
+                            <span class="pk-stat-label">收集金币</span>
+                            <span class="pk-stat-value"><span id="pkEndCoins">0</span></span>
+                        </div>
+                        <div class="pk-stat">
+                            <span class="pk-stat-label">总得分</span>
+                            <span class="pk-stat-value" id="pkEndScore">0</span>
+                        </div>
+                    </div>
+                    <div class="pk-end-buttons">
+                        <button class="pk-retry-btn" id="pkRetryBtn">&#128260; 重新挑战</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最终胜利界面 -->
+            <div class="pk-overlay pk-overlay-victory" id="pkVictoryOverlay" style="display:none;">
+                <div class="pk-overlay-content">
+                    <div class="pk-overlay-icon pk-victory-icon">&#127968;</div>
+                    <div class="pk-overlay-title pk-victory-title">到家了！</div>
+                    <div class="pk-overlay-subtitle pk-victory-subtitle">恭喜完成全部关卡，完美下班！</div>
+                    <div class="pk-end-stats">
+                        <div class="pk-stat">
+                            <span class="pk-stat-label">总距离</span>
+                            <span class="pk-stat-value"><span id="pkVictoryDistance">0</span>m</span>
+                        </div>
+                        <div class="pk-stat">
+                            <span class="pk-stat-label">总金币</span>
+                            <span class="pk-stat-value"><span id="pkVictoryCoins">0</span></span>
+                        </div>
+                        <div class="pk-stat">
+                            <span class="pk-stat-label">总得分</span>
+                            <span class="pk-stat-value" id="pkVictoryScore">0</span>
+                        </div>
+                    </div>
+                    <div class="pk-victory-buttons">
+                        <button class="pk-replay-animation-btn" id="pkReplayAnimBtn">&#127916; 一键查看最终动画</button>
+                        <button class="pk-retry-btn pk-play-again-btn" id="pkPlayAgainBtn">&#128260; 再玩一次</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 暂停按钮 -->
+            <button class="pk-pause-btn" id="pkPauseBtn" style="display:none;">&#9208;</button>
+        </div>
+
+        <!-- 移动端控制提示 -->
+        <div class="pk-mobile-hint" id="pkMobileHint">
+            <div class="pk-hint-zone pk-hint-jump">点击跳跃</div>
+            <div class="pk-hint-zone pk-hint-slide">点击滑铲</div>
+        </div>
+    </div>
+
+    <script src="js/parkour.js"></script>
+</body>
+</html>

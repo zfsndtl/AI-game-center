@@ -1,0 +1,643 @@
+{
+  "_comment": "暮归游戏配置文件 / Twilight Return Game Configuration File",
+  "_version": "2.0",
+  "_lastUpdated": "2025-07-25",
+
+  "gameSettings": {
+    "_comment": "游戏基础设置 / Basic Game Settings",
+    "LANES": {
+      "value": 3,
+      "comment_cn": "车道数量",
+      "comment_en": "Number of lanes on the road"
+    },
+    "SPEED_MAX": {
+      "value": 6.0,
+      "comment_cn": "最大速度限制",
+      "comment_en": "Maximum speed limit"
+    },
+    "FRAGMENT_BASE_INTERVAL": {
+      "value": 1500,
+      "comment_cn": "碎片生成基础间隔（毫秒）",
+      "comment_en": "Base interval for fragment spawning (milliseconds)"
+    },
+    "FRAGMENT_MIN_INTERVAL": {
+      "value": 800,
+      "comment_cn": "碎片生成最小间隔（毫秒）",
+      "comment_en": "Minimum interval for fragment spawning (milliseconds)"
+    },
+    "OBSTACLE_BASE_INTERVAL": {
+      "value": 4000,
+      "comment_cn": "障碍物生成基础间隔（毫秒）",
+      "comment_en": "Base interval for obstacle spawning (milliseconds)"
+    },
+    "OBSTACLE_MIN_INTERVAL": {
+      "value": 2000,
+      "comment_cn": "障碍物生成最小间隔（毫秒）",
+      "comment_en": "Minimum interval for obstacle spawning (milliseconds)"
+    }
+  },
+
+  "levels": {
+    "_comment": "关卡配置 / Level Configuration",
+    "list": [
+      {
+        "id": 1,
+        "name_cn": "初遇暮光",
+        "name_en": "First Twilight",
+        "distance": {
+          "value": 500,
+          "comment_cn": "关卡距离（米）",
+          "comment_en": "Level distance (meters)"
+        },
+        "speed": {
+          "value": 3.0,
+          "comment_cn": "关卡速度",
+          "comment_en": "Level speed"
+        },
+        "monsters": {
+          "value": [
+            {
+              "type": "level1",
+              "startDistance": {
+                "value": 200,
+                "comment_cn": "怪兽出现距离（米）",
+                "comment_en": "Monster spawn distance (meters)"
+              }
+            }
+          ],
+          "comment_cn": "关卡怪兽配置",
+          "comment_en": "Level monster configuration"
+        }
+      },
+      {
+        "id": 2,
+        "name_cn": "渐入暮色",
+        "name_en": "Deepening Twilight",
+        "distance": {
+          "value": 1000,
+          "comment_cn": "关卡距离（米）",
+          "comment_en": "Level distance (meters)"
+        },
+        "speed": {
+          "value": 4.0,
+          "comment_cn": "关卡速度",
+          "comment_en": "Level speed"
+        },
+        "monsters": {
+          "value": [
+            {
+              "type": "level1",
+              "startDistance": {
+                "value": 200,
+                "comment_cn": "怪兽出现距离（米）",
+                "comment_en": "Monster spawn distance (meters)"
+              }
+            },
+            {
+              "type": "level2",
+              "startDistance": {
+                "value": 500,
+                "comment_cn": "怪兽出现距离（米）",
+                "comment_en": "Monster spawn distance (meters)"
+              }
+            }
+          ],
+          "comment_cn": "关卡怪兽配置",
+          "comment_en": "Level monster configuration"
+        }
+      },
+      {
+        "id": 3,
+        "name_cn": "暮归之路",
+        "name_en": "Twilight Return Path",
+        "distance": {
+          "value": 2000,
+          "comment_cn": "关卡距离（米）",
+          "comment_en": "Level distance (meters)"
+        },
+        "speed": {
+          "value": 5.0,
+          "comment_cn": "关卡速度",
+          "comment_en": "Level speed"
+        },
+        "monsters": {
+          "value": [
+            {
+              "type": "level1",
+              "startDistance": {
+                "value": 200,
+                "comment_cn": "怪兽出现距离（米）",
+                "comment_en": "Monster spawn distance (meters)"
+              }
+            },
+            {
+              "type": "level2",
+              "startDistance": {
+                "value": 500,
+                "comment_cn": "怪兽出现距离（米）",
+                "comment_en": "Monster spawn distance (meters)"
+              }
+            },
+            {
+              "type": "level3",
+              "startDistance": {
+                "value": 1000,
+                "comment_cn": "怪兽出现距离（米）",
+                "comment_en": "Monster spawn distance (meters)"
+              }
+            }
+          ],
+          "comment_cn": "关卡怪兽配置",
+          "comment_en": "Level monster configuration"
+        }
+      }
+    ]
+  },
+
+  "weapons": {
+    "_comment": "武器系统配置 / Weapon System Configuration",
+    "bow": {
+      "name_cn": "弓箭",
+      "name_en": "Bow",
+      "icon": "🏹",
+      "cost": {
+        "value": 300,
+        "comment_cn": "兑换成本（碎片）",
+        "comment_en": "Exchange cost (fragments)"
+      },
+      "cooldown": {
+        "value": 2000,
+        "comment_cn": "冷却时间（毫秒）",
+        "comment_en": "Cooldown time (milliseconds)"
+      },
+      "unlimited": {
+        "value": true,
+        "comment_cn": "是否无限弹药",
+        "comment_en": "Unlimited ammunition"
+      },
+      "initialAmmo": {
+        "value": 0,
+        "comment_cn": "初始弹药数量",
+        "comment_en": "Initial ammunition count"
+      },
+      "ammoCost": {
+        "value": 0,
+        "comment_cn": "弹药兑换成本（碎片）",
+        "comment_en": "Ammunition exchange cost (fragments)"
+      },
+      "ammoPerPurchase": {
+        "value": 0,
+        "comment_cn": "每次兑换弹药数量",
+        "comment_en": "Ammunition per purchase"
+      },
+      "power": {
+        "value": 1,
+        "comment_cn": "攻击力",
+        "comment_en": "Attack power"
+      },
+      "bulletSpeed": {
+        "value": 600,
+        "comment_cn": "子弹速度",
+        "comment_en": "Bullet speed"
+      },
+      "bulletSize": {
+        "value": 8,
+        "comment_cn": "子弹大小（像素）",
+        "comment_en": "Bullet size (pixels)"
+      },
+      "color": "#FFD700",
+      "bulletsPerShot": {
+        "value": 1,
+        "comment_cn": "每次发射子弹数",
+        "comment_en": "Bullets per shot"
+      }
+    },
+    "pistol": {
+      "name_cn": "手枪",
+      "name_en": "Pistol",
+      "icon": "🔫",
+      "cost": {
+        "value": 500,
+        "comment_cn": "兑换成本（碎片）",
+        "comment_en": "Exchange cost (fragments)"
+      },
+      "cooldown": {
+        "value": 1000,
+        "comment_cn": "冷却时间（毫秒）",
+        "comment_en": "Cooldown time (milliseconds)"
+      },
+      "unlimited": {
+        "value": false,
+        "comment_cn": "是否无限弹药",
+        "comment_en": "Unlimited ammunition"
+      },
+      "initialAmmo": {
+        "value": 50,
+        "comment_cn": "初始弹药数量",
+        "comment_en": "Initial ammunition count"
+      },
+      "ammoCost": {
+        "value": 10,
+        "comment_cn": "弹药兑换成本（碎片）",
+        "comment_en": "Ammunition exchange cost (fragments)"
+      },
+      "ammoPerPurchase": {
+        "value": 10,
+        "comment_cn": "每次兑换弹药数量",
+        "comment_en": "Ammunition per purchase"
+      },
+      "power": {
+        "value": 1,
+        "comment_cn": "攻击力",
+        "comment_en": "Attack power"
+      },
+      "bulletSpeed": {
+        "value": 700,
+        "comment_cn": "子弹速度",
+        "comment_en": "Bullet speed"
+      },
+      "bulletSize": {
+        "value": 6,
+        "comment_cn": "子弹大小（像素）",
+        "comment_en": "Bullet size (pixels)"
+      },
+      "color": "#FF6B4A",
+      "bulletsPerShot": {
+        "value": 1,
+        "comment_cn": "每次发射子弹数",
+        "comment_en": "Bullets per shot"
+      }
+    },
+    "smg": {
+      "name_cn": "冲锋枪",
+      "name_en": "Submachine Gun",
+      "icon": "🔫",
+      "cost": {
+        "value": 800,
+        "comment_cn": "兑换成本（碎片）",
+        "comment_en": "Exchange cost (fragments)"
+      },
+      "cooldown": {
+        "value": 500,
+        "comment_cn": "冷却时间（毫秒），1秒可发射2次",
+        "comment_en": "Cooldown time (milliseconds), 2 shots per second"
+      },
+      "unlimited": {
+        "value": false,
+        "comment_cn": "是否无限弹药",
+        "comment_en": "Unlimited ammunition"
+      },
+      "initialAmmo": {
+        "value": 100,
+        "comment_cn": "初始弹药数量",
+        "comment_en": "Initial ammunition count"
+      },
+      "ammoCost": {
+        "value": 100,
+        "comment_cn": "弹药兑换成本（碎片）",
+        "comment_en": "Ammunition exchange cost (fragments)"
+      },
+      "ammoPerPurchase": {
+        "value": 50,
+        "comment_cn": "每次兑换弹药数量",
+        "comment_en": "Ammunition per purchase"
+      },
+      "power": {
+        "value": 1,
+        "comment_cn": "攻击力",
+        "comment_en": "Attack power"
+      },
+      "bulletSpeed": {
+        "value": 800,
+        "comment_cn": "子弹速度",
+        "comment_en": "Bullet speed"
+      },
+      "bulletSize": {
+        "value": 5,
+        "comment_cn": "子弹大小（像素）",
+        "comment_en": "Bullet size (pixels)"
+      },
+      "color": "#4A6294",
+      "bulletsPerShot": {
+        "value": 1,
+        "comment_cn": "每次发射子弹数",
+        "comment_en": "Bullets per shot"
+      }
+    }
+  },
+
+  "monsters": {
+    "_comment": "怪兽系统配置 / Monster System Configuration",
+    "level1": {
+      "name_cn": "迷雾游魂",
+      "name_en": "Mist Wraith",
+      "hp": {
+        "value": 2,
+        "comment_cn": "生命值",
+        "comment_en": "Health points"
+      },
+      "speed": {
+        "value": 1.0,
+        "comment_cn": "移动速度",
+        "comment_en": "Movement speed"
+      },
+      "color": "#8B4513",
+      "size": {
+        "value": 50,
+        "comment_cn": "大小（像素）",
+        "comment_en": "Size (pixels)"
+      },
+      "reward": {
+        "value": 20,
+        "comment_cn": "击败奖励（碎片）",
+        "comment_en": "Defeat reward (fragments)"
+      }
+    },
+    "level2": {
+      "name_cn": "暗影行者",
+      "name_en": "Shadow Walker",
+      "hp": {
+        "value": 3,
+        "comment_cn": "生命值",
+        "comment_en": "Health points"
+      },
+      "speed": {
+        "value": 1.3,
+        "comment_cn": "移动速度",
+        "comment_en": "Movement speed"
+      },
+      "color": "#4A4A6A",
+      "size": {
+        "value": 60,
+        "comment_cn": "大小（像素）",
+        "comment_en": "Size (pixels)"
+      },
+      "reward": {
+        "value": 40,
+        "comment_cn": "击败奖励（碎片）",
+        "comment_en": "Defeat reward (fragments)"
+      }
+    },
+    "level3": {
+      "name_cn": "暮色恶魔",
+      "name_en": "Twilight Demon",
+      "hp": {
+        "value": 5,
+        "comment_cn": "生命值",
+        "comment_en": "Health points"
+      },
+      "speed": {
+        "value": 1.6,
+        "comment_cn": "移动速度",
+        "comment_en": "Movement speed"
+      },
+      "color": "#1A1A2E",
+      "size": {
+        "value": 70,
+        "comment_cn": "大小（像素）",
+        "comment_en": "Size (pixels)"
+      },
+      "reward": {
+        "value": 80,
+        "comment_cn": "击败奖励（碎片）",
+        "comment_en": "Defeat reward (fragments)"
+      }
+    }
+  },
+
+  "fragments": {
+    "_comment": "温暖碎片系统配置 / Warm Fragment System Configuration",
+    "common": {
+      "name_cn": "城市光影",
+      "name_en": "City Lights",
+      "icon": "🌆",
+      "probability": {
+        "value": 0.70,
+        "comment_cn": "出现概率",
+        "comment_en": "Spawn probability"
+      },
+      "score": {
+        "value": 10,
+        "comment_cn": "分值",
+        "comment_en": "Score value"
+      },
+      "color": "#FFE49A",
+      "radius": {
+        "value": 14,
+        "comment_cn": "半径（像素）",
+        "comment_en": "Radius (pixels)"
+      },
+      "glow": {
+        "value": 15,
+        "comment_cn": "光晕强度",
+        "comment_en": "Glow intensity"
+      }
+    },
+    "rare": {
+      "name_cn": "街角生灵",
+      "name_en": "Street Creatures",
+      "icon": "🐾",
+      "probability": {
+        "value": 0.22,
+        "comment_cn": "出现概率",
+        "comment_en": "Spawn probability"
+      },
+      "score": {
+        "value": 30,
+        "comment_cn": "分值",
+        "comment_en": "Score value"
+      },
+      "color": "#FFD166",
+      "radius": {
+        "value": 18,
+        "comment_cn": "半径（像素）",
+        "comment_en": "Radius (pixels)"
+      },
+      "glow": {
+        "value": 20,
+        "comment_cn": "光晕强度",
+        "comment_en": "Glow intensity"
+      }
+    },
+    "epic": {
+      "name_cn": "人间烟火",
+      "name_en": "Human Warmth",
+      "icon": "🏮",
+      "probability": {
+        "value": 0.08,
+        "comment_cn": "出现概率",
+        "comment_en": "Spawn probability"
+      },
+      "score": {
+        "value": 50,
+        "comment_cn": "分值",
+        "comment_en": "Score value"
+      },
+      "color": "#FF6B4A",
+      "radius": {
+        "value": 22,
+        "comment_cn": "半径（像素）",
+        "comment_en": "Radius (pixels)"
+      },
+      "glow": {
+        "value": 25,
+        "comment_cn": "光晕强度",
+        "comment_en": "Glow intensity"
+      }
+    }
+  },
+
+  "obstacles": {
+    "_comment": "障碍物系统配置 / Obstacle System Configuration",
+    "puddle": {
+      "name_cn": "路面积水",
+      "name_en": "Road Puddle",
+      "probability": {
+        "value": 0.50,
+        "comment_cn": "出现概率",
+        "comment_en": "Spawn probability"
+      },
+      "speedReduce": {
+        "value": 0.30,
+        "comment_cn": "速度减少比例",
+        "comment_en": "Speed reduction ratio"
+      },
+      "duration": {
+        "value": 1000,
+        "comment_cn": "减速持续时间（毫秒）",
+        "comment_en": "Slowdown duration (milliseconds)"
+      },
+      "color": "rgba(100, 149, 237, 0.6)",
+      "width": {
+        "value": 55,
+        "comment_cn": "宽度（像素）",
+        "comment_en": "Width (pixels)"
+      },
+      "height": {
+        "value": 15,
+        "comment_cn": "高度（像素）",
+        "comment_en": "Height (pixels)"
+      }
+    },
+    "barrier": {
+      "name_cn": "施工路障",
+      "name_en": "Construction Barrier",
+      "probability": {
+        "value": 0.30,
+        "comment_cn": "出现概率",
+        "comment_en": "Spawn probability"
+      },
+      "speedReduce": {
+        "value": 0.50,
+        "comment_cn": "速度减少比例",
+        "comment_en": "Speed reduction ratio"
+      },
+      "duration": {
+        "value": 1500,
+        "comment_cn": "减速持续时间（毫秒）",
+        "comment_en": "Slowdown duration (milliseconds)"
+      },
+      "color": "#FF6B35",
+      "width": {
+        "value": 36,
+        "comment_cn": "宽度（像素）",
+        "comment_en": "Width (pixels)"
+      },
+      "height": {
+        "value": 40,
+        "comment_cn": "高度（像素）",
+        "comment_en": "Height (pixels)"
+      }
+    },
+    "crowd": {
+      "name_cn": "拥挤人群",
+      "name_en": "Crowded Area",
+      "probability": {
+        "value": 0.20,
+        "comment_cn": "出现概率",
+        "comment_en": "Spawn probability"
+      },
+      "speedReduce": {
+        "value": 0.40,
+        "comment_cn": "速度减少比例",
+        "comment_en": "Speed reduction ratio"
+      },
+      "duration": {
+        "value": 1200,
+        "comment_cn": "减速持续时间（毫秒）",
+        "comment_en": "Slowdown duration (milliseconds)"
+      },
+      "color": "#808080",
+      "width": {
+        "value": 44,
+        "comment_cn": "宽度（像素）",
+        "comment_en": "Width (pixels)"
+      },
+      "height": {
+        "value": 50,
+        "comment_cn": "高度（像素）",
+        "comment_en": "Height (pixels)"
+      }
+    }
+  },
+
+  "skyColors": {
+    "_comment": "天空颜色配置 / Sky Color Configuration",
+    "level1": {
+      "_comment_cn": "关卡1：下午到傍晚（浅色调）",
+      "_comment_en": "Level 1: Afternoon to evening (light tones)",
+      "start": {
+        "top": "#F47B4A",
+        "mid": "#FFD166",
+        "bottom": "#FFF8F0"
+      },
+      "end": {
+        "top": "#FF8C42",
+        "mid": "#FFB347",
+        "bottom": "#FFE4B5"
+      }
+    },
+    "level2": {
+      "_comment_cn": "关卡2：傍晚到日落（中等色调）",
+      "_comment_en": "Level 2: Evening to sunset (medium tones)",
+      "start": {
+        "top": "#FF6B35",
+        "mid": "#FF8C42",
+        "bottom": "#FFD166"
+      },
+      "end": {
+        "top": "#4A6294",
+        "mid": "#6A7BA5",
+        "bottom": "#8EA4CC"
+      }
+    },
+    "level3": {
+      "_comment_cn": "关卡3：日落到夜幕（深色调）",
+      "_comment_en": "Level 3: Sunset to night (dark tones)",
+      "start": {
+        "top": "#4A6294",
+        "mid": "#6A7BA5",
+        "bottom": "#8EA4CC"
+      },
+      "end": {
+        "top": "#1A1A2E",
+        "mid": "#2C3E6B",
+        "bottom": "#4A5568"
+      }
+    }
+  },
+
+  "warmStories": {
+    "_comment": "温暖故事配置 / Warm Story Configuration",
+    "list": [
+      "街角那家面包店，今天也亮着暖黄色的灯。",
+      "便利店门口的橘猫，用慵懒的眼神目送你。",
+      "转角遇见多年不见的老同学，彼此都愣了一下。",
+      "路灯下，有人在等你回家。",
+      "远处的窗户里，有人正在做晚饭。",
+      "公交站牌下，有人捧着一束花。",
+      "路边的梧桐树，叶子正在轻轻飘落。",
+      "街边的小摊，飘来熟悉的烤红薯香味。"
+    ]
+  }
+}

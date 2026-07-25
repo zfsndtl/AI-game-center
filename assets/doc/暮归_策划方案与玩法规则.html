@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>暮归 · 游戏策划方案与完整玩法规则</title>
+<style>
+  :root {
+    --orange: #F47B4A;
+    --orange-dark: #D05A2A;
+    --orange-light: #F8A87A;
+    --blue: #2C3E6B;
+    --blue-light: #4A6294;
+    --blue-lighter: #8EA4CC;
+    --gold: #FFD166;
+    --gold-light: #FFE49A;
+    --white: #FFF8F0;
+    --white-warm: #F5E6D8;
+    --black: #1A1A2E;
+    --grey: #8B7E74;
+    --grey-light: #B5A99A;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'PingFang SC','Noto Sans SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+    background: linear-gradient(180deg, #1A1A2E 0%, #2C3E6B 15%, #1A1A2E 100%);
+    color: #E8E0D8;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header ── */
+  .doc-header {
+    background: linear-gradient(180deg, rgba(244,123,74,0.15) 0%, transparent 100%);
+    padding: 4rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 80%, rgba(244,123,74,0.2) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .doc-header .shine {
+    width: 120px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 2rem;
+  }
+  .doc-header h1 {
+    font-family: 'Noto Serif SC','STSong','SimSun',serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+  .doc-header .subtitle {
+    font-family: 'Georgia','Playfair Display',serif;
+    font-size: 1rem;
+    color: rgba(255,248,240,0.5);
+    letter-spacing: 0.3em;
+    margin-bottom: 1.2rem;
+  }
+  .doc-header .tagline {
+    color: var(--gold);
+    font-size: 1.05rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+  }
+  .doc-meta {
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+    font-size: 0.8rem; color: rgba(255,248,240,0.4);
+    margin-top: 2rem;
+  }
+  .doc-meta span { white-space: nowrap; }
+
+  /* ── Navigation ── */
+  .nav-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(26,26,46,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,209,102,0.1);
+    padding: 0.6rem 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-bar::-webkit-scrollbar { display: none; }
+  .nav-inner {
+    display: flex; gap: 0; justify-content: center;
+    min-width: max-content;
+    padding: 0 1rem;
+  }
+  .nav-inner a {
+    color: rgba(255,248,240,0.5);
+    text-decoration: none;
+    font-size: 0.82rem;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .nav-inner a:hover, .nav-inner a.active {
+    color: var(--gold);
+    background: rgba(255,209,102,0.08);
+  }
+
+  /* ── Content ── */
+  .doc-body {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin: 4rem 0;
+  }
+  .section-number {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .section-title {
+    font-family: 'Noto Serif SC','STSong','SimSun',serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.06em;
+  }
+  .section-desc {
+    color: var(--grey);
+    font-size: 0.9rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: rgba(255,248,240,0.03);
+    border: 1px solid rgba(255,248,240,0.06);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s;
+  }
+  .card:hover { border-color: rgba(255,209,102,0.15); }
+  .card.accent-left {
+    border-left: 3px solid var(--orange);
+  }
+  .card.accent-gold {
+    border-left: 3px solid var(--gold);
+  }
+  .card.accent-blue {
+    border-left: 3px solid var(--blue-light);
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-title .icon { font-size: 1.3rem; }
+
+  .card p, .card li {
+    font-size: 0.9rem;
+    color: rgba(232,224,216,0.8);
+    line-height: 1.8;
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-radius: 12px;
+    border: 1px solid rgba(255,248,240,0.06);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  thead { background: rgba(244,123,74,0.12); }
+  th {
+    padding: 0.9rem 1.2rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+  td {
+    padding: 0.75rem 1.2rem;
+    border-top: 1px solid rgba(255,248,240,0.04);
+    color: rgba(232,224,216,0.85);
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(255,209,102,0.03); }
+  td strong { color: var(--white); }
+
+  /* ── Rule Box ── */
+  .rule-box {
+    background: rgba(44,62,107,0.3);
+    border: 1px solid rgba(74,98,148,0.4);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin: 1.5rem 0;
+    position: relative;
+  }
+  .rule-box::before {
+    content: '📋';
+    position: absolute; top: -14px; left: 20px;
+    font-size: 1.2rem;
+  }
+  .rule-box .rule-title {
+    font-weight: 600; color: var(--gold);
+    margin-bottom: 0.8rem; font-size: 0.95rem;
+  }
+  .rule-box ul {
+    list-style: none; padding: 0;
+  }
+  .rule-box li {
+    padding: 0.3rem 0 0.3rem 1.5rem;
+    position: relative;
+    font-size: 0.88rem;
+    color: rgba(232,224,216,0.85);
+  }
+  .rule-box li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--orange);
+    font-size: 0.7rem;
+    top: 0.5rem;
+  }
+
+  /* ── Highlight ── */
+  .highlight {
+    display: inline-block;
+    background: rgba(244,123,74,0.2);
+    color: var(--orange-light);
+    padding: 0.15em 0.5em;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.9em;
+  }
+  .highlight-gold {
+    display: inline-block;
+    background: rgba(255,209,102,0.15);
+    color: var(--gold);
+    padding: 0.15em 0.5em;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.9em;
+  }
+  .highlight-blue {
+    display: inline-block;
+    background: rgba(74,98,148,0.25);
+    color: var(--blue-lighter);
+    padding: 0.15em 0.5em;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.9em;
+  }
+
+  /* ── Grid ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 700px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .doc-body { padding: 0 1rem 3rem; }
+    .card { padding: 1.5rem; }
+  }
+
+  /* ── Stat ── */
+  .stat-card {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(255,248,240,0.03);
+    border: 1px solid rgba(255,248,240,0.06);
+    border-radius: 12px;
+  }
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+    font-family: 'Georgia','Playfair Display',serif;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--grey);
+    margin-top: 0.3rem;
+  }
+
+  /* ── Flow Chart ── */
+  .flow-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0.8rem; flex-wrap: wrap; margin: 1.5rem 0;
+  }
+  .flow-node {
+    background: rgba(44,62,107,0.4);
+    border: 1px solid rgba(74,98,148,0.5);
+    border-radius: 10px;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
+    color: var(--white);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    color: var(--orange);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  /* ── Code Block ── */
+  .code-block {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,248,240,0.08);
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    font-family: 'SF Mono','Consolas','Menlo',monospace;
+    font-size: 0.82rem;
+    color: rgba(232,224,216,0.75);
+    overflow-x: auto;
+    line-height: 1.7;
+    margin: 1rem 0;
+  }
+  .code-block .kw { color: var(--orange); }
+  .code-block .num { color: var(--gold); }
+  .code-block .str { color: var(--blue-lighter); }
+  .code-block .cmt { color: rgba(255,248,240,0.3); }
+
+  /* ── Footer ── */
+  .doc-footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid rgba(255,248,240,0.06);
+    margin-top: 4rem;
+  }
+  .doc-footer .foot-logo {
+    font-family: 'Noto Serif SC',serif;
+    font-size: 1.6rem; font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 0.3rem;
+  }
+  .doc-footer .foot-meta {
+    font-size: 0.78rem;
+    color: rgba(255,248,240,0.35);
+  }
+
+  /* ── Misc ── */
+  ul.content-list {
+    list-style: none; padding: 0;
+  }
+  ul.content-list li {
+    padding: 0.4rem 0 0.4rem 1.5rem;
+    position: relative;
+    font-size: 0.9rem;
+    color: rgba(232,224,216,0.85);
+  }
+  ul.content-list li::before {
+    content: '•'; position: absolute; left: 0.3rem;
+    color: var(--gold);
+  }
+  hr.section-divider {
+    border: none;
+    border-top: 1px solid rgba(255,248,240,0.06);
+    margin: 3rem 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="doc-header">
+  <div class="shine"></div>
+  <h1>暮 归</h1>
+  <p class="subtitle">Twilight Return</p>
+  <p class="tagline">归途有光，片刻即安</p>
+  <p style="font-size:1.05rem;color:rgba(255,248,240,0.6);font-weight:300;">
+    游戏策划方案 · 完整玩法规则
+  </p>
+  <div class="doc-meta">
+    <span>📄 文档版本 v2.0</span>
+    <span>📅 2025年7月</span>
+    <span>🎯 目标平台 HTML5 / 移动端</span>
+    <span>👥 目标用户 20–45岁通勤上班族</span>
+    <span>📱 操作方式 竖屏 · 单手</span>
+  </div>
+</header>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <a href="#s1">游戏概览</a>
+    <a href="#s2">核心玩法</a>
+    <a href="#s3">操作系统</a>
+    <a href="#s4">碎片系统</a>
+    <a href="#s5">障碍系统</a>
+    <a href="#s5b">关卡系统</a>
+    <a href="#s5c">武器系统</a>
+    <a href="#s5d">怪兽系统</a>
+    <a href="#s6">数值策划</a>
+    <a href="#s7">界面布局</a>
+    <a href="#s8">技术方案</a>
+    <a href="#s9">完整规则</a>
+  </div>
+</nav>
+
+<!-- ═══════════ BODY ═══════════ -->
+<div class="doc-body">
+
+<!-- ────────────────────────────────
+     SECTION 1: GAME OVERVIEW
+     ──────────────────────────────── -->
+<section id="s1" class="section">
+  <div class="section-number">Section 01</div>
+  <h2 class="section-title">游戏概览</h2>
+  <p class="section-desc">产品定位、目标用户与核心差异化价值</p>
+
+  <div class="grid-3">
+    <div class="stat-card">
+      <div class="stat-value">5,000m</div>
+      <div class="stat-label">单局标准归途距离</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">3~8min</div>
+      <div class="stat-label">单局游玩时长</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">3 车道</div>
+      <div class="stat-label">单手拇指滑动切换</div>
+    </div>
+  </div>
+
+  <div class="card accent-left" style="margin-top:2rem;">
+    <div class="card-title"><span class="icon">🎯</span>产品定位</div>
+    <p><strong>「暮归」</strong>是一款面向城市通勤上班族的<span class="highlight">治愈系单手休闲手游</span>。游戏以"下班归途"为叙事核心，通过极简的拇指滑动交互，让玩家在暮色中的城市街道上走向家的方向，沿途收集代表城市温暖瞬间的"温暖碎片"。不同于市面上"杀时间"的休闲游戏，「暮归」定位为<span class="highlight-gold">「情绪过渡工具」</span>——帮助用户在下班通勤的碎片时间里，完成从工作模式到生活模式的温柔切换。</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem;">
+    <div class="card accent-blue">
+      <div class="card-title"><span class="icon">👤</span>目标用户画像</div>
+      <ul class="content-list">
+        <li><strong>核心用户：</strong>25–35岁城市通勤上班族，日均通勤30–60分钟</li>
+        <li><strong>通勤方式：</strong>地铁、公交、步行、打车</li>
+        <li><strong>核心痛点：</strong>下班后情绪疲惫，需要从"工作模式"切换到"生活模式"</li>
+        <li><strong>游戏偏好：</strong>轻度、不肝不氪、画面好看、有温度、随时可停</li>
+        <li><strong>消费特征：</strong>愿意为品质感和情绪价值小额付费</li>
+      </ul>
+    </div>
+    <div class="card accent-gold">
+      <div class="card-title"><span class="icon">✨</span>核心差异化</div>
+      <ul class="content-list">
+        <li><strong>情感锚点：</strong>以"归家"为主题，与通勤场景深度绑定</li>
+        <li><strong>设计优先：</strong>单手操作是原始设计约束，而非后期适配</li>
+        <li><strong>情绪价值：</strong>帮用户"切换情绪"，而非"消耗时间"</li>
+        <li><strong>美学追求：</strong>暮色暖调、极简诗意、城市温度感</li>
+        <li><strong>道德底线：</strong>不设计上瘾机制、不利用FOMO、不制造焦虑</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 2: CORE GAMEPLAY
+     ──────────────────────────────── -->
+<section id="s2" class="section">
+  <div class="section-number">Section 02</div>
+  <h2 class="section-title">核心玩法设计</h2>
+  <p class="section-desc">游戏循环、目标系统与操作模型</p>
+
+  <div class="card accent-left">
+    <div class="card-title"><span class="icon">🔄</span>核心循环 (Core Loop)</div>
+    <div class="flow-row">
+      <div class="flow-node">踏上归途<br><small>开始行走</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">切换车道<br><small>收集温暖碎片</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">到达家门口<br><small>本局结束</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">解锁新内容<br><small>场景/故事/成就</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">再次出发<br><small>新的归途</small></div>
+    </div>
+    <p style="margin-top:1rem;">玩家在三车道道路上<span class="highlight">自动前进</span>，通过<span class="highlight-gold">左右滑动切换车道</span>收集迎面而来的温暖碎片、规避路面的障碍物。单局以累计行走 <strong>5,000 米</strong> 到达家门口为终点。游戏<span class="highlight-blue">无死亡、无失败惩罚</span>——只有"今天的归途结束了"。</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem;">
+    <div class="rule-box">
+      <div class="rule-title">🎮 基本规则</div>
+      <ul>
+        <li>玩家角色在三车道道路中央自动前进</li>
+        <li><strong>关卡制：</strong>共3关，每关距离、速度、怪兽配置不同</li>
+        <li>道路使用透视视角呈现，三车道汇聚于屏幕上方消失点</li>
+        <li>温暖碎片从消失点方向迎面飘来，可用于兑换武器</li>
+        <li>路面上随机出现障碍物（仅在关卡前半段）</li>
+        <li>怪兽会阻挡归途，需要使用武器击败</li>
+        <li>完成全部3关归途完成，画面渐白 → "到家了"</li>
+        <li>无法"死亡"——碰到障碍物或怪兽只是减速</li>
+      </ul>
+    </div>
+    <div class="rule-box">
+      <div class="rule-title">🏆 目标体系</div>
+      <ul>
+        <li><strong>首要目标：</strong>完成全部3关，到达家门口</li>
+        <li><strong>次要目标：</strong>收集温暖碎片，兑换武器击败怪兽</li>
+        <li><strong>战斗目标：</strong>击败怪兽获取碎片奖励</li>
+        <li><strong>长期目标：</strong>完成多次归途，解锁新场景</li>
+        <li><strong>无排名竞争：</strong>游戏不设排行榜</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 3: CONTROL SYSTEM
+     ──────────────────────────────── -->
+<section id="s3" class="section">
+  <div class="section-number">Section 03</div>
+  <h2 class="section-title">操作系统设计</h2>
+  <p class="section-desc">单手优先的交互模型与输入规范</p>
+
+  <div class="card accent-left">
+    <div class="card-title"><span class="icon">✋</span>单手操作设计原则</div>
+    <p>所有交互操作均设计在<span class="highlight">屏幕下半部拇指自然可达区域</span>。不留死角、不要求双手、不要求精准操作。这是「暮归」区别于大多数"可单手适配但并非为单手设计"的游戏的核心差异。</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem;">
+    <div>
+      <table>
+        <thead><tr><th colspan="2">📱 触摸操作（移动端）</th></tr></thead>
+        <tbody>
+          <tr><td><strong>左右滑动</strong></td><td>切换至相邻车道。滑动距离 &gt; 25px 且水平位移 &gt; 垂直位移时触发。覆盖整个屏幕区域，无死角。</td></tr>
+          <tr><td><strong>点击屏幕区域</strong></td><td>备选操作。点击屏幕左 1/3 → 左车道；中 1/3 → 中车道；右 1/3 → 右车道。为不习惯滑动的用户提供替代方案。</td></tr>
+          <tr><td><strong>点击开始/继续</strong></td><td>标题画面和结果画面任意位置点击即可开始或重新开始。</td></tr>
+          <tr><td><strong>自动收集</strong></td><td>玩家在正确车道时，碎片到达玩家位置自动收集。<strong>无需额外点击</strong>。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <table>
+        <thead><tr><th colspan="2">⌨️ 键盘操作（桌面端调试）</th></tr></thead>
+        <tbody>
+          <tr><td><strong>← / A</strong></td><td>切换至左侧车道</td></tr>
+          <tr><td><strong>→ / D</strong></td><td>切换至右侧车道</td></tr>
+          <tr><td><strong>空格 / 回车</strong></td><td>开始游戏 / 重新开始</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:1rem;">
+        <thead><tr><th colspan="2">🎯 交互容错设计</th></tr></thead>
+        <tbody>
+          <tr><td><strong>滑动阈值</strong></td><td>25px — 低于常规滑动手势阈值（通常30-40px），对轻微滑动更友好</td></tr>
+          <tr><td><strong>车道切换动画</strong></td><td>0.15s ease-out 平滑过渡，非瞬间传送，视觉引导明确</td></tr>
+          <tr><td><strong>连续滑动保护</strong></td><td>每次滑动后300ms冷却期，防止误操作连续跳车道</td></tr>
+          <tr><td><strong>屏幕防滚动</strong></td><td>游戏Canvas通过 <code>touch-action:none</code> 阻止浏览器默认滚动行为</td></tr>
+          <tr><td><strong>设备方向锁定</strong></td><td>竖屏锁定，旋转设备不影响游戏布局</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="code-block" style="margin-top:1.5rem;">
+<span class="cmt">/* 触摸手势检测伪代码 */</span>
+<span class="kw">function</span> handleTouch(touchStart, touchEnd) {
+  <span class="kw">const</span> dx = touchEnd.x - touchStart.x;
+  <span class="kw">const</span> dy = touchEnd.y - touchStart.y;
+  <span class="kw">const</span> dt = touchEnd.time - touchStart.time;
+
+  <span class="cmt">// 判定：水平位移 &gt; 25px 且 &gt; 垂直位移 → 滑动手势</span>
+  <span class="kw">if</span> (Math.abs(dx) &gt; <span class="num">25</span> && Math.abs(dx) &gt; Math.abs(dy)) {
+    <span class="kw">if</span> (dx &gt; <span class="num">0</span>) moveRight(); <span class="cmt">// → 右车道</span>
+    <span class="kw">else</span> moveLeft();           <span class="cmt">// → 左车道</span>
+  }
+
+  <span class="cmt">// 判定：位移小 + 时间短 → 点击手势（备选操作）</span>
+  <span class="kw">if</span> (Math.abs(dx) &lt; <span class="num">20</span> && Math.abs(dy) &lt; <span class="num">20</span> && dt &lt; <span class="num">300</span>) {
+    <span class="kw">const</span> third = screenWidth / <span class="num">3</span>;
+    <span class="kw">if</span> (touchStart.x &lt; third) moveToLane(<span class="num">0</span>);
+    <span class="kw">else if</span> (touchStart.x &lt; third * <span class="num">2</span>) moveToLane(<span class="num">1</span>);
+    <span class="kw">else</span> moveToLane(<span class="num">2</span>);
+  }
+}
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 4: FRAGMENT SYSTEM
+     ──────────────────────────────── -->
+<section id="s4" class="section">
+  <div class="section-number">Section 04</div>
+  <h2 class="section-title">温暖碎片系统</h2>
+  <p class="section-desc">核心收集物：类型、刷新、分值、视觉与故事</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>属性</th>
+        <th>🌆 城市光影</th>
+        <th>🐾 街角生灵</th>
+        <th>🏮 人间烟火</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>稀有度</strong></td>
+        <td>普通 (Common)</td>
+        <td>稀有 (Rare)</td>
+        <td>极稀有 (Epic)</td>
+      </tr>
+      <tr>
+        <td><strong>出现概率</strong></td>
+        <td><span class="highlight">70%</span></td>
+        <td><span class="highlight-gold">22%</span></td>
+        <td><span class="highlight-blue">8%</span></td>
+      </tr>
+      <tr>
+        <td><strong>分值</strong></td>
+        <td>10 分</td>
+        <td>30 分</td>
+        <td>50 分</td>
+      </tr>
+      <tr>
+        <td><strong>视觉尺寸</strong></td>
+        <td>直径 14px</td>
+        <td>直径 18px</td>
+        <td>直径 22px</td>
+      </tr>
+      <tr>
+        <td><strong>颜色</strong></td>
+        <td>#FFE49A 淡金</td>
+        <td>#FFD166 灯火金</td>
+        <td>#FF6B4A 暖橙红</td>
+      </tr>
+      <tr>
+        <td><strong>特效</strong></td>
+        <td>柔光晕 + 微呼吸</td>
+        <td>脉冲光环 + 4 星旋转粒子</td>
+        <td>上升粒子轨迹 + 6 星旋转粒子</td>
+      </tr>
+      <tr>
+        <td><strong>收集反馈</strong></td>
+        <td>+10 飘字 + 6 粒子爆发</td>
+        <td>+30 飘字 + 12 粒子爆发 + 屏幕微闪</td>
+        <td>+50 飘字 + 20 粒子爆发 + 全屏闪光 + 微震</td>
+      </tr>
+      <tr>
+        <td><strong>故事示例</strong></td>
+        <td>"便利店暖黄的灯光，在暮色中格外温柔。"</td>
+        <td>"一只橘猫蹲在围墙上，用慵懒的眼神目送你。"</td>
+        <td>"转角遇见多年不见的老同学，彼此都愣了一下。"</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="rule-box" style="margin-top:1.5rem;">
+    <div class="rule-title">碎片刷新规则</div>
+    <ul>
+      <li><strong>基础刷新间隔：</strong>1.2 ~ 2.5 秒随机刷新一枚碎片（均匀分布随机）</li>
+      <li><strong>动态加速：</strong>随着归途距离推进，刷新间隔逐渐缩短至 0.6 ~ 1.3 秒</li>
+      <li><strong>数量上限：</strong>屏幕上同时最多存在 <span class="highlight">4 枚</span>未收集碎片</li>
+      <li><strong>车道分布：</strong>碎片随机出现在 3 条车道中的一条（均匀概率）</li>
+      <li><strong>运动速度：</strong>碎片以恒定速度（180~240 px/s）从消失点飘向玩家位置</li>
+      <li><strong>到达时间：</strong>约 1.8~2.5 秒从生成到到达玩家所在 Y 坐标</li>
+      <li><strong>收集判定：</strong>碎片到达玩家 Y 坐标 ±10px 范围内，且玩家在同一车道 → 自动收集</li>
+      <li><strong>错过判定：</strong>碎片到达玩家 Y 坐标但玩家不在同一车道 → 碎片飘过，计为错过（无惩罚）</li>
+      <li><strong>不重复车道：</strong>连续两枚碎片不会出现在同一车道（提高策略性）</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 5: OBSTACLE SYSTEM
+     ──────────────────────────────── -->
+<section id="s5" class="section">
+  <div class="section-number">Section 05</div>
+  <h2 class="section-title">障碍物系统</h2>
+  <p class="section-desc">路面障碍：类型、效果、刷新与规避策略</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>属性</th>
+        <th>💧 路面积水</th>
+        <th>🚧 施工路障</th>
+        <th>👥 拥挤人群</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>出现概率</strong></td><td>50%</td><td>30%</td><td>20%</td></tr>
+      <tr><td><strong>视觉表现</strong></td><td>蓝色反光椭圆形水洼</td><td>橙色条纹锥桶 + 横杆</td><td>灰色人影群（3个简化人物）</td></tr>
+      <tr><td><strong>减速效果</strong></td><td><span class="highlight">-30% 速度</span></td><td><span class="highlight-gold">-50% 速度</span></td><td><span class="highlight-blue">-40% 速度</span></td></tr>
+      <tr><td><strong>持续时长</strong></td><td>1.0 秒</td><td>1.5 秒</td><td>1.2 秒</td></tr>
+      <tr><td><strong>视觉效果</strong></td><td>水花飞溅粒子</td><td>橙色碎片粒子 + 屏幕震动</td><td>灰色碎片粒子</td></tr>
+      <tr><td><strong>碰撞宽度</strong></td><td>40px</td><td>36px</td><td>44px</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rule-box" style="margin-top:1.5rem;">
+    <div class="rule-title">障碍物刷新与交互规则</div>
+    <ul>
+      <li><strong>刷新间隔：</strong>3.5 ~ 6.5 秒随机，随距离推进逐渐缩短至 2.0 ~ 4.0 秒</li>
+      <li><strong>数量上限：</strong>屏幕同时最多存在 <span class="highlight">2 个</span>活跃障碍物</li>
+      <li><strong>车道占用：</strong>每个障碍物仅占用 <span class="highlight-gold">1 条车道</span>，玩家切换车道即可规避</li>
+      <li><strong>不会连续：</strong>同一车道不会连续出现两个障碍物</li>
+      <li><strong>不会重叠：</strong>障碍物不会与碎片同时出现在同一车道的同一位置</li>
+      <li><strong>减速叠加：</strong>如果已在减速中碰到另一个障碍物，减速效果刷新而非叠加</li>
+      <li><strong>不阻止归途：</strong>碰到障碍物只是减速，永远不会导致"死亡"或游戏结束</li>
+      <li><strong>视觉效果：</strong>碰到后屏幕微震 + 角色短暂闪烁 + 碎裂粒子</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 5b: LEVEL SYSTEM
+     ──────────────────────────────── -->
+<section id="s5b" class="section">
+  <div class="section-number">Section 05b</div>
+  <h2 class="section-title">关卡系统</h2>
+  <p class="section-desc">关卡制设计：距离、速度与怪兽配置</p>
+
+  <div class="card accent-left">
+    <div class="card-title"><span class="icon">🗺️</span>关卡架构</div>
+    <p>游戏采用<strong>关卡制</strong>设计，共3关，每关距离、速度、怪兽配置各不相同，难度递进：</p>
+    <table style="margin-top:1rem;">
+      <thead>
+        <tr><th>关卡</th><th>名称</th><th>距离</th><th>速度</th><th>怪兽配置</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>关卡1</strong></td>
+          <td>初遇暮光</td>
+          <td>500m</td>
+          <td>2.0</td>
+          <td>300m出现第一类怪兽（迷雾游魂）</td>
+        </tr>
+        <tr>
+          <td><strong>关卡2</strong></td>
+          <td>渐入暮色</td>
+          <td>1000m</td>
+          <td>2.5</td>
+          <td>300m出现第一类怪兽，500m出现第二类怪兽（暗影行者）</td>
+        </tr>
+        <tr>
+          <td><strong>关卡3</strong></td>
+          <td>暮归之路</td>
+          <td>2000m</td>
+          <td>3.0</td>
+          <td>300m出现第一类怪兽，500m出现第二类怪兽，1000m出现第三类怪兽（暮色恶魔）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rule-box" style="margin-top:1.5rem;">
+    <div class="rule-title">🎯 关卡规则</div>
+    <ul>
+      <li><strong>关卡进度：</strong>每关独立计算距离，完成后进入下一关</li>
+      <li><strong>速度固定：</strong>每关速度固定，不再随距离增加</li>
+      <li><strong>关卡过渡：</strong>关卡切换时显示关卡名称和过渡动画</li>
+      <li><strong>障碍物：</strong>仅在关卡前半段出现</li>
+      <li><strong>总距离：</strong>3500m（500+1000+2000）</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 5c: WEAPON SYSTEM
+     ──────────────────────────────── -->
+<section id="s5c" class="section">
+  <div class="section-number">Section 05c</div>
+  <h2 class="section-title">武器系统</h2>
+  <p class="section-desc">武器兑换、弹药管理与战斗机制</p>
+
+  <div class="card accent-left">
+    <div class="card-title"><span class="icon">🏹</span>武器类型</div>
+    <p>玩家可通过收集的温暖碎片兑换武器，用于击败怪兽：</p>
+    <table style="margin-top:1rem;">
+      <thead>
+        <tr><th>武器</th><th>兑换成本</th><th>冷却时间</th><th>弹药规则</th><th>特性</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>🏹 弓箭</strong></td>
+          <td>300碎片</td>
+          <td>2秒</td>
+          <td>无限弹药</td>
+          <td>基础远程武器，适合新手</td>
+        </tr>
+        <tr>
+          <td><strong>🔫 手枪</strong></td>
+          <td>500碎片</td>
+          <td>1秒</td>
+          <td>初始50发，10碎片=10发</td>
+          <td>中级武器，需要弹药补给</td>
+        </tr>
+        <tr>
+          <td><strong>🔫 冲锋枪</strong></td>
+          <td>800碎片</td>
+          <td>0.5秒（1秒2次）</td>
+          <td>初始100发，100碎片=50发</td>
+          <td>高级武器，每1秒可发射2次（每次1发）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem;">
+    <div class="rule-box">
+      <div class="rule-title">💰 兑换规则</div>
+      <ul>
+        <li><strong>弓箭：</strong>300碎片兑换，无弹药限制</li>
+        <li><strong>手枪：</strong>500碎片兑换，弹药有限需要补给</li>
+        <li><strong>冲锋枪：</strong>800碎片兑换，弹药有限</li>
+        <li><strong>弹药补给：</strong>随时可在右侧面板兑换</li>
+      </ul>
+    </div>
+    <div class="rule-box">
+      <div class="rule-title">🎯 操作方式</div>
+      <ul>
+        <li><strong>射击：</strong>空格键或点击屏幕</li>
+        <li><strong>切换武器：</strong>数字键1/2/3</li>
+        <li><strong>面板显示：</strong>当前武器、剩余弹药、冷却状态</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 5d: MONSTER SYSTEM
+     ──────────────────────────────── -->
+<section id="s5d" class="section">
+  <div class="section-number">Section 05d</div>
+  <h2 class="section-title">怪兽系统</h2>
+  <p class="section-desc">怪兽类型、行为模式与击败奖励</p>
+
+  <div class="card accent-left">
+    <div class="card-title"><span class="icon">👹</span>怪兽类型</div>
+    <p>怪兽会阻挡玩家的归途，需要使用武器击败：</p>
+    <table style="margin-top:1rem;">
+      <thead>
+        <tr><th>类型</th><th>名称</th><th>生命值</th><th>速度</th><th>奖励</th><th>出现条件</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Level 1</strong></td>
+          <td>迷雾游魂</td>
+          <td>2</td>
+          <td>1.0</td>
+          <td>20碎片</td>
+          <td>所有关卡300m后</td>
+        </tr>
+        <tr>
+          <td><strong>Level 2</strong></td>
+          <td>暗影行者</td>
+          <td>3</td>
+          <td>1.3</td>
+          <td>40碎片</td>
+          <td>关卡2的500m后，关卡3的500m后</td>
+        </tr>
+        <tr>
+          <td><strong>Level 3</strong></td>
+          <td>暮色恶魔</td>
+          <td>5</td>
+          <td>1.6</td>
+          <td>80碎片</td>
+          <td>关卡3的1000m后</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rule-box" style="margin-top:1.5rem;">
+    <div class="rule-title">🎯 怪兽行为</div>
+    <ul>
+      <li><strong>随机车道：</strong>怪兽随机出现在三条车道之一</li>
+      <li><strong>固定车道：</strong>怪兽生成后保持在该车道，不会切换</li>
+      <li><strong>缓慢靠近：</strong>怪兽会缓慢向玩家移动</li>
+      <li><strong>碰撞效果：</strong>碰撞怪兽会触发短暂减速（1-1.5秒）</li>
+      <li><strong>击败奖励：</strong>使用武器击败怪兽可获得碎片奖励</li>
+      <li><strong>无死亡惩罚：</strong>碰撞怪兽不会导致游戏结束</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 6: NUMERICAL DESIGN
+     ──────────────────────────────── -->
+<section id="s6" class="section">
+  <div class="section-number">Section 06</div>
+  <h2 class="section-title">数值策划</h2>
+  <p class="section-desc">速度曲线、距离分段、碎片经济与难度递进</p>
+
+  <div class="card accent-left">
+    <div class="card-title"><span class="icon">📈</span>关卡速度设计</div>
+    <p>每个关卡有固定的速度设定，难度递进：</p>
+    <table style="margin-top:1rem;">
+      <thead>
+        <tr><th>关卡</th><th>距离</th><th>速度</th><th>难度</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>关卡1</strong></td>
+          <td>500m</td>
+          <td>2.0</td>
+          <td>慢速，适应期</td>
+        </tr>
+        <tr>
+          <td><strong>关卡2</strong></td>
+          <td>1000m</td>
+          <td>2.5</td>
+          <td>中速，挑战增加</td>
+        </tr>
+        <tr>
+          <td><strong>关卡3</strong></td>
+          <td>2000m</td>
+          <td>3.0</td>
+          <td>快速，最终挑战</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1rem;"><strong>总距离：3500m</strong>，总时长约5-8分钟</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem;">
+    <div class="card accent-gold">
+      <div class="card-title"><span class="icon">🧮</span>碎片经济数值</div>
+      <table>
+        <tbody>
+          <tr><td><strong>单局期望碎片总数</strong></td><td>约 180 ~ 250 枚（含错过）</td></tr>
+          <tr><td><strong>单局期望收集数</strong></td><td>约 90 ~ 150 枚（取决于操作水平）</td></tr>
+          <tr><td><strong>期望总分范围</strong></td><td>约 1,100 ~ 2,500 分/局</td></tr>
+          <tr><td><strong>期望稀有碎片数</strong></td><td>约 20 ~ 35 枚/局</td></tr>
+          <tr><td><strong>期望极稀有碎片数</strong></td><td>约 7 ~ 15 枚/局</td></tr>
+          <tr><td><strong>收集率基准</strong></td><td>入门 40% · 熟练 60% · 高手 80%+</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card accent-blue">
+      <div class="card-title"><span class="icon">📊</span>难度递进参数</div>
+      <table>
+        <tbody>
+          <tr><td><strong>碎片刷新间隔</strong></td><td>起点 1.85s → 终点 0.95s（线性缩短）</td></tr>
+          <tr><td><strong>障碍刷新间隔</strong></td><td>起点 5.0s → 终点 2.5s（线性缩短）</td></tr>
+          <tr><td><strong>稀有碎片概率</strong></td><td>全程恒定 22%（不随距离变化）</td></tr>
+          <tr><td><strong>障碍严重度</strong></td><td>前期偏向积水（轻），后期加权人群/路障（重）</td></tr>
+          <tr><td><strong>屏幕碎片上限</strong></td><td>起点 3 枚 → 1250m 后 4 枚</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem;">
+    <div class="card-title"><span class="icon">🎨</span>天空渐变过渡数值</div>
+    <p>游戏最具标志性的视觉特征——天空从暮光橙到夜幕蓝的渐变，由距离驱动：</p>
+    <table>
+      <thead><tr><th>距离</th><th>天空顶部</th><th>天空中部</th><th>天空底部</th><th>氛围</th></tr></thead>
+      <tbody>
+        <tr><td>0m</td><td>#F47B4A 暮光橙</td><td>#FFD166 灯火金</td><td>#FFF8F0 星辰白</td><td>🌅 黄昏初始</td></tr>
+        <tr><td>1,250m</td><td>#E87040</td><td>#F5C560</td><td>#F0E0D0</td><td>🌇 暮色渐深</td></tr>
+        <tr><td>2,500m</td><td>#C06050</td><td>#C0A080</td><td>#C0B8B0</td><td>🌆 华灯初上</td></tr>
+        <tr><td>3,750m</td><td>#7A5070</td><td>#6A7090</td><td>#4A4A60</td><td>🌃 夜幕降临</td></tr>
+        <tr><td>5,000m</td><td>#2C3E6B 夜幕蓝</td><td>#4A6294 暗蓝</td><td>#1A1A2E 深夜</td><td>🌙 到家时刻</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:0.8rem; font-size:0.85rem; color:var(--grey);">过渡方式：逐像素 <code>lerp()</code> 线性插值，60 个渐变步阶，过渡平滑无断层。</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 7: UI LAYOUT
+     ──────────────────────────────── -->
+<section id="s7" class="section">
+  <div class="section-number">Section 07</div>
+  <h2 class="section-title">界面布局与视觉层级</h2>
+  <p class="section-desc">屏幕空间分配、HUD 元素与视觉层级规范</p>
+
+  <div class="card accent-left">
+    <div class="card-title"><span class="icon">📐</span>屏幕空间分配</div>
+    <table>
+      <thead><tr><th>区域</th><th>占比</th><th>内容</th><th>交互</th></tr></thead>
+      <tbody>
+        <tr><td><strong>天空层</strong></td><td>顶部 32%</td><td>天空渐变 + 远建筑剪影（视差）</td><td>纯视觉，无交互</td></tr>
+        <tr><td><strong>城市层</strong></td><td>32% – 48%</td><td>近建筑剪影 + 亮灯窗户 + 路灯 + 行道树</td><td>纯视觉</td></tr>
+        <tr><td><strong>路面层</strong></td><td>48% – 100%</td><td>三车道透视道路 + 碎片 + 障碍物</td><td><strong>主要交互区</strong>（滑动/点击切换车道）</td></tr>
+        <tr><td><strong>玩家区</strong></td><td>底部 78% 处</td><td>玩家角色（简化剪影 + 行走动画）</td><td>视觉锚点</td></tr>
+        <tr><td><strong>HUD 层</strong></td><td>顶部 + 底部叠加</td><td>距离指示器、碎片计数、进度条、暂停按钮</td><td>固定 UI，不响应滑动</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem;">
+    <div>
+      <table>
+        <thead><tr><th colspan="2">📍 顶部 HUD</th></tr></thead>
+        <tbody>
+          <tr><td><strong>距离文字</strong></td><td>"离家还有 X,XXX 米"，居中，28px Bold</td></tr>
+          <tr><td><strong>进度条</strong></td><td>6px 细线，暮光橙填充，带灯火金光点</td></tr>
+          <tr><td><strong>碎片计数</strong></td><td>右上角 "✦ N"，灯火金色，14px</td></tr>
+          <tr><td><strong>HUD 背景</strong></td><td>顶部渐变遮罩（半透明深色 → 透明），防文字被天空淹没</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <table>
+        <thead><tr><th colspan="2">📍 底部元素</th></tr></thead>
+        <tbody>
+          <tr><td><strong>新手引导</strong></td><td>前 400m 显示 "左右滑动切换车道，收集温暖碎片"，渐隐</td></tr>
+          <tr><td><strong>暂停按钮</strong></td><td>右下角，半透明圆形，36×36px</td></tr>
+          <tr><td><strong>拇指提示区</strong></td><td>底部 1/4 为拇指自然放置区域，所有操作在此区域内完成</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 8: TECHNICAL SOLUTION
+     ──────────────────────────────── -->
+<section id="s8" class="section">
+  <div class="section-number">Section 08</div>
+  <h2 class="section-title">纯 HTML5 技术方案</h2>
+  <p class="section-desc">渲染架构、性能策略与兼容性目标</p>
+
+  <div class="card accent-blue">
+    <div class="card-title"><span class="icon">⚙️</span>技术栈选型</div>
+    <table>
+      <thead><tr><th>模块</th><th>方案</th><th>选型理由</th></tr></thead>
+      <tbody>
+        <tr><td><strong>渲染引擎</strong></td><td>Canvas 2D API</td><td>零依赖，轻量（&lt;50KB），移动端性能充足，支持像素级绘制</td></tr>
+        <tr><td><strong>框架</strong></td><td>无框架 · 纯 Vanilla JS</td><td>无打包负担，即开即用，适合原型验证与快速迭代</td></tr>
+        <tr><td><strong>动画循环</strong></td><td>requestAnimationFrame + delta-time</td><td>60fps 自适应帧率，兼容低帧率设备，无帧率波动影响</td></tr>
+        <tr><td><strong>音效</strong></td><td>Web Audio API (OscillatorNode)</td><td>程序化合成音效，零音频文件依赖，体积优化</td></tr>
+        <tr><td><strong>持久化</strong></td><td>localStorage</td><td>客户端存储，支持最佳成绩、游玩次数、设置</td></tr>
+        <tr><td><strong>字体</strong></td><td>系统字体栈</td><td>PingFang SC / Noto Sans SC / Noto Serif SC，零网络依赖</td></tr>
+        <tr><td><strong>响应式</strong></td><td>CSS viewport + JS Canvas 动态缩放</td><td>适配 320px–428px 主流手机屏幕宽度</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem;">
+    <div class="card">
+      <div class="card-title"><span class="icon">🖼️</span>渲染分层架构（6层）</div>
+      <table>
+        <tbody>
+          <tr><td><strong>L0 天空层</strong></td><td>静态渐变（仅随距离推进色相偏移），60 步渐变带</td></tr>
+          <tr><td><strong>L1 远建筑</strong></td><td>滚动速度 0.15x · 低饱和深蓝矩形剪影</td></tr>
+          <tr><td><strong>L2 近建筑</strong></td><td>滚动速度 0.4x · 带随机亮灯窗户的建筑剪影</td></tr>
+          <tr><td><strong>L3 行道树</strong></td><td>滚动速度 0.7x · 间隔树剪影 + 路灯 + 灯光光晕</td></tr>
+          <tr><td><strong>L4 路面层</strong></td><td>滚动速度 1.0x · 三车道透视道路 + 虚线分隔线</td></tr>
+          <tr><td><strong>L5 实体层</strong></td><td>滚动速度 1.0x · 玩家角色 + 碎片 + 障碍物</td></tr>
+          <tr><td><strong>L6 UI 层</strong></td><td>固定 · HUD + 粒子 + 浮动文字 + 覆盖层</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🚀</span>性能目标</div>
+      <table>
+        <tbody>
+          <tr><td><strong>帧率</strong></td><td>60fps（中高端）/ 30fps 自适应（低端）</td></tr>
+          <tr><td><strong>首屏加载</strong></td><td>&lt; 2秒（零外部资源）</td></tr>
+          <tr><td><strong>内存占用</strong></td><td>&lt; 50MB</td></tr>
+          <tr><td><strong>包体大小</strong></td><td>单文件 &lt; 80KB（未压缩）/ &lt; 25KB（gzip）</td></tr>
+          <tr><td><strong>粒子上限</strong></td><td>同时最多 120 个活跃粒子</td></tr>
+          <tr><td><strong>GC 策略</strong></td><td>碎片/障碍物/粒子到达边界即移出数组，避免内存泄漏</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ────────────────────────────────
+     SECTION 9: COMPLETE RULES
+     ──────────────────────────────── -->
+<section id="s9" class="section">
+  <div class="section-number">Section 09</div>
+  <h2 class="section-title">完整玩法规则参考</h2>
+  <p class="section-desc">一页纸规则速查：从开始到结束的所有游戏规则</p>
+
+  <!-- Game Start -->
+  <div class="rule-box">
+    <div class="rule-title">🎬 游戏开始</div>
+    <ul>
+      <li>标题画面显示「暮归」Logo、品牌 Slogan、最佳记录（如有）</li>
+      <li>轻触屏幕任意位置即开始新一局归途</li>
+      <li>玩家角色起始位于<span class="highlight">中间车道</span>，速度为 <strong>2.0 km/h</strong></li>
+      <li>初始 625 米为<span class="highlight-blue">新手适应期</span>：碎片稀疏，无障碍物，底部显示操作提示</li>
+    </ul>
+  </div>
+
+  <!-- During Game -->
+  <div class="rule-box" style="margin-top:1rem;">
+    <div class="rule-title">🚶 游戏中</div>
+    <ul>
+      <li>玩家自动前进，<strong>不可停止</strong>（减速是唯一的速度变化）</li>
+      <li>左右滑动屏幕切换车道；点击屏幕左/中/右 1/3 区域也可切换</li>
+      <li>碎片从消失点飘来 → 到达玩家位置时，<strong>同车道自动收集</strong></li>
+      <li>障碍物从消失点飘来 → 同车道碰到后<span class="highlight">减速</span>，不同车道则安全通过</li>
+      <li>天空颜色随距离<span class="highlight-gold">从暮光橙渐变至夜幕蓝</span></li>
+      <li>道路虚线分隔线持续向下滚动，提供<span class="highlight-blue">视觉速度感</span></li>
+      <li>街道旁的路灯光晕随天色变暗而逐渐增强</li>
+      <li>收集极稀有碎片时全屏短暂闪光 + 微震</li>
+    </ul>
+  </div>
+
+  <!-- Game End -->
+  <div class="rule-box" style="margin-top:1rem;">
+    <div class="rule-title">🏠 归途完成</div>
+    <ul>
+      <li>累计行走 <strong>5,000 米</strong>后到达家门口，画面渐白过渡</li>
+      <li>显示结果页面：
+        <span style="margin-left:1rem;">🌙 「到家了」大字标题</span>
+        <span style="margin-left:1rem;">⏱️ 本局用时（分:秒）</span>
+        <span style="margin-left:1rem;">📊 各类碎片收集数量</span>
+        <span style="margin-left:1rem;">💬 随机展示一条本局收集到的温暖故事</span>
+      </li>
+      <li>按钮：「🏠 再走一程」（重新开始）</li>
+      <li>最佳成绩自动保存至 localStorage</li>
+    </ul>
+  </div>
+
+  <!-- Scoring -->
+  <div class="rule-box" style="margin-top:1rem;">
+    <div class="rule-title">📊 计分规则</div>
+    <ul>
+      <li>普通碎片（城市光影）：<strong>+10 分</strong></li>
+      <li>稀有碎片（街角生灵）：<strong>+30 分</strong></li>
+      <li>极稀有碎片（人间烟火）：<strong>+50 分</strong></li>
+      <li>归途完成奖励：<strong>+100 分</strong>（到达 5,000 米）</li>
+      <li><strong>总分 = Σ(碎片分值) + 归途完成奖励</strong></li>
+      <li>分数不设排行榜，仅用于个人记录和成就感反馈</li>
+      <li>错过碎片<span class="highlight-gold">不扣分</span>，无任何惩罚</li>
+    </ul>
+  </div>
+
+  <!-- Prohibited -->
+  <div class="rule-box" style="margin-top:1rem; border-color: rgba(200,80,80,0.4); background: rgba(200,80,80,0.06);">
+    <div class="rule-title" style="color:#E08080;">🚫 本游戏明确没有的设计</div>
+    <ul>
+      <li><strong>没有生命值 / HP：</strong>永远不会"死亡"或"Game Over"</li>
+      <li><strong>没有时间限制：</strong>不急不赶，按自己的节奏走</li>
+      <li><strong>没有失败惩罚：</strong>错过碎片不扣分，碰到障碍物只减速</li>
+      <li><strong>没有强制广告：</strong>不打断游戏流程</li>
+      <li><strong>没有排行榜：</strong>不和别人比较，只和自己对话</li>
+      <li><strong>没有每日强制任务：</strong>想来就来，不想来也不焦虑</li>
+      <li><strong>没有体力系统：</strong>想走几程走几程</li>
+      <li><strong>没有"肝"和"氪"：</strong>碎片概率不随付费变化，不设付费墙</li>
+    </ul>
+  </div>
+</section>
+
+</div><!-- .doc-body -->
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="doc-footer">
+  <div class="foot-logo">暮 归</div>
+  <p style="color:rgba(255,248,240,0.5);font-size:0.9rem;margin-bottom:0.5rem;">归途有光，片刻即安</p>
+  <p class="foot-meta">
+    © 2025 Twilight Return · 游戏策划方案 v2.0 · 纯 HTML5 实现 · 内部文档
+  </p>
+</footer>
+
+</body>
+</html>

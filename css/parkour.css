@@ -1,0 +1,545 @@
+/* ===== 城市跑酷游戏样式 ===== */
+
+.parkour-page {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* ===== 头部 ===== */
+.parkour-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+.pk-back-link {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.pk-back-link:active {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(0.95);
+}
+
+.pk-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.pk-coin-display {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffd700;
+}
+
+/* ===== 信息栏 ===== */
+.pk-info-bar {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    flex-shrink: 0;
+}
+
+.pk-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.pk-info-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pk-info-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* ===== 关卡进度条 ===== */
+.pk-progress-bar-wrap {
+    position: relative;
+    height: 22px;
+    background: rgba(0, 0, 0, 0.35);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.pk-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.2s ease;
+    border-radius: 0 4px 4px 0;
+    position: relative;
+}
+
+.pk-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.pk-progress-bus {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    transition: left 0.2s ease;
+    z-index: 2;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+}
+
+/* ===== 游戏容器 ===== */
+.pk-game-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+}
+
+#pkCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ===== 暂停按钮 ===== */
+.pk-pause-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 0.15s ease;
+}
+
+.pk-pause-btn:active {
+    transform: scale(0.9);
+}
+
+/* ===== 覆盖层 ===== */
+.pk-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 12, 41, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    animation: pkFadeIn 0.3s ease;
+}
+
+@keyframes pkFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.pk-overlay-content {
+    text-align: center;
+    padding: 24px;
+    max-width: 420px;
+    width: 90%;
+}
+
+.pk-overlay-icon {
+    font-size: 60px;
+    margin-bottom: 12px;
+    animation: pkBounce 2s ease-in-out infinite;
+}
+
+@keyframes pkBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+.pk-overlay-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+
+.pk-overlay-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 24px;
+}
+
+/* ===== 关卡预览卡片 ===== */
+.pk-level-preview {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pk-level-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 8px 10px;
+    min-width: 72px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pk-level-card.pk-level-final {
+    background: rgba(245, 87, 108, 0.15);
+    border-color: rgba(245, 87, 108, 0.3);
+}
+
+.pk-level-num {
+    font-size: 18px;
+    font-weight: 800;
+    color: #667eea;
+}
+
+.pk-level-final .pk-level-num {
+    color: #f5576c;
+}
+
+.pk-level-name {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+}
+
+.pk-level-goal {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.pk-level-speed {
+    font-size: 10px;
+    color: #ffd54f;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* ===== 控制提示 ===== */
+.pk-tips {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.pk-tip-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.pk-tip-row:last-child {
+    margin-bottom: 0;
+}
+
+.pk-tip-key {
+    font-size: 16px;
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+}
+
+/* ===== 按钮 ===== */
+.pk-start-btn, .pk-retry-btn, .pk-next-btn {
+    padding: 14px 44px;
+    font-size: 17px;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #fff;
+}
+
+.pk-start-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.pk-start-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 12px rgba(102, 126, 234, 0.5);
+}
+
+.pk-next-btn {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    box-shadow: 0 4px 20px rgba(56, 239, 125, 0.4);
+}
+
+.pk-next-btn:active {
+    transform: scale(0.95);
+}
+
+.pk-retry-btn {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    box-shadow: 0 4px 20px rgba(245, 87, 108, 0.4);
+}
+
+.pk-retry-btn:active {
+    transform: scale(0.95);
+}
+
+/* ===== 关卡过渡界面 ===== */
+.pk-transition-icon {
+    font-size: 50px;
+}
+
+.pk-transition-info {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0 28px;
+}
+
+.pk-transition-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.pk-transition-stat-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pk-transition-stat-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #38ef7d;
+}
+
+/* ===== 结束统计 ===== */
+.pk-end-stats {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin: 20px 0 28px;
+}
+
+.pk-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.pk-stat-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pk-stat-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffd700;
+}
+
+.pk-end-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+/* ===== 胜利界面 ===== */
+.pk-victory-icon {
+    font-size: 64px;
+    animation: pkVictoryBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes pkVictoryBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-15px) scale(1.05); }
+}
+
+.pk-victory-title {
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 30px;
+}
+
+.pk-victory-subtitle {
+    color: rgba(255, 215, 0, 0.7);
+}
+
+.pk-victory-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.pk-replay-animation-btn {
+    padding: 14px 36px;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #fff;
+    background: linear-gradient(135deg, #ff9a44, #fc6076);
+    box-shadow: 0 4px 20px rgba(252, 96, 118, 0.4);
+}
+
+.pk-replay-animation-btn:active {
+    transform: scale(0.95);
+}
+
+.pk-play-again-btn {
+    padding: 12px 32px;
+    font-size: 15px;
+}
+
+/* ===== 移动端控制提示 ===== */
+.pk-mobile-hint {
+    display: none;
+    flex-shrink: 0;
+}
+
+.pk-hint-zone {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 500;
+}
+
+.pk-hint-jump {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.pk-hint-slide {
+    background: rgba(245, 87, 108, 0.1);
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+    .pk-title {
+        font-size: 15px;
+    }
+
+    .pk-overlay-icon {
+        font-size: 48px;
+    }
+
+    .pk-overlay-title {
+        font-size: 22px;
+    }
+
+    .pk-tips {
+        display: none;
+    }
+
+    .pk-level-preview {
+        gap: 6px;
+    }
+
+    .pk-level-card {
+        min-width: 62px;
+        padding: 6px 8px;
+    }
+
+    .pk-end-stats, .pk-transition-info {
+        gap: 16px;
+    }
+
+    .pk-stat-value, .pk-transition-stat-value {
+        font-size: 18px;
+    }
+
+    .pk-info-value {
+        font-size: 14px;
+    }
+
+    .pk-info-label {
+        font-size: 10px;
+    }
+}
+
+@media (max-height: 600px) {
+    .pk-info-bar {
+        padding: 6px 16px;
+    }
+
+    .pk-info-value {
+        font-size: 15px;
+    }
+
+    .pk-overlay-content {
+        padding: 16px;
+    }
+
+    .pk-overlay-icon {
+        font-size: 40px;
+        margin-bottom: 8px;
+    }
+
+    .pk-overlay-subtitle {
+        margin-bottom: 16px;
+    }
+
+    .pk-progress-bar-wrap {
+        height: 18px;
+    }
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>碎片拼图 - AI小站</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/puzzle-effect.css" />
+</head>
+<body>
+    <div class="puzzle-page">
+        <!-- 头部 -->
+        <header class="puzzle-header">
+            <a href="index.html" class="back-link">← 返回</a>
+            <h1 class="page-title">🧩 碎片拼图</h1>
+            <div class="header-actions">
+                <button class="header-btn" id="resetBtn" title="重置">🔄</button>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <div class="puzzle-main">
+            <!-- 上传区域 -->
+            <div class="upload-section" id="uploadSection">
+                <div class="upload-box" id="uploadBox">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">点击或拖拽上传图片</div>
+                    <div class="upload-hint">支持 5-10 张图片，建议图片尺寸一致</div>
+                    <input type="file" id="fileInput" accept="image/*" multiple hidden />
+                </div>
+                <div class="upload-preview" id="uploadPreview"></div>
+            </div>
+
+            <!-- 控制面板 -->
+            <div class="control-panel" id="controlPanel">
+                <div class="control-item">
+                    <label class="control-label">碎片数量:</label>
+                    <select id="fragmentCount">
+                        <option value="4">4块 (2×2)</option>
+                        <option value="9" selected>9块 (3×3)</option>
+                        <option value="16">16块 (4×4)</option>
+                    </select>
+                </div>
+                <div class="control-item">
+                    <label class="control-label">动画速度:</label>
+                    <select id="animSpeed">
+                        <option value="slow">慢速</option>
+                        <option value="normal" selected>正常</option>
+                        <option value="fast">快速</option>
+                    </select>
+                </div>
+                <div class="control-item">
+                    <label class="control-label">排列方式:</label>
+                    <select id="layoutMode">
+                        <option value="grid" selected>九宫格</option>
+                        <option value="random">随机排列</option>
+                    </select>
+                </div>
+                <button class="start-btn" id="startBtn" disabled>开始动画</button>
+            </div>
+
+            <!-- 画布区域 -->
+            <div class="canvas-section" id="canvasSection" style="display: none;">
+                <canvas id="puzzleCanvas"></canvas>
+                <div class="canvas-controls">
+                    <button class="canvas-btn" id="pauseBtn">⏸️ 暂停</button>
+                    <button class="canvas-btn" id="replayBtn">🔄 重播</button>
+                    <button class="canvas-btn" id="fullscreenBtn">⛶ 放大播放</button>
+                    <button class="canvas-btn" id="downloadBtn">📥 下载动画</button>
+                    <button class="canvas-btn" id="saveBtn">💾 保存图片</button>
+                </div>
+            </div>
+
+            <!-- 全屏播放模态框 -->
+            <div class="fullscreen-modal" id="fullscreenModal" style="display: none;">
+                <div class="fullscreen-header">
+                    <span class="fullscreen-title">🧩 碎片拼图 - 全屏播放</span>
+                    <button class="fullscreen-close" id="closeFullscreenBtn">✕</button>
+                </div>
+                <div class="fullscreen-content">
+                    <canvas id="fullscreenCanvas"></canvas>
+                </div>
+                <div class="fullscreen-controls">
+                    <button class="fs-btn" id="fsPauseBtn">⏸️ 暂停</button>
+                    <button class="fs-btn" id="fsReplayBtn">🔄 重播</button>
+                    <button class="fs-btn" id="fsDownloadBtn">📥 下载动画</button>
+                </div>
+            </div>
+
+            <!-- 下载进度提示 -->
+            <div class="download-overlay" id="downloadOverlay" style="display: none;">
+                <div class="download-content">
+                    <div class="download-spinner"></div>
+                    <div class="download-text" id="downloadText">正在录制动画...</div>
+                    <div class="download-progress">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="download-percent" id="downloadPercent">0%</div>
+                </div>
+            </div>
+
+            <!-- 进度提示 -->
+            <div class="progress-overlay" id="progressOverlay" style="display: none;">
+                <div class="progress-content">
+                    <div class="progress-spinner"></div>
+                    <div class="progress-text">正在生成碎片动画...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/puzzle-effect.js"></script>
+</body>
+</html>

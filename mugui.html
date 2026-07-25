@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>暮归 - AI小站</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/mugui.css" />
+</head>
+<body>
+    <div class="mugui-page">
+        <!-- 游戏头部 -->
+        <header class="mugui-header">
+            <a href="index.html" class="back-link">← 返回</a>
+            <h1 class="page-title">🌅 暮归</h1>
+            <div class="header-stats">
+                <span class="star-count" id="starCount">⭐ 0</span>
+            </div>
+        </header>
+
+        <!-- 游戏信息栏 -->
+        <div class="game-info-bar">
+            <div class="info-item">
+                <span class="info-label">离家还有</span>
+                <span class="info-value"><span id="distance">5,000</span> 米</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">温暖碎片</span>
+                <span class="info-value"><span id="fragmentCount">0</span> 片</span>
+            </div>
+            <div class="info-item" id="weaponInfo" style="display: none;">
+                <span class="info-label">武器等级</span>
+                <span class="info-value"><span id="weaponLevel">1</span> 级</span>
+            </div>
+        </div>
+
+        <!-- 游戏画布 -->
+        <div class="game-container" id="gameContainer">
+            <canvas id="gameCanvas"></canvas>
+
+            <!-- 右侧武器兑换栏 -->
+            <div class="weapon-panel" id="weaponPanel">
+                <div class="panel-section">
+                    <div class="section-title">武器兑换</div>
+
+                    <!-- 弓箭 -->
+                    <button class="weapon-btn" id="buyBowBtn">
+                        <span class="weapon-icon">🏹</span>
+                        <span class="weapon-name">弓箭</span>
+                        <span class="cost">300碎片</span>
+                        <span class="weapon-desc">2秒攻击 · 无限弹药</span>
+                    </button>
+
+                    <!-- 手枪 -->
+                    <button class="weapon-btn" id="buyPistolBtn">
+                        <span class="weapon-icon">🔫</span>
+                        <span class="weapon-name">手枪</span>
+                        <span class="cost">500碎片</span>
+                        <span class="weapon-desc">1秒攻击 · 初始50发</span>
+                    </button>
+
+                    <!-- 冲锋枪 -->
+                    <button class="weapon-btn" id="buySmgBtn">
+                        <span class="weapon-icon">🔫</span>
+                        <span class="weapon-name">冲锋枪</span>
+                        <span class="cost">800碎片</span>
+                        <span class="weapon-desc">1秒2发 · 初始100发</span>
+                    </button>
+                </div>
+
+                <div class="panel-section">
+                    <div class="section-title">弹药补给</div>
+                    <button class="ammo-btn" id="buyPistolAmmoBtn" style="display: none;">
+                        手枪弹药<br><span class="cost">10碎片 = 10发</span>
+                    </button>
+                    <button class="ammo-btn" id="buySmgAmmoBtn" style="display: none;">
+                        冲锋枪弹药<br><span class="cost">100碎片 = 50发</span>
+                    </button>
+                </div>
+
+                <div class="panel-section" id="currentWeaponSection" style="display: none;">
+                    <div class="section-title">当前武器</div>
+                    <div class="current-weapon">
+                        <div class="weapon-name"><span id="currentWeaponName">无</span></div>
+                        <div class="weapon-ammo">弹药: <span id="currentWeaponAmmo">-</span></div>
+                        <div class="weapon-cooldown">冷却: <span id="weaponCooldown">就绪</span></div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="section-title">战斗统计</div>
+                    <div class="stat-row">
+                        <span>击败怪兽:</span>
+                        <span id="monstersDefeated">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>当前碎片:</span>
+                        <span id="currentFragments">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 开始界面 -->
+            <div class="game-overlay" id="gameOverlay">
+                <div class="overlay-content">
+                    <div class="overlay-icon">🌅</div>
+                    <div class="overlay-title">暮归</div>
+                    <div class="overlay-subtitle">归途有光，片刻即安</div>
+
+                    <div class="control-tips">
+                        <div class="tip-item">
+                            <span class="tip-icon">💡</span>
+                            <span class="tip-text">在暮色中走向家的方向，收集温暖碎片</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon">📱</span>
+                            <span class="tip-text">左右滑动切换车道</span>
+                        </div>
+                    </div>
+
+                    <button class="start-btn" id="startBtn">开始归途</button>
+                </div>
+            </div>
+
+            <!-- 游戏结束界面 -->
+            <div class="result-overlay" id="resultOverlay" style="display: none;">
+                <div class="result-content">
+                    <div class="result-icon">🌙</div>
+                    <div class="result-title">到家了</div>
+                    <div class="result-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">归途用时</span>
+                            <span class="stat-value" id="finalTime">0:00</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">归途距离</span>
+                            <span class="stat-value">5,000</span>m
+                        </div>
+                    </div>
+                    <div class="fragment-summary">
+                        <div class="fragment-type">
+                            <span class="fragment-icon">🌆</span>
+                            <span class="fragment-name">城市光影</span>
+                            <span class="fragment-count" id="commonFragments">× 0</span>
+                        </div>
+                        <div class="fragment-type">
+                            <span class="fragment-icon">🐾</span>
+                            <span class="fragment-name">街角生灵</span>
+                            <span class="fragment-count" id="rareFragments">× 0</span>
+                        </div>
+                        <div class="fragment-type">
+                            <span class="fragment-icon">🏮</span>
+                            <span class="fragment-name">人间烟火</span>
+                            <span class="fragment-count" id="epicFragments">× 0</span>
+                        </div>
+                    </div>
+                    <div class="warm-story" id="warmStory">
+                        "街角那家面包店，今天也亮着暖黄色的灯。"
+                    </div>
+                    <div class="result-buttons">
+                        <button class="result-btn retry-btn" id="retryBtn">🏠 再走一程</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 移动端控制 -->
+        <div class="mobile-controls" id="mobileControls" style="display: none;">
+            <button class="control-left" id="controlLeft">◀</button>
+            <button class="control-right" id="controlRight">▶</button>
+        </div>
+    </div>
+
+    <script src="js/mugui.js"></script>
+</body>
+</html>
